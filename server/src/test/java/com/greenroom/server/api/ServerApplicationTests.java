@@ -1,7 +1,8 @@
-package com.greenroom.server;
+package com.greenroom.server.api;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.ContextConfiguration;
 
 @SpringBootTest
 class ServerApplicationTests {
