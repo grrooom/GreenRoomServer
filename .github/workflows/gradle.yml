@@ -30,10 +30,14 @@ jobs:
       run : chmod +x ./server/gradlew
       
     - name: Gradle Test And Create API SPEC
-      run: ./server/gradlew copyOasToSwagger
+      run: |
+        cd server
+        ./gradlew copyOasToSwagger
 
     - name: BootJar 
-      run: ./server/gradlew bootJar
+      run: |
+        cd server
+        ./gradlew bootJar
       
       # DockerHub 로그인
     - name: Login to DockerHub
