@@ -17,7 +17,7 @@ jobs:
         java-version: '17'
         distribution: 'temurin'
 
-    - name: Make application-secrets.yml
+    - name: Make application-secret.yml
       run: |
         cd ./server/src/main/resources # resources 폴더로 이동
         touch ./application-secret.yml # application.yml 생성
@@ -27,10 +27,10 @@ jobs:
       uses: gradle/actions/setup-gradle@af1da67850ed9a4cedd57bfd976089dd991e2582 # v4.0.0
 
     - name: Gradle Test And Create API SPEC
-      run: ./gradlew copyOasToSwagger
+      run: ./server/gradlew copyOasToSwagger
 
     - name: BootJar 
-      run: ./gradlew bootJar
+      run: ./server/gradlew bootJar
       
       # DockerHub 로그인
     - name: Login to DockerHub
