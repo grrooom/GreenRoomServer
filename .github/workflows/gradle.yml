@@ -27,18 +27,18 @@ jobs:
     - name: Setup Gradle
       uses: gradle/actions/setup-gradle@af1da67850ed9a4cedd57bfd976089dd991e2582 # v4.0.0
 
-    - name : grand gradlew
+    - name : grant on gradlew
       run : chmod +x ./server/gradlew
       
     - name: Gradle Test And Create API SPEC
       run: |
         cd server
-        ./gradlew copyOasToSwagger
+        ./gradlew --spring.profiles.active=dev copyOasToSwagger
 
     - name: BootJar 
       run: |
         cd server
-        ./gradlew bootJar
+        ./gradlew --spring.profiles.active=dev bootJar
       
       # DockerHub 로그인
     - name: Login to DockerHub
