@@ -33,12 +33,12 @@ jobs:
     - name: Gradle Test And Create API SPEC
       run: |
         cd server
-        ./gradlew --spring.profiles.active=dev copyOasToSwagger
+        ./gradlew -pspring.profiles.active=dev copyOasToSwagger
 
     - name: BootJar 
       run: |
         cd server
-        ./gradlew --spring.profiles.active=dev bootJar
+        ./gradlew -pspring.profiles.active=dev bootJar
       
       # DockerHub 로그인
     - name: Login to DockerHub
