@@ -1,3 +1,4 @@
+
 name: Java CI/CD with Gradle
 on:
   push:
@@ -49,6 +50,7 @@ jobs:
       # DockerHub Push
     - name: Build and Push Docker image
       run: |
+        cd server
         docker build -t ${{ secrets.DOCKER_HUB_USERNAME }}/greenroom .
         docker push ${{ secrets.DOCKER_HUB_USERNAME }}/greenroom
  
