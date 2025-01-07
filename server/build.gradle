@@ -96,6 +96,7 @@ openapi3 {
 
 
 tasks.register('copyOasToSwagger', Copy) {
+
 	// 기존 yaml 파일 삭제
 	delete 'src/main/resources/static/swagger-ui/openapi3.yaml'
 
@@ -111,4 +112,14 @@ tasks.register('copyOasToSwagger', Copy) {
 	// openapi3 task가 먼저 실행되도록 설정
 	dependsOn tasks.named('openapi3')
 
+}
+
+sourceSets {
+	ext.profile = (!project.hasProperty('profile') || !profile) ? 'local' : profile
+	println "current profile : ${profile}"
+	main {
+		java {
+			srcDirs "src/main/java"
+		}
+	}
 }
