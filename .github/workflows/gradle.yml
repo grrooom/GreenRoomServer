@@ -33,8 +33,7 @@ jobs:
     - name: Gradle Test And Create API SPEC
       run: |
         cd server
-        ./gradlew copyOasToSwagger --args='--spring.profiles.active=test'
-
+        ./gradlew SPRING_PROFILES_ACTIVE=test copyOasToSwagger
     - name: BootJar 
       run: |
         cd server
