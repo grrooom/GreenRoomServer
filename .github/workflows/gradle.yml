@@ -41,7 +41,7 @@ jobs:
     - name: Gradle Test And Create API SPEC
       run: |
         cd server
-        ./gradlew -Pprofile=test copyOasToSwagger
+        ./gradlew -Pprofile=test copyOasToSwagger -i
     - name: BootJar 
       run: |
         cd server
