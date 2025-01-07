@@ -1,0 +1,40 @@
+spring:
+  jpa:
+    show-sql: true
+    hibernate:
+      ddl-auto: create
+    properties:
+      hibernate:
+        format_sql: true
+        default_batch_fetch_size: 100
+  datasource:
+    url: jdbc:h2:mem:test
+    username: sa
+    password:
+    driver-class-name: org.h2.Driver
+  servlet:
+    multipart:
+      max-request-size: 100MB
+      max-file-size: 100MB
+  mail:
+    host: smtp.gmail.com
+    port: 587
+    username: ENC(GoXmhnlYhTWXrVx550csmitTvIcQWnfoqSorlY2jWfk=)
+    password: ENC(dXbTFoOHJHLNxADWJ26ejY77pDpr0E/B3CYtujkuV7g=)
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true
+temp:
+  filePath: src/main/resources/
+
+logging.level:
+  org.hibernate.type: info
+
+decorator:
+  datasource:
+    p6spy:
+      enable-logging: true
+
