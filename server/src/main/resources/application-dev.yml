@@ -9,7 +9,7 @@ spring:
         default_batch_fetch_size: 100
         dialect : org.hibernate.dialect.MySQLDialect
   datasource:
-    url: jdbc:mysql://ENC(x3tDMa/IitHv7t/Ax6hLJyjy8QDYb6PpAe6ahzl/X0ePT2xf/tkr8H1bApvoWGpZatON8IY/pYw9UaN2sBmCKjCqQzuG+k6+DwqpWLcUsGI=):3306/greenroom
+    url: ENC(kgK9/mdi4kgWtrLXbxIJByGetfhtr5EzpiKYTGMOTIz4Xl+IFbWdPFK4wrNyrb83SCRqk30I9vvvgPHG2DYGCmJoakcvBREnK5zdeSEIH53f43cRRVmxtTsFgCeBRgYI3hJr5WQJOX0=)
     username: ENC(jIrlODxxlnLjfjNGJWxcK7PlWl42HFmU)
     password: ENC(cOCoUxDYuC87FVNhcrkKRqyXmybNx38JPe5v9NGF9io=)
     driver-class-name: com.mysql.cj.jdbc.Driver
