@@ -27,30 +27,24 @@
         </encoder>
 
         <!-- 롤링 정책 -->
-        <rollingPolicy class = "ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
-            <!-- gz, zip 등을 넣을 경우 자동 로그파일 압축 -->
-            <fileNamePattern>/logs/%d{yyyy-MM-dd}/dev_log.log</fileNamePattern>
-
-            <timeBasedFileNamingAndTriggeringPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedFileNamingAndTriggeringPolicy">
-                <!-- 파일당 최고 용량 -->
-                <maxFileSize>10MB</maxFileSize>
-            </timeBasedFileNamingAndTriggeringPolicy>
-
-            <!-- 로그파일 최대 보관주기 -->
-            <maxHistory>30</maxHistory>
+        <rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
+            <fileNamePattern>./logs/fileName.%d{yyyy-MM-dd}.%i.log</fileNamePattern>
+            <maxFileSize>30MB</maxFileSize>
+            <maxHistory>7</maxHistory>   <!--전체 용량 제어(maxHistory와 함께 사용 필수)-->
+            <totalSizeCap>1GB</totalSizeCap>
         </rollingPolicy>
     </appender>
 
     <!-- spring.profile에 따른 분기 -->
-<!--    현재 prod 서버가 없으니 주석처리 -->
-<!--    <springProfile name = "prod">-->
-<!--        <root level = "INFO">-->
-<!--            <appender-ref ref="FILE"/>-->
-<!--            <appender-ref ref="ERROR"/>-->
-<!--        </root>-->
-<!--        <logger name="com.zaxxer.hikari" level = "ERROR" />-->
-<!--        <logger name="org.apache" level = "ERROR" />-->
-<!--    </springProfile>-->
+    <!--    현재 prod 서버가 없으니 주석처리 -->
+    <!--    <springProfile name = "prod">-->
+    <!--        <root level = "INFO">-->
+    <!--            <appender-ref ref="FILE"/>-->
+    <!--            <appender-ref ref="ERROR"/>-->
+    <!--        </root>-->
+    <!--        <logger name="com.zaxxer.hikari" level = "ERROR" />-->
+    <!--        <logger name="org.apache" level = "ERROR" />-->
+    <!--    </springProfile>-->
     <!--
         + 외부 프로젝트가 아닌 내 프로젝트와 관련된 것은 DEBUG level에서 출력함.
         + security와 관련된 것은 DEBUG level에서 출력함.
