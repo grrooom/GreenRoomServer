@@ -7,6 +7,7 @@ spring:
       hibernate:
         format_sql: true
         default_batch_fetch_size: 100
+        dialect : org.hibernate.dialect.MySQLDialect
   datasource:
     url: jdbc:mysql://ENC(x3tDMa/IitHv7t/Ax6hLJyjy8QDYb6PpAe6ahzl/X0ePT2xf/tkr8H1bApvoWGpZatON8IY/pYw9UaN2sBmCKjCqQzuG+k6+DwqpWLcUsGI=):3306/greenroom
     username: ENC(jIrlODxxlnLjfjNGJWxcK7PlWl42HFmU)
