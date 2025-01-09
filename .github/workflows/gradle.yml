@@ -1,0 +1,100 @@
+
+name: GreenRoom Server CI/CD 
+on:
+  push:
+    branches: [ "develop" ]
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+    - name: Set up JDK 17
+      uses: actions/setup-java@v4
+      with:
+        java-version: '17'
+        distribution: 'temurin'
+
+    - name: Make data.sql
+      run: |
+        cd ./server/src/test/resources
+        touch ./data-test.sql
+        echo "${{secrets.DATA_TEST_SQL}}" | base64 --decode >  ./data-test.sql
+        
+    - name: Check data content
+      run: |
+        cd ./server/src/test/resources
+        echo "---- test-data.sql ----"
+        cat data-test.sql
+        echo "--------------------------------"
+      shell: bash
+
+    - name: Make schema.sql
+      run: |
+        cd ./server/src/test/resources
+        touch ./schema-test.sql
+        echo "${{secrets.SCHEMA_TEST_SQL}}" | base64 --decode >  ./schema-test.sql
+    - name: Check schema content
+      run: |
+        cd ./server/src/test/resources
+        echo "---- test-schema.sql ----"
+        cat schema-test.sql
+        echo "--------------------------------"
+      shell: bash
+      
+    - name: Make application-secret.yml
+      run: |
+        cd ./server/src/main/resources # resources 폴더로 이동
+        touch ./application-secret.yml # application.yml 생성
+        echo "${{ secrets.SECRETS}}" | base64 --decode > ./application-secret.yml
+      shell: bash
+
+    - name: Setup Gradle
+      uses: gradle/actions/setup-gradle@af1da67850ed9a4cedd57bfd976089dd991e2582 # v4.0.0
+
+    - name : grant on gradlew
+      run : chmod +x ./server/gradlew
+      
+    - name: Gradle Test And Create API SPEC
+      run: |
+        cd server
+        ./gradlew copyOasToSwagger 
+        
+    - name: BootJar 
+      run: |
+        cd server
+        ./gradlew bootJar
+      
+      # DockerHub 로그인
+    - name: Login to DockerHub
+      uses: docker/login-action@v2
+      with:
+        username: ${{ secrets.DOCKER_HUB_USERNAME }}
+        password: ${{ secrets.DOCKER_HUB_PASSWORD }}
+
+      # DockerHub Push
+    - name: Build and Push Docker image
+      run: |
+        cd server
+        docker build -t ${{ secrets.DOCKER_HUB_USERNAME }}/greenroom .
+        docker push ${{ secrets.DOCKER_HUB_USERNAME }}/greenroom
+ 
+  deploy:  
+    runs-on: ubuntu-latest
+    needs: build
+    steps:
+      # AWS 배포
+      - name: SSH to EC2 and deploy
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.EC2_HOST }}
+          username: ${{ secrets.EC2_USER }}
+          key: ${{ secrets.EC2_SSH_KEY }}
+          script: |
+            cd greenroom
+            sudo docker compose down
+            sudo docker rmi ${{ secrets.DOCKER_HUB_USERNAME }}/greenroom
+            sudo docker compose up -d     
