@@ -37,7 +37,7 @@ public class MailSender {
             throw new CustomException(ResponseCodeEnum.FAIL_TO_SEND_EMAIL,e.getMessage());
         }
         catch (MessagingException e){
-            throw new CustomException(ResponseCodeEnum.INVALID_EMAIL_CONTENT,e.getMessage());
+            throw new CustomException(ResponseCodeEnum.INVALID_EMAIL_FORMAT,e.getMessage());
         }
     }
 }

@@ -41,6 +41,7 @@ import org.springframework.stereotype.Component;
 
 import java.time.LocalDateTime;
 import java.util.*;
+import java.util.regex.Pattern;
 
 /**
  * 순수 user 관련 생명 주기만 관리 하는 서비스
@@ -246,6 +247,9 @@ public class CustomUserDetailService implements UserDetailsService {
         }
         //처음 시도한 경우 새로 생성
         else{
+
+            if(!isValidEmail((email))){throw  new CustomException(ResponseCodeEnum.INVALID_EMAIL_FORMAT);}
+
             token = tokenProvider.createVerificationToken(email);
             emailVerificationLogsRepository.save(EmailVerificationLogs.createLog(email,1,token));
         }
@@ -254,6 +258,16 @@ public class CustomUserDetailService implements UserDetailsService {
         String deepLink = redirectUrl+"?token="+token;
         mailSender.sendEmail(email,deepLink);
 
+    }
+
+
+    public Boolean isValidEmail(String email){
+        final String EMAIL_REGEX =
+                "^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,}$";
+        if (email == null || email.isEmpty()) {
+            return false; // null 또는 빈 값 처리
+        }
+        return Pattern.matches(EMAIL_REGEX, email);
     }
 
     @Transactional

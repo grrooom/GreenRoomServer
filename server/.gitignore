@@ -42,3 +42,6 @@ application-secret.yml
 ### db ###
 data-test.sql
 shema-test.sql
+
+### api ###
+openapi3.yaml
