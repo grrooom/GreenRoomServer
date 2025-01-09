@@ -1,14 +1,13 @@
 server:
-  address: 0.0.0.0
   port: 8080
 spring:
   profiles:
     active: local
     include: secret
-  jpa:
-    hibernate:
-      naming:
-        physical-strategy: com.greenroom.server.api.utils.JpaCustomPhysicalNamingStrategy
+#  jpa:
+#    hibernate:
+#      naming:
+#        physical-strategy: com.greenroom.server.api.utils.JpaCustomPhysicalNamingStrategy
   servlet:
     multipart:
       max-file-size: 5MB

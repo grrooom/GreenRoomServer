@@ -231,7 +231,7 @@ public class CustomUserDetailService implements UserDetailsService {
             //5회 이상 시도했을 경우
             if(emailLog.getNumberOfTrial()>=5){
                 // 15분 이상 지났을 경우 초기화
-                if(emailLog.getExpires_at().plusMinutes(15).isBefore(LocalDateTime.now())){
+                if(emailLog.getExpiresAt().plusMinutes(15).isBefore(LocalDateTime.now())){
                     token = tokenProvider.createVerificationToken(email);
                     emailLog.updateLog(token);
                 }
@@ -265,7 +265,7 @@ public class CustomUserDetailService implements UserDetailsService {
             EmailVerificationLogs emailLog = optionalEmailLog.get();
 
             //토큰 만료 안되었으면
-            if(LocalDateTime.now().isBefore(emailLog.getExpires_at())){
+            if(LocalDateTime.now().isBefore(emailLog.getExpiresAt())){
                 emailLog.updateVerificationStatus(VerificationStatus.VERIFIED);
                 emailVerificationLogsRepository.save(emailLog);
             }

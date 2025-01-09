@@ -3,17 +3,21 @@ spring:
     database-platform: org.hibernate.dialect.H2Dialect #추가
     show-sql: true
     hibernate:
-      ddl-auto: create
+      ddl-auto: none
     properties :
       hibernate:
-        dialect: org.hibernate.dialect.H2Dialect  
+        dialect: org.hibernate.dialect.H2Dialect
         format_sql: true
+  sql:
+    init:
+      mode: always
+      schema-locations: classpath*:schema-test.sql
+      data-locations: classpath*:data-test.sql
   datasource:
     url: jdbc:h2:mem:testDb
     username: sa
     password:
     driver-class-name: org.h2.Driver
-    
   h2:
     console:
       settings:

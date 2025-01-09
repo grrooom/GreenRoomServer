@@ -17,6 +17,7 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @Builder
 @Getter
+@Table(name = "email_verification_logs")
 public class EmailVerificationLogs extends BaseTime {
 
     @Id@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -28,21 +29,21 @@ public class EmailVerificationLogs extends BaseTime {
     @Enumerated(EnumType.STRING)
     private VerificationStatus verificationStatus;
 
-    private LocalDateTime expires_at;
+    private LocalDateTime expiresAt;
 
     public static EmailVerificationLogs createLog(String email,int trial,String token){
         return EmailVerificationLogs.builder()
                 .email(email)
                 .verificationToken(token)
                 .numberOfTrial(trial)
-                .expires_at(LocalDateTime.now().plusMinutes(15))
+                .expiresAt(LocalDateTime.now().plusMinutes(15))
                 .verificationStatus(VerificationStatus.PENDING)
                 .build();
     }
 
     public void updateLog(String token){
         this.verificationToken = token;
-        this.expires_at = LocalDateTime.now().plusMinutes(15);
+        this.expiresAt = LocalDateTime.now().plusMinutes(15);
         this.verificationStatus = VerificationStatus.PENDING;
         this.numberOfTrial = this.numberOfTrial>=5?1:this.numberOfTrial+1;
     }

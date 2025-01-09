@@ -106,7 +106,7 @@ public class AuthIntegrationTest {
     void 회원가입성공() throws Exception {
 
         //given
-        emailVerificationLogsRepository.save(EmailVerificationLogs.builder().email("testEmail@gmail.com").verificationStatus(VerificationStatus.VERIFIED).expires_at(LocalDateTime.now().minusMinutes(15)).build());
+        emailVerificationLogsRepository.save(EmailVerificationLogs.builder().email("testEmail@gmail.com").verificationStatus(VerificationStatus.VERIFIED).expiresAt(LocalDateTime.now().minusMinutes(15)).build());
 
         SignupRequestDto signupRequestDto = new SignupRequestDto("testEmail@gmail.com","!123456");
 
@@ -178,7 +178,7 @@ public class AuthIntegrationTest {
     void 회원가입실패2() throws Exception {
 
         //given
-        emailVerificationLogsRepository.save(EmailVerificationLogs.builder().email("testEmail@gmail.com").verificationStatus(VerificationStatus.VERIFIED).expires_at(LocalDateTime.now().minusMinutes(15)).build());
+        emailVerificationLogsRepository.save(EmailVerificationLogs.builder().email("testEmail@gmail.com").verificationStatus(VerificationStatus.VERIFIED).expiresAt(LocalDateTime.now().minusMinutes(15)).build());
         userDetailService.save(new SignupRequestDto("testEmail@gmail.com", "!123456"));
 
         SignupRequestDto signupRequestDto = new SignupRequestDto("testEmail@gmail.com", "!123456");
@@ -224,7 +224,7 @@ public class AuthIntegrationTest {
     void 로그인성공() throws Exception {
 
         //given
-        emailVerificationLogsRepository.save(EmailVerificationLogs.builder().email("testEmail@gmail.com").verificationStatus(VerificationStatus.VERIFIED).expires_at(LocalDateTime.now().minusMinutes(15)).build());
+        emailVerificationLogsRepository.save(EmailVerificationLogs.builder().email("testEmail@gmail.com").verificationStatus(VerificationStatus.VERIFIED).expiresAt(LocalDateTime.now().minusMinutes(15)).build());
         userDetailService.save(new SignupRequestDto("testEmail@gmail.com", "!123456"));
 
 
@@ -298,7 +298,7 @@ public class AuthIntegrationTest {
     void 로그인실패2() throws Exception {
 
         //given
-        emailVerificationLogsRepository.save(EmailVerificationLogs.builder().email("testEmail@gmail.com").verificationStatus(VerificationStatus.VERIFIED).expires_at(LocalDateTime.now().minusMinutes(15)).build());
+        emailVerificationLogsRepository.save(EmailVerificationLogs.builder().email("testEmail@gmail.com").verificationStatus(VerificationStatus.VERIFIED).expiresAt(LocalDateTime.now().minusMinutes(15)).build());
         userDetailService.save(new SignupRequestDto("testEmail@gmail.com", "!1234567"));
 
         LoginRequestDto loginRequestDto = new LoginRequestDto("testEmail@gmail.com", "!1234567890");
@@ -637,7 +637,7 @@ public class AuthIntegrationTest {
 
         //given
 
-        EmailVerificationLogs emailVerificationLogs = EmailVerificationLogs.builder().email("emailTest@gmail.com").numberOfTrial(2).verificationStatus(VerificationStatus.PENDING).expires_at(LocalDateTime.now()).build();
+        EmailVerificationLogs emailVerificationLogs = EmailVerificationLogs.builder().email("emailTest@gmail.com").numberOfTrial(2).verificationStatus(VerificationStatus.PENDING).expiresAt(LocalDateTime.now()).build();
         emailVerificationLogsRepository.save(emailVerificationLogs);
         String token= emailVerificationLogs.getVerificationToken();
 
