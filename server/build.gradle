@@ -85,8 +85,8 @@ tasks.named('test') {
 openapi3 {
 	servers = [
 			{ url = "http://localhost:8080" },
-			{ url = "https://greenroom-server:8080" },
-			{ url = "http://greenroom-server:8080"}
+			{ url = "https://greenroom-server.site:8080" },
+			{ url = "http://greenroom-server.site:8080"}
 	]
 	title = '그린룸 API DOCUMENT'
 	description = '그린룸 api 명세서입니다.'
