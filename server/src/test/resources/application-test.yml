@@ -1,0 +1,53 @@
+spring:
+  jpa:
+    database-platform: org.hibernate.dialect.H2Dialect #추가
+    show-sql: true
+    hibernate:
+      ddl-auto: none
+    properties :
+      hibernate:
+        dialect: org.hibernate.dialect.H2Dialect
+        format_sql: true
+  sql:
+    init:
+      mode: always
+      schema-locations: classpath*:schema-test.sql
+      data-locations: classpath*:data-test.sql
+  datasource:
+    url: jdbc:h2:mem:testDb
+    username: sa
+    password:
+    driver-class-name: org.h2.Driver
+  h2:
+    console:
+      settings:
+        web-allow-others: true
+      enbaled : true
+      path : /h2
+
+  servlet:
+    multipart:
+      max-request-size: 100MB
+      max-file-size: 100MB
+  mail:
+    host: smtp.gmail.com
+    port: 587
+    username: ENC(GoXmhnlYhTWXrVx550csmitTvIcQWnfoqSorlY2jWfk=)
+    password: ENC(dXbTFoOHJHLNxADWJ26ejY77pDpr0E/B3CYtujkuV7g=)
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true
+temp:
+  filePath: src/main/resources/
+
+logging.level:
+  org.hibernate.type: info
+
+decorator:
+  datasource:
+    p6spy:
+      enable-logging: true
+
