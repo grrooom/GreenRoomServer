@@ -1,0 +1,44 @@
+spring:
+  jpa:
+    show-sql: false
+    hibernate:
+      ddl-auto: none
+    properties:
+      hibernate:
+        format_sql: true
+        default_batch_fetch_size: 100
+        dialect : org.hibernate.dialect.MySQLDialect
+  datasource:
+    url: ENC(kgK9/mdi4kgWtrLXbxIJByGetfhtr5EzpiKYTGMOTIz4Xl+IFbWdPFK4wrNyrb83SCRqk30I9vvvgPHG2DYGCmJoakcvBREnK5zdeSEIH53f43cRRVmxtTsFgCeBRgYI3hJr5WQJOX0=)
+    username: ENC(jIrlODxxlnLjfjNGJWxcK7PlWl42HFmU)
+    password: ENC(WcCj7bRbz1ZnW/KZr24eB1jEu5fXjmSSEkuV2/h9ZKw=)
+    driver-class-name: com.mysql.cj.jdbc.Driver
+  sql:
+    init:
+      mode : never
+  servlet:
+    multipart:
+      max-request-size: 100MB
+      max-file-size: 100MB
+  mail:
+    host: smtp.gmail.com
+    port: 587
+    username: ENC(GoXmhnlYhTWXrVx550csmitTvIcQWnfoqSorlY2jWfk=)
+    password: ENC(dXbTFoOHJHLNxADWJ26ejY77pDpr0E/B3CYtujkuV7g=)
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true
+temp:
+  filePath: src/main/resources/
+logging.level:
+  #  org.hibernate.SQL: debug
+  org.hibernate.type: info
+
+decorator:
+  datasource:
+    p6spy:
+      enable-logging: true
+

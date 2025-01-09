@@ -1,0 +1,26 @@
+server:
+  port: 8080
+spring:
+  profiles:
+    active: local
+    include: secret
+#  jpa:
+#    hibernate:
+#      naming:
+#        physical-strategy: com.greenroom.server.api.utils.JpaCustomPhysicalNamingStrategy
+  servlet:
+    multipart:
+      max-file-size: 5MB
+      max-request-size: 10MB
+###농사로 open api key
+gardening-data:
+  api-key: ENC(wZ/82T6CzwoBHZAU5MZD4Ehs2Bbx2C3dHaMtnLvelLO+2Rm32iPn3g==)
+
+jwt:
+  header: Authorization
+  secret-key: ENC(8gMvPhHsH5YgpI2l3zovLPj2SQTqyd9ervjI2MUFJ43TfSW5GuRy4vf87GE4VTRx/cks3bTwYie5SNPf7LguDHLpz2MBmAkqyF4U+cSZkh2YJwoowT00MDHgQ2INQqdTYbXRX9ABaaTHEJCwSdx3ADTVSg8r9vRTlVso7QUadsYnKyRPCF7BqDhvOFMSIdyd+3oJn3BOR9D1JzLf7XCLtMSLXrLxaK8a2NtHaE8Kc/HuYB1/uxncA3ZwrwsSQ9xTT/LpkBQuPgJUomBhBJt10cj2tqPa1nF+xNRorsBzkDJYlsbkbrvQMRpTefbTDzNoyUmw3aBejXi5GiawZIrl9yTyEz7LMKEkRAqVZ7A1VfNQ0IVJzJgRQk49FFA3OUfpZVB7B9uL9SgDR/XcEEwh0YHJY8CDNXkZ9+1VC6eZfKbOyWqvfS0hSRVy5zskcuY7ibFbSctxbmpYU65KCAzrnoHHyf2VVKGaISgCa1kn+Ds0BPnCXt4caNMOvl8hjD4/xjqGe8m+OOnaLTBKofZ19OvVSmDWGmOKHRnhjjX0bE/gcVJNZZYTJzp8+mY7yNCeo2yrz3iimtgvXrkjPnwXPid6zg167IO3521MzhJbL2+oqCY5eoq8gwdqKLuClIuBnLe8rt4H5BFuzvGY8KZutO0QWzQ1+wPWQXF49LrqTJMNZBULJUSFFruKzuU84niiy85kNcixSYVphkpuNyHqVleDgVDleILDgi3cOn/Re36crI3yil1lY5MzRIui1NSC/HGVbtiJAMfvOc7bkmBYW9XNfs+i2avi17u5w2MdrssWcHhk2SCmqOP8nG/GCjVllmR/diT/JYuL7UnXB8NrxDMfPEoVC2Qv0C1szciG93wr5QnC+WofbRIftnTxmdIcwZw3o/IKJ19MtW6JLCg9dKswlWrS4QgO0mDaFgbPbEXApruSlvp9R0tHgmIcZY1Qqnj14/F6NUiDbkw1qSOK0+Z35EJwDzmyM788ecTwE/eMVj4ZuJLt1iL6CfZOX3JFMwPgg6B2u09Ndm/+rCLcYKuVx9/o2itrm4VPpXk+QIt7Uubf1OKeEphvbhteDF0pqjhJoHMiNklE0LqTJ9iVxwTcOjS1IcjzG9qcEO9dnemFmegK5EcMYRG49+CW0ZVtmVTjFNqAtDWpo05pZ+dnmlSyOikcoESx4rCT0tx7rg8Scj9w9mwRReQTU5ipqzzml2msJuCGf6kh3UniOO5WmrI9g95yLab12X2gsNQTnVumieh9bDprm+hLSDFY+GCGZbdsG9OQiVBBcat1MWdquhHU8tKJbyAjebSTTcQpNDJBi0SHgo8SI/yAflezIgnFAjOd8S0G/z4ausXVYXZ+jl/8FCAWOws0FLmpiYmk0l0=)
+  token-validity-in-seconds: 3600
+logging:
+  config: classpath:logback-spring.xml
+
+

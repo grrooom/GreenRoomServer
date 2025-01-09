@@ -1,0 +1,124 @@
+
+plugins {
+	id 'java'
+	id 'org.springframework.boot' version '3.4.0'
+	id 'io.spring.dependency-management' version '1.1.6'
+	id 'com.epages.restdocs-api-spec' version '0.18.2'
+}
+
+group = 'com.greenroom'
+version = '0.0.1-SNAPSHOT'
+
+java {
+	sourceCompatibility = '17'
+}
+
+configurations {
+	compileOnly {
+		extendsFrom annotationProcessor
+	}
+}
+
+repositories {
+	mavenCentral()
+}
+
+dependencies {
+	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+	implementation 'org.springframework.boot:spring-boot-starter-security'
+	implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
+	implementation 'org.springframework.boot:spring-boot-starter-validation'
+	implementation 'org.springframework.boot:spring-boot-starter-web'
+	implementation 'org.springframework.boot:spring-boot-starter-oauth2-client'
+	implementation "com.github.ulisesbocchio:jasypt-spring-boot-starter:3.0.3"
+
+	// s3
+	implementation 'org.springframework.cloud:spring-cloud-starter-aws:2.2.6.RELEASE'
+
+	compileOnly 'org.projectlombok:lombok'
+	annotationProcessor 'org.projectlombok:lombok'
+	developmentOnly 'org.springframework.boot:spring-boot-devtools'
+	runtimeOnly 'com.mysql:mysql-connector-j'
+
+	// 테스트 의존성 추가
+	testCompileOnly 'org.projectlombok:lombok' 
+	testAnnotationProcessor 'org.projectlombok:lombok' 
+	testImplementation 'org.springframework.security:spring-security-test'
+	testImplementation 'org.springframework.boot:spring-boot-starter-test'
+	testRuntimeOnly 'com.h2database:h2'
+
+	//jwt 의존성 추가
+	implementation group: 'io.jsonwebtoken', name: 'jjwt-api', version: '0.11.5'
+	runtimeOnly group: 'io.jsonwebtoken', name: 'jjwt-impl', version: '0.11.5'
+	runtimeOnly group: 'io.jsonwebtoken', name: 'jjwt-jackson', version: '0.11.5'
+
+	implementation 'org.springframework.boot:spring-boot-starter-webflux' //webclient
+	implementation "org.json:json:20210307" //json
+
+
+
+	///api 문서화
+	testImplementation 'org.springframework.restdocs:spring-restdocs-mockmvc'
+	testImplementation 'com.epages:restdocs-api-spec-mockmvc:0.18.2'
+	testImplementation 'com.epages:restdocs-api-spec-restassured:0.18.2'
+	testImplementation 'org.springframework.restdocs:spring-restdocs-restassured'
+	//local용 db
+	runtimeOnly 'org.mariadb.jdbc:mariadb-java-client'
+
+	//at&rt blacklist 관리
+	implementation 'org.springframework.boot:spring-boot-starter-data-redis'
+
+	//smtp 메일 전송
+	implementation 'org.springframework.boot:spring-boot-starter-mail'
+}
+
+
+tasks.named('bootBuildImage') {
+	builder = 'paketobuildpacks/builder-jammy-base:latest'
+}
+
+tasks.named('test') {
+	delete file('build/generated-snippets')
+	useJUnitPlatform()
+}
+
+openapi3 {
+	servers = [
+			{ url = "http://localhost:8080" },
+			{ url = "https://greenroom-server.site:8080" },
+			{ url = "http://greenroom-server.site:8080"}
+	]
+	title = '그린룸 API DOCUMENT'
+	description = '그린룸 api 명세서입니다.'
+	version = '0.1.0'
+	format = 'yaml'
+}
+
+
+tasks.register('copyOasToSwagger', Copy) {
+
+	// 기존 yaml 파일 삭제
+	delete 'src/main/resources/static/swagger-ui/openapi3.yaml'
+
+	// 복제할 yaml 파일 타겟팅
+	from "build/api-spec/openapi3.yaml"
+
+	// 타겟 디렉토리로 파일 복제
+	into 'src/main/resources/static/swagger-ui'
+
+	//test가 먼저 실행되도록 설정
+	dependsOn tasks.named('test')
+
+	// openapi3 task가 먼저 실행되도록 설정
+	dependsOn tasks.named('openapi3')
+}
+
+//sourceSets {
+//	ext.profile = (!project.hasProperty('profile') || !profile) ? 'local' : profile
+//	println "current profile : ${profile}"
+//	main {
+//		java {
+//			srcDirs "src/main/java"
+//		}
+//	}
+//}

@@ -1,0 +1,67 @@
+spring:
+  jpa:
+    show-sql: true
+    hibernate:
+      ddl-auto: none
+    properties:
+      hibernate:
+        format_sql: true
+        default_batch_fetch_size: 100
+  datasource:
+    url: jdbc:mariadb://localhost/greenroom
+    username: root
+    password: ENC(XYnmOTbvyFIoJ3A/PTVR5Q==)
+    driver-class-name: org.mariadb.jdbc.Driver
+  sql:
+    init:
+      mode : never
+  servlet:
+    multipart:
+      max-request-size: 100MB
+      max-file-size: 100MB
+  mail:
+    host: smtp.gmail.com
+    port: 587
+    username: ENC(GoXmhnlYhTWXrVx550csmitTvIcQWnfoqSorlY2jWfk=)
+    password: ENC(dXbTFoOHJHLNxADWJ26ejY77pDpr0E/B3CYtujkuV7g=)
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true
+#cloud:
+#  aws:
+#    region:
+#      static: ap-northeast-2
+#      auto: false
+#    credentials:
+#      access-key: temporalValue
+#      secret-key: temporalValue
+#aws:
+#  s3:
+#    bucket: temporalValue
+#    path:
+#      root: temporalValue
+#      plant: local/plant
+#      greenroom : local/greenroom
+#      user: local/user
+#      diary: local/diary
+#  cdn:
+#    path:
+#      root: temporal value
+#      plant: local/plant
+#      greenroom : local/greenroom
+#      user: local/user
+#      diary: local/diary
+temp:
+  filePath: src/main/resources/
+logging.level:
+  #  org.hibernate.SQL: debug
+  org.hibernate.type: info
+
+decorator:
+  datasource:
+    p6spy:
+      enable-logging: true
+
