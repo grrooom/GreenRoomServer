@@ -248,7 +248,7 @@ public class CustomUserDetailService implements UserDetailsService {
         //처음 시도한 경우 새로 생성
         else{
 
-            if(!isValidEmail((email))){throw  new CustomException(ResponseCodeEnum.INVALID_EMAIL_FORMAT);}
+            if(!isValidEmail((email))){throw  new CustomException(ResponseCodeEnum.INVALID_REQUEST_ARGUMENT);}
 
             token = tokenProvider.createVerificationToken(email);
             emailVerificationLogsRepository.save(EmailVerificationLogs.createLog(email,1,token));
