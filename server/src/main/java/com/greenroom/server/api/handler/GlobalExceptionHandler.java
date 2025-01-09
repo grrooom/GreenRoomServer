@@ -6,6 +6,7 @@ import com.greenroom.server.api.utils.ApiResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.multipart.MaxUploadSizeExceededException;
@@ -57,6 +58,13 @@ public class GlobalExceptionHandler {
 
         return ResponseEntity.status(ResponseCodeEnum.UNKNOWN_SERVER_ERROR.getStatus()).body(ApiResponse.failed(ResponseCodeEnum.UNKNOWN_SERVER_ERROR));
 
+    }
+
+    @ExceptionHandler(MethodArgumentNotValidException.class)
+    public ResponseEntity<ApiResponse> handleInvalidArgumentException(MethodArgumentNotValidException e){
+
+        log.error("[Exception] code : {}  code message : {}", ResponseCodeEnum.INVALID_REQUEST_ARGUMENT.getCode(), e.getMessage());
+        return ResponseEntity.status(ResponseCodeEnum.INVALID_REQUEST_ARGUMENT.getStatus()).body(ApiResponse.failed(ResponseCodeEnum.INVALID_REQUEST_ARGUMENT));
     }
 
 }
