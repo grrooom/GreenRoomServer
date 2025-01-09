@@ -290,60 +290,60 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "Gradle.AuthControllerTest.jwtTokenUpdate성공.executor": "Run",
-    "Gradle.AuthControllerTest.jwtTokenUpdate실패1.executor": "Run",
-    "Gradle.AuthControllerTest.jwtTokenUpdate실패2.executor": "Run",
-    "Gradle.AuthControllerTest.jwtTokenUpdate실패3.executor": "Run",
-    "Gradle.AuthControllerTest.jwtTokenUpdate실패4.executor": "Run",
-    "Gradle.AuthControllerTest.jwtTokenUpdate실패5.executor": "Run",
-    "Gradle.AuthControllerTest.로그인성공.executor": "Run",
-    "Gradle.AuthControllerTest.로그인실패1.executor": "Run",
-    "Gradle.AuthControllerTest.로그인실패2.executor": "Run",
-    "Gradle.AuthControllerTest.이메일인증성공.executor": "Run",
-    "Gradle.AuthControllerTest.이메일인증실패1.executor": "Run",
-    "Gradle.AuthControllerTest.이메일인증실패2.executor": "Run",
-    "Gradle.AuthControllerTest.이메일인증실패3.executor": "Run",
-    "Gradle.AuthControllerTest.이메일인증실패4.executor": "Run",
-    "Gradle.AuthControllerTest.이메일인증실패5.executor": "Run",
-    "Gradle.AuthControllerTest.이메일토큰검증성공.executor": "Run",
-    "Gradle.AuthControllerTest.이메일토큰검증실패1.executor": "Run",
-    "Gradle.AuthControllerTest.이메일토큰검증실패2.executor": "Run",
-    "Gradle.AuthControllerTest.회원가입성공.executor": "Run",
-    "Gradle.AuthControllerTest.회원가입실패1.executor": "Run",
-    "Gradle.AuthControllerTest.회원가입실패2.executor": "Run",
-    "Gradle.AuthIntegrationTest.executor": "Run",
-    "Gradle.AuthServiceTest.executor": "Run",
-    "Gradle.AuthServiceTest.로그인성공.executor": "Run",
-    "Gradle.AuthServiceTest.회원가입성공 (1).executor": "Run",
-    "Gradle.AuthServiceTest.회원가입성공.executor": "Run",
-    "Gradle.AuthServiceTest.회원가입실패1.executor": "Run",
-    "Gradle.AuthUnitControllerTest.회원가입성공.executor": "Run",
-    "Gradle.server [bootJar].executor": "Run",
-    "Gradle.server [copyOasToSwagger].executor": "Run",
-    "Gradle.server [openapi3].executor": "Run",
-    "Gradle.server [test].executor": "Run",
-    "Gradle.server 빌드.executor": "Run",
-    "JavaScript 디버그.index.html.executor": "Run",
-    "RequestMappingsPanelOrder0": "0",
-    "RequestMappingsPanelOrder1": "1",
-    "RequestMappingsPanelWidth0": "75",
-    "RequestMappingsPanelWidth1": "75",
-    "RunOnceActivity.OpenProjectViewOnStart": "true",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "Spring Boot.ServerApplication.executor": "Run",
-    "git-widget-placeholder": "feature/auth-api",
-    "kotlin-language-version-configured": "true",
-    "last_opened_file_path": "C:/sideProject/greenroom/server/src/test/resources",
-    "node.js.detected.package.eslint": "true",
-    "node.js.detected.package.tslint": "true",
-    "node.js.selected.package.eslint": "(autodetect)",
-    "node.js.selected.package.tslint": "(autodetect)",
-    "nodejs_package_manager_path": "npm",
-    "vue.rearranger.settings.migration": "true"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;Gradle.AuthControllerTest.jwtTokenUpdate성공.executor&quot;: &quot;Run&quot;,
+    &quot;Gradle.AuthControllerTest.jwtTokenUpdate실패1.executor&quot;: &quot;Run&quot;,
+    &quot;Gradle.AuthControllerTest.jwtTokenUpdate실패2.executor&quot;: &quot;Run&quot;,
+    &quot;Gradle.AuthControllerTest.jwtTokenUpdate실패3.executor&quot;: &quot;Run&quot;,
+    &quot;Gradle.AuthControllerTest.jwtTokenUpdate실패4.executor&quot;: &quot;Run&quot;,
+    &quot;Gradle.AuthControllerTest.jwtTokenUpdate실패5.executor&quot;: &quot;Run&quot;,
+    &quot;Gradle.AuthControllerTest.로그인성공.executor&quot;: &quot;Run&quot;,
+    &quot;Gradle.AuthControllerTest.로그인실패1.executor&quot;: &quot;Run&quot;,
+    &quot;Gradle.AuthControllerTest.로그인실패2.executor&quot;: &quot;Run&quot;,
+    &quot;Gradle.AuthControllerTest.이메일인증성공.executor&quot;: &quot;Run&quot;,
+    &quot;Gradle.AuthControllerTest.이메일인증실패1.executor&quot;: &quot;Run&quot;,
+    &quot;Gradle.AuthControllerTest.이메일인증실패2.executor&quot;: &quot;Run&quot;,
+    &quot;Gradle.AuthControllerTest.이메일인증실패3.executor&quot;: &quot;Run&quot;,
+    &quot;Gradle.AuthControllerTest.이메일인증실패4.executor&quot;: &quot;Run&quot;,
+    &quot;Gradle.AuthControllerTest.이메일인증실패5.executor&quot;: &quot;Run&quot;,
+    &quot;Gradle.AuthControllerTest.이메일토큰검증성공.executor&quot;: &quot;Run&quot;,
+    &quot;Gradle.AuthControllerTest.이메일토큰검증실패1.executor&quot;: &quot;Run&quot;,
+    &quot;Gradle.AuthControllerTest.이메일토큰검증실패2.executor&quot;: &quot;Run&quot;,
+    &quot;Gradle.AuthControllerTest.회원가입성공.executor&quot;: &quot;Run&quot;,
+    &quot;Gradle.AuthControllerTest.회원가입실패1.executor&quot;: &quot;Run&quot;,
+    &quot;Gradle.AuthControllerTest.회원가입실패2.executor&quot;: &quot;Run&quot;,
+    &quot;Gradle.AuthIntegrationTest.executor&quot;: &quot;Run&quot;,
+    &quot;Gradle.AuthServiceTest.executor&quot;: &quot;Run&quot;,
+    &quot;Gradle.AuthServiceTest.로그인성공.executor&quot;: &quot;Run&quot;,
+    &quot;Gradle.AuthServiceTest.회원가입성공 (1).executor&quot;: &quot;Run&quot;,
+    &quot;Gradle.AuthServiceTest.회원가입성공.executor&quot;: &quot;Run&quot;,
+    &quot;Gradle.AuthServiceTest.회원가입실패1.executor&quot;: &quot;Run&quot;,
+    &quot;Gradle.AuthUnitControllerTest.회원가입성공.executor&quot;: &quot;Run&quot;,
+    &quot;Gradle.server [bootJar].executor&quot;: &quot;Run&quot;,
+    &quot;Gradle.server [copyOasToSwagger].executor&quot;: &quot;Run&quot;,
+    &quot;Gradle.server [openapi3].executor&quot;: &quot;Run&quot;,
+    &quot;Gradle.server [test].executor&quot;: &quot;Run&quot;,
+    &quot;Gradle.server 빌드.executor&quot;: &quot;Run&quot;,
+    &quot;JavaScript 디버그.index.html.executor&quot;: &quot;Run&quot;,
+    &quot;RequestMappingsPanelOrder0&quot;: &quot;0&quot;,
+    &quot;RequestMappingsPanelOrder1&quot;: &quot;1&quot;,
+    &quot;RequestMappingsPanelWidth0&quot;: &quot;75&quot;,
+    &quot;RequestMappingsPanelWidth1&quot;: &quot;75&quot;,
+    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;Spring Boot.ServerApplication.executor&quot;: &quot;Run&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;feature/auth-api&quot;,
+    &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
+    &quot;last_opened_file_path&quot;: &quot;C:/sideProject/greenroom/server/src/test/resources&quot;,
+    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
+    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
+    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
+    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
+    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   }
-}]]></component>
+}</component>
   <component name="ReactorSettings">
     <option name="notificationShown" value="true" />
   </component>
@@ -486,6 +486,19 @@
     </configuration>
     <configuration name="index.html" type="JavascriptDebugType" temporary="true" nameIsGenerated="true" uri="http://localhost:63342/server/server/build/reports/tests/test/index.html" useBuiltInWebServerPort="true">
       <method v="2" />
+    </configuration>
+    <configuration default="true" type="JetRunConfigurationType">
+      <module name="server.main" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration default="true" type="KotlinStandaloneScriptRunConfigurationType">
+      <module name="server.main" />
+      <option name="filePath" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
     </configuration>
     <configuration name="ServerApplication" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot" nameIsGenerated="true">
       <module name="server.main" />
