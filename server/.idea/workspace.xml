@@ -1,0 +1,414 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="SELECTIVE" />
+  </component>
+  <component name="ChangeListManager">
+    <list default="true" id="b2a8e82a-b6b3-41f3-b96e-46c6dfa5bf12" name="변경" comment="[fix]:test code 수정 &amp; test profile 추가 &amp; dockerfile 수정" />
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="ExternalProjectsData">
+    <projectState path="$PROJECT_DIR$">
+      <ProjectState />
+    </projectState>
+  </component>
+  <component name="ExternalProjectsManager">
+    <system id="GRADLE">
+      <state>
+        <task path="$PROJECT_DIR$">
+          <activation />
+        </task>
+        <projects_view>
+          <tree_state>
+            <expand>
+              <path>
+                <item name="" type="6a2764b6:ExternalProjectsStructure$RootNode" />
+                <item name="server" type="f1a62948:ProjectNode" />
+              </path>
+              <path>
+                <item name="" type="6a2764b6:ExternalProjectsStructure$RootNode" />
+                <item name="server" type="f1a62948:ProjectNode" />
+                <item name="Tasks" type="e4a08cd1:TasksNode" />
+              </path>
+              <path>
+                <item name="" type="6a2764b6:ExternalProjectsStructure$RootNode" />
+                <item name="server" type="f1a62948:ProjectNode" />
+                <item name="Tasks" type="e4a08cd1:TasksNode" />
+                <item name="build" type="c8890929:TasksNode$1" />
+              </path>
+              <path>
+                <item name="" type="6a2764b6:ExternalProjectsStructure$RootNode" />
+                <item name="server" type="f1a62948:ProjectNode" />
+                <item name="Tasks" type="e4a08cd1:TasksNode" />
+                <item name="other" type="c8890929:TasksNode$1" />
+              </path>
+              <path>
+                <item name="" type="6a2764b6:ExternalProjectsStructure$RootNode" />
+                <item name="server" type="f1a62948:ProjectNode" />
+                <item name="Tasks" type="e4a08cd1:TasksNode" />
+                <item name="verification" type="c8890929:TasksNode$1" />
+              </path>
+            </expand>
+            <select />
+          </tree_state>
+        </projects_view>
+      </state>
+    </system>
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="Enum" />
+        <option value="Interface" />
+        <option value="Class" />
+      </list>
+    </option>
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_BRANCH_BY_REPOSITORY">
+      <map>
+        <entry key="$PROJECT_DIR$/.." value="develop" />
+      </map>
+    </option>
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/.." />
+  </component>
+  <component name="KubernetesApiProvider">{
+  &quot;isMigrated&quot;: true
+}</component>
+  <component name="MarkdownSettingsMigration">
+    <option name="stateVersion" value="1" />
+  </component>
+  <component name="ProjectColorInfo">{
+  &quot;associatedIndex&quot;: 0
+}</component>
+  <component name="ProjectId" id="2q3OrfigiobloOEP2hkuWCTKUSY" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "Gradle.AuthControllerTest.jwtTokenUpdate성공.executor": "Run",
+    "Gradle.AuthControllerTest.jwtTokenUpdate실패1.executor": "Run",
+    "Gradle.AuthControllerTest.jwtTokenUpdate실패2.executor": "Run",
+    "Gradle.AuthControllerTest.jwtTokenUpdate실패3.executor": "Run",
+    "Gradle.AuthControllerTest.jwtTokenUpdate실패4.executor": "Run",
+    "Gradle.AuthControllerTest.jwtTokenUpdate실패5.executor": "Run",
+    "Gradle.AuthControllerTest.로그인성공.executor": "Run",
+    "Gradle.AuthControllerTest.로그인실패1.executor": "Run",
+    "Gradle.AuthControllerTest.로그인실패2.executor": "Run",
+    "Gradle.AuthControllerTest.이메일인증성공.executor": "Run",
+    "Gradle.AuthControllerTest.이메일인증실패1.executor": "Run",
+    "Gradle.AuthControllerTest.이메일인증실패2.executor": "Run",
+    "Gradle.AuthControllerTest.이메일인증실패3.executor": "Run",
+    "Gradle.AuthControllerTest.이메일인증실패4.executor": "Run",
+    "Gradle.AuthControllerTest.이메일인증실패5.executor": "Run",
+    "Gradle.AuthControllerTest.이메일토큰검증성공.executor": "Run",
+    "Gradle.AuthControllerTest.이메일토큰검증실패1.executor": "Run",
+    "Gradle.AuthControllerTest.이메일토큰검증실패2.executor": "Run",
+    "Gradle.AuthControllerTest.회원가입성공.executor": "Run",
+    "Gradle.AuthControllerTest.회원가입실패1.executor": "Run",
+    "Gradle.AuthControllerTest.회원가입실패2.executor": "Run",
+    "Gradle.AuthIntegrationTest.executor": "Run",
+    "Gradle.AuthServiceTest.executor": "Run",
+    "Gradle.AuthServiceTest.로그인성공.executor": "Run",
+    "Gradle.AuthServiceTest.회원가입성공 (1).executor": "Run",
+    "Gradle.AuthServiceTest.회원가입성공.executor": "Run",
+    "Gradle.AuthServiceTest.회원가입실패1.executor": "Run",
+    "Gradle.AuthUnitControllerTest.회원가입성공.executor": "Run",
+    "Gradle.server [bootJar].executor": "Run",
+    "Gradle.server [copyOasToSwagger].executor": "Run",
+    "Gradle.server [openapi3].executor": "Run",
+    "Gradle.server [test].executor": "Run",
+    "Gradle.server 빌드.executor": "Run",
+    "JavaScript 디버그.index.html.executor": "Run",
+    "RequestMappingsPanelOrder0": "0",
+    "RequestMappingsPanelOrder1": "1",
+    "RequestMappingsPanelWidth0": "75",
+    "RequestMappingsPanelWidth1": "75",
+    "RunOnceActivity.OpenProjectViewOnStart": "true",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "Spring Boot.ServerApplication.executor": "Run",
+    "kotlin-language-version-configured": "true",
+    "last_opened_file_path": "C:/sideProject/greenroom/server/src/test/resources",
+    "node.js.detected.package.eslint": "true",
+    "node.js.detected.package.tslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.tslint": "(autodetect)",
+    "nodejs_package_manager_path": "npm",
+    "vue.rearranger.settings.migration": "true"
+  }
+}]]></component>
+  <component name="ReactorSettings">
+    <option name="notificationShown" value="true" />
+  </component>
+  <component name="RecentsManager">
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="C:\sideProject\greenroom\server\src\test\resources" />
+      <recent name="C:\사이드프로젝트모음\greenroomNew\server\src\main\resources" />
+      <recent name="C:\사이드프로젝트모음\greenroomNew\server\src\main\java\com\greenroom\server\api" />
+      <recent name="C:\사이드프로젝트모음\greenroomNew\server\src\main\java\com\greenroom\server\api\security" />
+    </key>
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="C:\sideProject\greenroom\server\src\test\resources" />
+      <recent name="C:\sideProject\greenroom\server\src\main\resources" />
+      <recent name="C:\사이드프로젝트모음\greenroomNew\server\src\main\resources\static\" />
+      <recent name="C:\사이드프로젝트모음\greenroomNew\server\src\main\resources\static" />
+    </key>
+    <key name="CopyClassDialog.RECENTS_KEY">
+      <recent name="com.greenroom.server.api.domain.greenroom.repository" />
+    </key>
+  </component>
+  <component name="RunManager" selected="Spring Boot.ServerApplication">
+    <configuration name="AuthControllerTest.로그인실패1" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
+      <ExternalSystemSettings>
+        <option name="executionName" />
+        <option name="externalProjectPath" value="$PROJECT_DIR$" />
+        <option name="externalSystemIdString" value="GRADLE" />
+        <option name="scriptParameters" value="" />
+        <option name="taskDescriptions">
+          <list />
+        </option>
+        <option name="taskNames">
+          <list>
+            <option value=":test" />
+            <option value="--tests" />
+            <option value="&quot;com.greenroom.server.api.AuthControllerTest.로그인실패1&quot;" />
+          </list>
+        </option>
+        <option name="vmOptions" />
+      </ExternalSystemSettings>
+      <ExternalSystemDebugServerProcess>false</ExternalSystemDebugServerProcess>
+      <ExternalSystemReattachDebugProcess>true</ExternalSystemReattachDebugProcess>
+      <DebugAllEnabled>false</DebugAllEnabled>
+      <RunAsTest>true</RunAsTest>
+      <method v="2" />
+    </configuration>
+    <configuration name="AuthIntegrationTest" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
+      <ExternalSystemSettings>
+        <option name="executionName" />
+        <option name="externalProjectPath" value="$PROJECT_DIR$" />
+        <option name="externalSystemIdString" value="GRADLE" />
+        <option name="scriptParameters" value="" />
+        <option name="taskDescriptions">
+          <list />
+        </option>
+        <option name="taskNames">
+          <list>
+            <option value=":test" />
+            <option value="--tests" />
+            <option value="&quot;com.greenroom.server.api.AuthIntegrationTest&quot;" />
+          </list>
+        </option>
+        <option name="vmOptions" />
+      </ExternalSystemSettings>
+      <ExternalSystemDebugServerProcess>false</ExternalSystemDebugServerProcess>
+      <ExternalSystemReattachDebugProcess>true</ExternalSystemReattachDebugProcess>
+      <DebugAllEnabled>false</DebugAllEnabled>
+      <RunAsTest>true</RunAsTest>
+      <method v="2" />
+    </configuration>
+    <configuration name="server [bootJar]" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
+      <ExternalSystemSettings>
+        <option name="executionName" />
+        <option name="externalProjectPath" value="$PROJECT_DIR$" />
+        <option name="externalSystemIdString" value="GRADLE" />
+        <option name="scriptParameters" />
+        <option name="taskDescriptions">
+          <list />
+        </option>
+        <option name="taskNames">
+          <list>
+            <option value="bootJar" />
+          </list>
+        </option>
+        <option name="vmOptions" />
+      </ExternalSystemSettings>
+      <ExternalSystemDebugServerProcess>true</ExternalSystemDebugServerProcess>
+      <ExternalSystemReattachDebugProcess>true</ExternalSystemReattachDebugProcess>
+      <DebugAllEnabled>false</DebugAllEnabled>
+      <RunAsTest>false</RunAsTest>
+      <method v="2" />
+    </configuration>
+    <configuration name="server [copyOasToSwagger]" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
+      <ExternalSystemSettings>
+        <option name="executionName" />
+        <option name="externalProjectPath" value="$PROJECT_DIR$" />
+        <option name="externalSystemIdString" value="GRADLE" />
+        <option name="scriptParameters" value="" />
+        <option name="taskDescriptions">
+          <list />
+        </option>
+        <option name="taskNames">
+          <list>
+            <option value="copyOasToSwagger" />
+          </list>
+        </option>
+        <option name="vmOptions" />
+      </ExternalSystemSettings>
+      <ExternalSystemDebugServerProcess>true</ExternalSystemDebugServerProcess>
+      <ExternalSystemReattachDebugProcess>true</ExternalSystemReattachDebugProcess>
+      <DebugAllEnabled>false</DebugAllEnabled>
+      <RunAsTest>false</RunAsTest>
+      <method v="2" />
+    </configuration>
+    <configuration name="server [test]" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
+      <ExternalSystemSettings>
+        <option name="env">
+          <map>
+            <entry key="PROFILE" value="test" />
+          </map>
+        </option>
+        <option name="executionName" />
+        <option name="externalProjectPath" value="$PROJECT_DIR$" />
+        <option name="externalSystemIdString" value="GRADLE" />
+        <option name="scriptParameters" value="" />
+        <option name="taskDescriptions">
+          <list />
+        </option>
+        <option name="taskNames">
+          <list>
+            <option value="test" />
+          </list>
+        </option>
+        <option name="vmOptions" />
+      </ExternalSystemSettings>
+      <ExternalSystemDebugServerProcess>true</ExternalSystemDebugServerProcess>
+      <ExternalSystemReattachDebugProcess>true</ExternalSystemReattachDebugProcess>
+      <DebugAllEnabled>false</DebugAllEnabled>
+      <RunAsTest>false</RunAsTest>
+      <method v="2" />
+    </configuration>
+    <configuration name="index.html" type="JavascriptDebugType" temporary="true" nameIsGenerated="true" uri="http://localhost:63342/server/server/build/reports/tests/test/index.html" useBuiltInWebServerPort="true">
+      <method v="2" />
+    </configuration>
+    <configuration name="ServerApplication" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot" nameIsGenerated="true">
+      <module name="server.main" />
+      <selectedOptions>
+        <option name="environmentVariables" />
+      </selectedOptions>
+      <option name="SPRING_BOOT_MAIN_CLASS" value="com.greenroom.server.api.ServerApplication" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <list>
+      <item itemvalue="Gradle.AuthIntegrationTest" />
+      <item itemvalue="Gradle.server [bootJar]" />
+      <item itemvalue="Gradle.server [copyOasToSwagger]" />
+      <item itemvalue="Gradle.server [test]" />
+      <item itemvalue="JavaScript 디버그.index.html" />
+      <item itemvalue="Spring Boot.ServerApplication" />
+    </list>
+    <recent_temporary>
+      <list>
+        <item itemvalue="Gradle.server [copyOasToSwagger]" />
+        <item itemvalue="Gradle.AuthIntegrationTest" />
+        <item itemvalue="JavaScript 디버그.index.html" />
+        <item itemvalue="Gradle.server [bootJar]" />
+        <item itemvalue="Gradle.server [test]" />
+      </list>
+    </recent_temporary>
+  </component>
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="애플리케이션 수준" UseSingleDictionary="true" transferred="true" />
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="디폴트 작업">
+      <changelist id="b2a8e82a-b6b3-41f3-b96e-46c6dfa5bf12" name="변경" comment="" />
+      <created>1733887993199</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1733887993199</updated>
+      <workItem from="1733887995275" duration="1593000" />
+      <workItem from="1734067715612" duration="713000" />
+      <workItem from="1734402741501" duration="949000" />
+      <workItem from="1734538273886" duration="3254000" />
+      <workItem from="1734567453513" duration="13140000" />
+      <workItem from="1734860686321" duration="17823000" />
+      <workItem from="1734916459621" duration="682000" />
+      <workItem from="1734917458804" duration="20299000" />
+      <workItem from="1735280976136" duration="41606000" />
+      <workItem from="1735620698622" duration="12631000" />
+      <workItem from="1735776329274" duration="8195000" />
+      <workItem from="1735787228368" duration="6821000" />
+      <workItem from="1735838254291" duration="193000" />
+      <workItem from="1735838459367" duration="120000" />
+      <workItem from="1735838593099" duration="565000" />
+      <workItem from="1735889472242" duration="10217000" />
+      <workItem from="1736074688751" duration="79822000" />
+    </task>
+    <task id="LOCAL-00001" summary="[feat]:security 설정 &amp; auth &amp; api docs 설정 &amp; dockerFile">
+      <option name="closed" value="true" />
+      <created>1736145853862</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1736145853862</updated>
+    </task>
+    <task id="LOCAL-00002" summary="[fix]:test code 수정 &amp; test profile 추가">
+      <option name="closed" value="true" />
+      <created>1736229767067</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1736229767067</updated>
+    </task>
+    <task id="LOCAL-00003" summary="[fix]:test code 수정 &amp; test profile 추가">
+      <option name="closed" value="true" />
+      <created>1736230398810</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1736230398810</updated>
+    </task>
+    <task id="LOCAL-00004" summary="[fix]:test code 수정 &amp; test profile 추가">
+      <option name="closed" value="true" />
+      <created>1736231089535</created>
+      <option name="number" value="00004" />
+      <option name="presentableId" value="LOCAL-00004" />
+      <option name="project" value="LOCAL" />
+      <updated>1736231089535</updated>
+    </task>
+    <task id="LOCAL-00005" summary="[fix]:test code 수정 &amp; test profile 추가">
+      <option name="closed" value="true" />
+      <created>1736234587019</created>
+      <option name="number" value="00005" />
+      <option name="presentableId" value="LOCAL-00005" />
+      <option name="project" value="LOCAL" />
+      <updated>1736234587019</updated>
+    </task>
+    <task id="LOCAL-00006" summary="[fix]:test code 수정 &amp; test profile 추가 &amp; logback 수정">
+      <option name="closed" value="true" />
+      <created>1736304651408</created>
+      <option name="number" value="00006" />
+      <option name="presentableId" value="LOCAL-00006" />
+      <option name="project" value="LOCAL" />
+      <updated>1736304651408</updated>
+    </task>
+    <task id="LOCAL-00007" summary="[fix]:test code 수정 &amp; test profile 추가 &amp; dockerfile 수정">
+      <option name="closed" value="true" />
+      <created>1736395970497</created>
+      <option name="number" value="00007" />
+      <option name="presentableId" value="LOCAL-00007" />
+      <option name="project" value="LOCAL" />
+      <updated>1736395970497</updated>
+    </task>
+    <option name="localTasksCounter" value="8" />
+    <servers />
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="3" />
+  </component>
+  <component name="VcsManagerConfiguration">
+    <MESSAGE value="[feat]:security 설정 &amp; auth &amp; api docs 설정 &amp; dockerFile" />
+    <MESSAGE value="[fix]:test code 수정 &amp; test profile 추가" />
+    <MESSAGE value="[fix]:test code 수정 &amp; test profile 추가 &amp; logback 수정" />
+    <MESSAGE value="[fix]:test code 수정 &amp; test profile 추가 &amp; dockerfile 수정" />
+    <option name="LAST_COMMIT_MESSAGE" value="[fix]:test code 수정 &amp; test profile 추가 &amp; dockerfile 수정" />
+  </component>
+  <component name="com.intellij.coverage.CoverageDataManagerImpl">
+    <SUITE FILE_PATH="coverage/server$AuthUnitControllerTest_.ic" NAME="AuthUnitControllerTest.회원가입성공 커버리지 결과" MODIFIED="1736226512865" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="idea" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" />
+  </component>
+</project>
