@@ -3,13 +3,10 @@ package com.greenroom.server.api.security.dto;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.RequiredArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 @Getter
-@Setter
+@Data
 @RequiredArgsConstructor
 @AllArgsConstructor
 public class SignupRequestDto {

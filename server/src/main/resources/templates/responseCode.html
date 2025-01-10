@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Error Code Documentation</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 20px;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: left;
+        }
+        th {
+            background-color: #f4f4f4;
+        }
+        h2 {
+            margin-top: 30px;
+            font-size: 24px;
+        }
+    </style>
+</head>
+<body>
+<h1>Error Code Documentation</h1>
+
+
+
+<!-- 반복적으로 섹션을 만들기 위해 Thymeleaf를 사용 -->
+<div>
+    <h2> ERROR DESCRIPTION</h2>
+    <table>
+        <thead>
+        <tr>
+            <th>Status Code</th>
+            <th>Status</th>
+            <th>Error Code</th>
+            <th>Occurrence Reason</th>
+            <th>Resolution</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="error : ${errorGroups}">
+            <td th:text="${error.statusCode}"></td>
+            <td th:text="${error.status}"></td>
+            <td th:text="${error.code}"></td>
+            <td th:text="${error.reason}"></td>
+            <td th:text="${error.postProcess}"></td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+</body>
+</html>
