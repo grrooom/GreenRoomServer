@@ -1,10 +1,9 @@
 package com.greenroom.server.api.security.entity;
 
 
-import com.greenroom.server.api.domain.common.BaseTime;
+import com.greenroom.server.api.domain.common.entity.BaseTime;
 import jakarta.persistence.*;
 import lombok.*;
-import org.springframework.data.redis.core.RedisHash;
 
 @Getter
 @Entity

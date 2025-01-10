@@ -127,7 +127,7 @@ public class AuthIntegrationTest {
 
         resultActions.andDo( // 문서 작성
                 document(
-                        "회원가입-성공", // api의 id
+                        "회원가입_SUCCESS", // api의 id
                         resource(
                                 ResourceSnippetParameters.builder()
                                         .tag("😎 AUTH-인증/인가") // 문서에서 api들이 태그로 분류됨
@@ -157,7 +157,7 @@ public class AuthIntegrationTest {
         );
 
         // then
-        resultActions.andExpect(status().isConflict()).andExpect(jsonPath("code").value("C023"));
+        resultActions.andExpect(status().isConflict()).andExpect(jsonPath("code").value(ResponseCodeEnum.EMAIL_NOT_VERIFIED.getCode()));
 
         // 문서 작성
         resultActions.andDo(
@@ -196,12 +196,12 @@ public class AuthIntegrationTest {
         );
 
         // then
-        resultActions.andExpect(status().isConflict()).andExpect(jsonPath("code").value("C002")); // 상태 코드 conflict인지 확인
+        resultActions.andExpect(status().isConflict()).andExpect(jsonPath("code").value(ResponseCodeEnum.USER_ALREADY_EXIST.getCode())); // 상태 코드 conflict인지 확인
 
         // 문서 작성
         resultActions.andDo(
                 document(
-                        "회원가입_FAIL_USER_ALREAD_EXISTS", // api의 id
+                        "회원가입_FAIL_USER_ALREADY_EXISTS", // api의 id
                         resource(
                                 ResourceSnippetParameters.builder()
                                         .tag("😎 AUTH-인증/인가") // 문서에서 api들이 태그로 분류됨
@@ -235,7 +235,7 @@ public class AuthIntegrationTest {
         );
 
         // then
-        resultActions.andExpect(status().isBadRequest()).andExpect(jsonPath("code").value("C027"));
+        resultActions.andExpect(status().isBadRequest()).andExpect(jsonPath("code").value(ResponseCodeEnum.INVALID_REQUEST_ARGUMENT.getCode()));
 
         // 문서 작성
         resultActions.andDo(
@@ -287,7 +287,7 @@ public class AuthIntegrationTest {
         // 문서 작성
         resultActions.andDo(
                 document(
-                        "로그인-성공", // api의 id
+                        "로그인_SUCCESS", // api의 id
                         resource(
                                 ResourceSnippetParameters.builder()
                                         .tag("😎 AUTH-인증/인가") // 문서에서 api들이 태그로 분류됨
@@ -317,7 +317,7 @@ public class AuthIntegrationTest {
         );
 
         // then
-        resultActions.andExpect(status().isNotFound()).andExpect(jsonPath("code").value("C001")); // 상태 코드 not found인지 확인
+        resultActions.andExpect(status().isNotFound()).andExpect(jsonPath("code").value(ResponseCodeEnum.USER_NOT_FOUND.getCode())); // 상태 코드 not found인지 확인
 
         // 문서 작성
         resultActions.andDo(
@@ -355,7 +355,7 @@ public class AuthIntegrationTest {
         );
 
         // then
-        resultActions.andExpect(status().isConflict()).andExpect(jsonPath("code").value("C017")); // 상태 코드 conflict인지 확인
+        resultActions.andExpect(status().isConflict()).andExpect(jsonPath("code").value(ResponseCodeEnum.PASSWORD_NOT_MATCHED.getCode())); // 상태 코드 conflict인지 확인
 
         // 문서 작성
         resultActions.andDo(
@@ -393,7 +393,7 @@ public class AuthIntegrationTest {
         );
 
         // then
-        resultActions.andExpect(status().isBadRequest()).andExpect(jsonPath("code").value("C027")); // 상태 코드 conflict인지 확인
+        resultActions.andExpect(status().isBadRequest()).andExpect(jsonPath("code").value(ResponseCodeEnum.INVALID_REQUEST_ARGUMENT.getCode())); // 상태 코드 conflict인지 확인
 
         // 문서 작성
         resultActions.andDo(
@@ -467,7 +467,7 @@ public class AuthIntegrationTest {
         );
 
         // then
-        resultActions.andExpect(status().isConflict()).andExpect(jsonPath("code").value("C019"));
+        resultActions.andExpect(status().isConflict()).andExpect(jsonPath("code").value(ResponseCodeEnum.EXCEED_NUMBER_OF_TRIAL_VERIFICATION.getCode()));
 
         // 문서 작성
         resultActions.andDo(
@@ -506,7 +506,7 @@ public class AuthIntegrationTest {
                         .content(mapper.writeValueAsString(emailAuthDto))
         );
         // then
-        resultActions.andExpect(status().isConflict()).andExpect(jsonPath("code").value("C025"));
+        resultActions.andExpect(status().isConflict()).andExpect(jsonPath("code").value(ResponseCodeEnum.ALREADY_VERIFIED_EMAIL.getCode()));
 
         // 문서 작성
         resultActions.andDo(
@@ -544,7 +544,7 @@ public class AuthIntegrationTest {
         );
 
         // then
-        resultActions.andExpect(status().isConflict()).andExpect(jsonPath("code").value("C018")); ; // 상태 코드 conflict인지 확인
+        resultActions.andExpect(status().isConflict()).andExpect(jsonPath("code").value(ResponseCodeEnum.VERIFIED_USER_ALREADY_EXISTS.getCode())); ; // 상태 코드 conflict인지 확인
 
         // 문서 작성
         resultActions.andDo(
@@ -582,7 +582,7 @@ public class AuthIntegrationTest {
         );
 
         // then
-        resultActions.andExpect(status().isConflict()).andExpect(jsonPath("code").value("C024"));
+        resultActions.andExpect(status().isConflict()).andExpect(jsonPath("code").value(ResponseCodeEnum.INVALID_EMAIL_CONTENT.getCode()));
 
         // 문서 작성
         resultActions.andDo(
@@ -622,7 +622,7 @@ public class AuthIntegrationTest {
         );
 
         // then
-        resultActions.andExpect(status().isInternalServerError()).andExpect(jsonPath("code").value("D002"));
+        resultActions.andExpect(status().isInternalServerError()).andExpect(jsonPath("code").value(ResponseCodeEnum.FAIL_TO_SEND_EMAIL.getCode()));
 
         // 문서 작성
         resultActions.andDo(
@@ -661,12 +661,12 @@ public class AuthIntegrationTest {
         );
 
         // then
-        resultActions.andExpect(status().isBadRequest()).andExpect(jsonPath("code").value("C027"));
+        resultActions.andExpect(status().isBadRequest()).andExpect(jsonPath("code").value(ResponseCodeEnum.INVALID_REQUEST_ARGUMENT.getCode()));
 
         // 문서 작성
         resultActions.andDo(
                 document(
-                        "이메일인증_FAIL_FAIL_TO_SEND_EMAIL", // api의 id
+                        "이메일인증_FAIL_INVALID_REQUEST_ARGUMENT", // api의 id
                         resource(
                                 ResourceSnippetParameters.builder()
                                         .tag("😎 AUTH-인증/인가") // 문서에서 api들이 태그로 분류됨
@@ -737,7 +737,7 @@ public class AuthIntegrationTest {
         );
 
         // then
-        resultActions.andExpect(status().isConflict()).andExpect(jsonPath("code").value("C022"));
+        resultActions.andExpect(status().isConflict()).andExpect(jsonPath("code").value(ResponseCodeEnum.EMAIL_VERIFICATION_CODE_NOT_MATCHED.getCode()));
 
         // 문서 작성
         resultActions.andDo(
@@ -776,7 +776,7 @@ public class AuthIntegrationTest {
         );
 
         // then
-        resultActions.andExpect(status().isConflict()).andExpect(jsonPath("code").value("C021"));
+        resultActions.andExpect(status().isConflict()).andExpect(jsonPath("code").value(ResponseCodeEnum.EMAIL_VERIFICATION_CODE_EXPIRED.getCode()));
 
         // 문서 작성
         resultActions.andDo(
@@ -817,7 +817,7 @@ public class AuthIntegrationTest {
         );
 
         // then
-        resultActions.andExpect(status().isBadRequest()).andExpect(jsonPath("code").value("C027"));
+        resultActions.andExpect(status().isBadRequest()).andExpect(jsonPath("code").value(ResponseCodeEnum.INVALID_REQUEST_ARGUMENT.getCode()));
 
         // 문서 작성
         resultActions.andDo(
@@ -918,7 +918,7 @@ public class AuthIntegrationTest {
         );
 
         // then
-        resultActions.andExpect(status().isConflict()).andExpect(jsonPath("code").value("C005"));
+        resultActions.andExpect(status().isConflict()).andExpect(jsonPath("code").value(ResponseCodeEnum.REFRESH_TOKEN_EXPIRED.getCode()));
 
         // 문서 작성
         resultActions.andDo(
@@ -969,7 +969,7 @@ public class AuthIntegrationTest {
         );
 
         // then
-        resultActions.andExpect(status().isConflict()).andExpect(jsonPath("code").value("C009"));
+        resultActions.andExpect(status().isConflict()).andExpect(jsonPath("code").value(ResponseCodeEnum.REFRESH_TOKEN_INVALID.getCode()));
 
         // 문서 작성
         resultActions.andDo(
@@ -1017,7 +1017,7 @@ public class AuthIntegrationTest {
         );
 
         // then
-        resultActions.andExpect(status().isNotFound()).andExpect(jsonPath("code").value("C001"));
+        resultActions.andExpect(status().isNotFound()).andExpect(jsonPath("code").value(ResponseCodeEnum.USER_NOT_FOUND.getCode()));
 
         // 문서 작성
         resultActions.andDo(
@@ -1066,7 +1066,7 @@ public class AuthIntegrationTest {
         );
 
         // then
-        resultActions.andExpect(status().isNotFound()).andExpect(jsonPath("code").value("C026"));
+        resultActions.andExpect(status().isNotFound()).andExpect(jsonPath("code").value(ResponseCodeEnum.REFRESH_TOKEN_NOT_EXISTS.getCode()));
 
         // 문서 작성
         resultActions.andDo(
@@ -1116,7 +1116,7 @@ public class AuthIntegrationTest {
         );
 
         // then
-        resultActions.andExpect(status().isConflict()).andExpect(jsonPath("code").value("C007"));
+        resultActions.andExpect(status().isConflict()).andExpect(jsonPath("code").value(ResponseCodeEnum.REFRESH_TOKEN_NOT_MATCHED.getCode()));
 
         // 문서 작성
         resultActions.andDo(
@@ -1152,7 +1152,7 @@ public class AuthIntegrationTest {
         );
 
         // then
-        resultActions.andExpect(status().isBadRequest()).andExpect(jsonPath("code").value("C027"));
+        resultActions.andExpect(status().isBadRequest()).andExpect(jsonPath("code").value(ResponseCodeEnum.INVALID_REQUEST_ARGUMENT.getCode()));
 
         // 문서 작성
         resultActions.andDo(

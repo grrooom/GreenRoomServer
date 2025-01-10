@@ -1,7 +1,6 @@
 package com.greenroom.server.api.domain.user.entity;
 
-import com.greenroom.server.api.domain.alram.entity.Alarm;
-import com.greenroom.server.api.domain.common.BaseTime;
+import com.greenroom.server.api.domain.common.entity.BaseTime;
 import com.greenroom.server.api.domain.greenroom.entity.Grade;
 import com.greenroom.server.api.domain.user.dto.UserDto;
 import com.greenroom.server.api.domain.user.enums.Provider;

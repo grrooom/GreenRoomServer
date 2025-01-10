@@ -1,6 +1,6 @@
 package com.greenroom.server.api.domain.board.entity;
 
-import com.greenroom.server.api.domain.common.BaseTime;
+import com.greenroom.server.api.domain.common.entity.BaseTime;
 import com.greenroom.server.api.domain.greenroom.entity.Plant;
 import com.greenroom.server.api.domain.user.entity.User;
 import jakarta.persistence.*;

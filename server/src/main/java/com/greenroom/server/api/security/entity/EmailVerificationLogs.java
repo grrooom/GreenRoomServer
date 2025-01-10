@@ -1,7 +1,6 @@
 package com.greenroom.server.api.security.entity;
 
-import com.greenroom.server.api.domain.common.BaseTime;
-import com.greenroom.server.api.domain.user.enums.converter.ProviderConverter;
+import com.greenroom.server.api.domain.common.entity.BaseTime;
 import com.greenroom.server.api.security.enums.VerificationStatus;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -9,7 +8,6 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @Entity
