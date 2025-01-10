@@ -4,12 +4,18 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="b2a8e82a-b6b3-41f3-b96e-46c6dfa5bf12" name="변경" comment="[fix]:openapi3 url 명세 변경">
-      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
+    <list default="true" id="b2a8e82a-b6b3-41f3-b96e-46c6dfa5bf12" name="변경" comment="[fix]:add email 검증 로직">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/greenroom/server/api/enums/ResponseCodeEnum.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/greenroom/server/api/enums/ResponseCodeEnum.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/greenroom/server/api/handler/GlobalExceptionHandler.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/greenroom/server/api/handler/GlobalExceptionHandler.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/greenroom/server/api/security/controller/AuthController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/greenroom/server/api/security/controller/AuthController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/greenroom/server/api/security/dto/EmailAuthenticationDto.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/greenroom/server/api/security/dto/EmailAuthenticationDto.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/greenroom/server/api/security/dto/LoginRequestDto.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/greenroom/server/api/security/dto/LoginRequestDto.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/greenroom/server/api/security/dto/SignupRequestDto.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/greenroom/server/api/security/dto/SignupRequestDto.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/greenroom/server/api/security/dto/TokenRequestDto.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/greenroom/server/api/security/dto/TokenRequestDto.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/greenroom/server/api/security/service/CustomUserDetailService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/greenroom/server/api/security/service/CustomUserDetailService.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/greenroom/server/api/utils/MailSender.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/greenroom/server/api/utils/MailSender.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/java/com/greenroom/server/api/AuthIntegrationTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/com/greenroom/server/api/AuthIntegrationTest.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -112,6 +118,9 @@
     "Gradle.AuthControllerTest.회원가입실패1.executor": "Run",
     "Gradle.AuthControllerTest.회원가입실패2.executor": "Run",
     "Gradle.AuthIntegrationTest.executor": "Run",
+    "Gradle.AuthIntegrationTest.이메일인증실패4.executor": "Run",
+    "Gradle.AuthIntegrationTest.이메일인증실패6.executor": "Run",
+    "Gradle.AuthIntegrationTest.이메일토큰검증실패2.executor": "Run",
     "Gradle.AuthServiceTest.executor": "Run",
     "Gradle.AuthServiceTest.로그인성공.executor": "Run",
     "Gradle.AuthServiceTest.회원가입성공 (1).executor": "Run",
@@ -131,7 +140,7 @@
     "RunOnceActivity.OpenProjectViewOnStart": "true",
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "Spring Boot.ServerApplication.executor": "Run",
-    "git-widget-placeholder": "develop",
+    "git-widget-placeholder": "feature/apply-arg-validation",
     "kotlin-language-version-configured": "true",
     "last_opened_file_path": "C:/sideProject/greenroom/server/src/test/resources",
     "node.js.detected.package.eslint": "true",
@@ -162,31 +171,7 @@
       <recent name="com.greenroom.server.api.domain.greenroom.repository" />
     </key>
   </component>
-  <component name="RunManager" selected="Gradle.server [copyOasToSwagger]">
-    <configuration name="AuthControllerTest.로그인실패1" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
-      <ExternalSystemSettings>
-        <option name="executionName" />
-        <option name="externalProjectPath" value="$PROJECT_DIR$" />
-        <option name="externalSystemIdString" value="GRADLE" />
-        <option name="scriptParameters" value="" />
-        <option name="taskDescriptions">
-          <list />
-        </option>
-        <option name="taskNames">
-          <list>
-            <option value=":test" />
-            <option value="--tests" />
-            <option value="&quot;com.greenroom.server.api.AuthControllerTest.로그인실패1&quot;" />
-          </list>
-        </option>
-        <option name="vmOptions" />
-      </ExternalSystemSettings>
-      <ExternalSystemDebugServerProcess>false</ExternalSystemDebugServerProcess>
-      <ExternalSystemReattachDebugProcess>true</ExternalSystemReattachDebugProcess>
-      <DebugAllEnabled>false</DebugAllEnabled>
-      <RunAsTest>true</RunAsTest>
-      <method v="2" />
-    </configuration>
+  <component name="RunManager" selected="Gradle.AuthIntegrationTest">
     <configuration name="AuthIntegrationTest" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
       <ExternalSystemSettings>
         <option name="executionName" />
@@ -211,26 +196,76 @@
       <RunAsTest>true</RunAsTest>
       <method v="2" />
     </configuration>
-    <configuration name="server [bootJar]" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
+    <configuration name="AuthIntegrationTest.이메일토큰검증실패2" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
       <ExternalSystemSettings>
         <option name="executionName" />
         <option name="externalProjectPath" value="$PROJECT_DIR$" />
         <option name="externalSystemIdString" value="GRADLE" />
-        <option name="scriptParameters" />
+        <option name="scriptParameters" value="" />
         <option name="taskDescriptions">
           <list />
         </option>
         <option name="taskNames">
           <list>
-            <option value="bootJar" />
+            <option value=":test" />
+            <option value="--tests" />
+            <option value="&quot;com.greenroom.server.api.AuthIntegrationTest.이메일토큰검증실패2&quot;" />
           </list>
         </option>
         <option name="vmOptions" />
       </ExternalSystemSettings>
-      <ExternalSystemDebugServerProcess>true</ExternalSystemDebugServerProcess>
+      <ExternalSystemDebugServerProcess>false</ExternalSystemDebugServerProcess>
       <ExternalSystemReattachDebugProcess>true</ExternalSystemReattachDebugProcess>
       <DebugAllEnabled>false</DebugAllEnabled>
-      <RunAsTest>false</RunAsTest>
+      <RunAsTest>true</RunAsTest>
+      <method v="2" />
+    </configuration>
+    <configuration name="AuthIntegrationTest.이메일인증실패4" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
+      <ExternalSystemSettings>
+        <option name="executionName" />
+        <option name="externalProjectPath" value="$PROJECT_DIR$" />
+        <option name="externalSystemIdString" value="GRADLE" />
+        <option name="scriptParameters" value="" />
+        <option name="taskDescriptions">
+          <list />
+        </option>
+        <option name="taskNames">
+          <list>
+            <option value=":test" />
+            <option value="--tests" />
+            <option value="&quot;com.greenroom.server.api.AuthIntegrationTest.이메일인증실패4&quot;" />
+          </list>
+        </option>
+        <option name="vmOptions" />
+      </ExternalSystemSettings>
+      <ExternalSystemDebugServerProcess>false</ExternalSystemDebugServerProcess>
+      <ExternalSystemReattachDebugProcess>true</ExternalSystemReattachDebugProcess>
+      <DebugAllEnabled>false</DebugAllEnabled>
+      <RunAsTest>true</RunAsTest>
+      <method v="2" />
+    </configuration>
+    <configuration name="AuthIntegrationTest.이메일인증실패6" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
+      <ExternalSystemSettings>
+        <option name="executionName" />
+        <option name="externalProjectPath" value="$PROJECT_DIR$" />
+        <option name="externalSystemIdString" value="GRADLE" />
+        <option name="scriptParameters" value="" />
+        <option name="taskDescriptions">
+          <list />
+        </option>
+        <option name="taskNames">
+          <list>
+            <option value=":test" />
+            <option value="--tests" />
+            <option value="&quot;com.greenroom.server.api.AuthIntegrationTest.이메일인증실패6&quot;" />
+          </list>
+        </option>
+        <option name="vmOptions" />
+      </ExternalSystemSettings>
+      <ExternalSystemDebugServerProcess>false</ExternalSystemDebugServerProcess>
+      <ExternalSystemReattachDebugProcess>true</ExternalSystemReattachDebugProcess>
+      <DebugAllEnabled>false</DebugAllEnabled>
+      <RunAsTest>true</RunAsTest>
       <method v="2" />
     </configuration>
     <configuration name="server [copyOasToSwagger]" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
@@ -255,35 +290,18 @@
       <RunAsTest>false</RunAsTest>
       <method v="2" />
     </configuration>
-    <configuration name="server [test]" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
-      <ExternalSystemSettings>
-        <option name="env">
-          <map>
-            <entry key="PROFILE" value="test" />
-          </map>
-        </option>
-        <option name="executionName" />
-        <option name="externalProjectPath" value="$PROJECT_DIR$" />
-        <option name="externalSystemIdString" value="GRADLE" />
-        <option name="scriptParameters" value="" />
-        <option name="taskDescriptions">
-          <list />
-        </option>
-        <option name="taskNames">
-          <list>
-            <option value="test" />
-          </list>
-        </option>
-        <option name="vmOptions" />
-      </ExternalSystemSettings>
-      <ExternalSystemDebugServerProcess>true</ExternalSystemDebugServerProcess>
-      <ExternalSystemReattachDebugProcess>true</ExternalSystemReattachDebugProcess>
-      <DebugAllEnabled>false</DebugAllEnabled>
-      <RunAsTest>false</RunAsTest>
-      <method v="2" />
+    <configuration default="true" type="JetRunConfigurationType">
+      <module name="server.main" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
     </configuration>
-    <configuration name="index.html" type="JavascriptDebugType" temporary="true" nameIsGenerated="true" uri="http://localhost:63342/server/server/build/reports/tests/test/index.html" useBuiltInWebServerPort="true">
-      <method v="2" />
+    <configuration default="true" type="KotlinStandaloneScriptRunConfigurationType">
+      <module name="server.main" />
+      <option name="filePath" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
     </configuration>
     <configuration name="ServerApplication" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot" nameIsGenerated="true">
       <module name="server.main" />
@@ -296,21 +314,20 @@
       </method>
     </configuration>
     <list>
-      <item itemvalue="Gradle.AuthControllerTest.로그인실패1" />
+      <item itemvalue="Gradle.AuthIntegrationTest.이메일인증실패4" />
+      <item itemvalue="Gradle.AuthIntegrationTest.이메일인증실패6" />
+      <item itemvalue="Gradle.AuthIntegrationTest.이메일토큰검증실패2" />
       <item itemvalue="Gradle.AuthIntegrationTest" />
-      <item itemvalue="Gradle.server [bootJar]" />
       <item itemvalue="Gradle.server [copyOasToSwagger]" />
-      <item itemvalue="Gradle.server [test]" />
-      <item itemvalue="JavaScript 디버그.index.html" />
       <item itemvalue="Spring Boot.ServerApplication" />
     </list>
     <recent_temporary>
       <list>
-        <item itemvalue="Gradle.server [copyOasToSwagger]" />
         <item itemvalue="Gradle.AuthIntegrationTest" />
-        <item itemvalue="JavaScript 디버그.index.html" />
-        <item itemvalue="Gradle.server [bootJar]" />
-        <item itemvalue="Gradle.server [test]" />
+        <item itemvalue="Gradle.AuthIntegrationTest.이메일인증실패4" />
+        <item itemvalue="Gradle.AuthIntegrationTest.이메일인증실패6" />
+        <item itemvalue="Gradle.AuthIntegrationTest.이메일토큰검증실패2" />
+        <item itemvalue="Gradle.server [copyOasToSwagger]" />
       </list>
     </recent_temporary>
   </component>
@@ -413,7 +430,15 @@
       <option name="project" value="LOCAL" />
       <updated>1736414119085</updated>
     </task>
-    <option name="localTasksCounter" value="10" />
+    <task id="LOCAL-00010" summary="[fix]:add email 검증 로직">
+      <option name="closed" value="true" />
+      <created>1736419798783</created>
+      <option name="number" value="00010" />
+      <option name="presentableId" value="LOCAL-00010" />
+      <option name="project" value="LOCAL" />
+      <updated>1736419798783</updated>
+    </task>
+    <option name="localTasksCounter" value="11" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -425,7 +450,8 @@
     <MESSAGE value="[fix]:test code 수정 &amp; test profile 추가 &amp; logback 수정" />
     <MESSAGE value="[fix]:test code 수정 &amp; test profile 추가 &amp; dockerfile 수정" />
     <MESSAGE value="[fix]:openapi3 url 명세 변경" />
-    <option name="LAST_COMMIT_MESSAGE" value="[fix]:openapi3 url 명세 변경" />
+    <MESSAGE value="[fix]:add email 검증 로직" />
+    <option name="LAST_COMMIT_MESSAGE" value="[fix]:add email 검증 로직" />
   </component>
   <component name="com.intellij.coverage.CoverageDataManagerImpl">
     <SUITE FILE_PATH="coverage/server$AuthUnitControllerTest_.ic" NAME="AuthUnitControllerTest.회원가입성공 커버리지 결과" MODIFIED="1736226512865" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="idea" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" />

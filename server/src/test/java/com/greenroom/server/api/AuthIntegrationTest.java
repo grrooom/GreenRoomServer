@@ -17,6 +17,7 @@ import com.greenroom.server.api.security.service.CustomUserDetailService;
 import com.greenroom.server.api.security.util.TokenProvider;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
+import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -37,6 +38,7 @@ import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.test.context.ActiveProfiles;
 
+import java.io.File;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -47,11 +49,13 @@ import java.util.stream.Collectors;
 import static com.epages.restdocs.apispec.MockMvcRestDocumentationWrapper.document;
 import static com.epages.restdocs.apispec.ResourceDocumentation.resource;
 import static org.mockito.Mockito.doThrow;
+import static org.mockito.Mockito.when;
 import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 
+@Slf4j
 @AutoConfigureMockMvc
 @AutoConfigureRestDocs
 @SpringBootTest
@@ -210,6 +214,45 @@ public class AuthIntegrationTest {
         );
     }
 
+
+    @Test
+    @Transactional
+    @DisplayName("회원가입 api")
+    void 회원가입실패3() throws Exception {
+
+        //given
+        emailVerificationLogsRepository.save(EmailVerificationLogs.builder().email("testEmail@gmail.com").verificationStatus(VerificationStatus.VERIFIED).expiresAt(LocalDateTime.now().minusMinutes(15)).build());
+        userDetailService.save(new SignupRequestDto("testEmail@gmail.com", "!123456"));
+
+        SignupRequestDto signupRequestDto = new SignupRequestDto("testEmailgmail.com", "!123456");
+
+        // when
+        ResultActions resultActions = mockMvc.perform( // api 실행
+                RestDocumentationRequestBuilders
+                        .post("/api/auth/signup")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(mapper.writeValueAsString(signupRequestDto))
+        );
+
+        // then
+        resultActions.andExpect(status().isBadRequest()).andExpect(jsonPath("code").value("C027"));
+
+        // 문서 작성
+        resultActions.andDo(
+                document(
+                        "회원가입_FAIL_INVALID_REQUEST_ARGUMENT", // api의 id
+                        resource(
+                                ResourceSnippetParameters.builder()
+                                        .tag("😎 AUTH-인증/인가") // 문서에서 api들이 태그로 분류됨
+                                        .summary("회원가입 요청 api") // api 이름
+                                        .description("이미 존재하는 회원") // api 설명
+                                        .responseFields(resultDescriptors) // responseBody 설명
+                                        .build()
+                        )
+                )
+        );
+    }
+
     protected List<FieldDescriptor> tokenResultDescriptors = List.of(
             fieldWithPath("status").description("응답 상태")
             ,fieldWithPath("code").description("상태 코드")
@@ -318,6 +361,44 @@ public class AuthIntegrationTest {
         resultActions.andDo(
                 document(
                         "로그인_FAIL_PASSWORD_NOT_MATCHED", // api의 id
+                        resource(
+                                ResourceSnippetParameters.builder()
+                                        .tag("😎 AUTH-인증/인가") // 문서에서 api들이 태그로 분류됨
+                                        .summary("로그인 요청 api") // api 이름
+                                        .description("email&password 기반 일반 로그인 api") // api 설명
+                                        .responseFields(resultDescriptors) // responseBody 설명
+                                        .build()
+                        )
+                )
+        );
+    }
+
+    @Test
+    @Transactional
+    @DisplayName("로그인 api")
+    void 로그인실패3() throws Exception {
+
+        //given
+        emailVerificationLogsRepository.save(EmailVerificationLogs.builder().email("testEmail@gmail.com").verificationStatus(VerificationStatus.VERIFIED).expiresAt(LocalDateTime.now().minusMinutes(15)).build());
+        userDetailService.save(new SignupRequestDto("testEmail@gmail.com", "!1234567"));
+
+        LoginRequestDto loginRequestDto = new LoginRequestDto("", "!1234567890");
+
+        // when
+        ResultActions resultActions = mockMvc.perform( // api 실행
+                RestDocumentationRequestBuilders
+                        .post("/api/auth/login")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(mapper.writeValueAsString(loginRequestDto))
+        );
+
+        // then
+        resultActions.andExpect(status().isBadRequest()).andExpect(jsonPath("code").value("C027")); // 상태 코드 conflict인지 확인
+
+        // 문서 작성
+        resultActions.andDo(
+                document(
+                        "로그인_FAIL_INVALID_REQUEST_ARGUMENT", // api의 id
                         resource(
                                 ResourceSnippetParameters.builder()
                                         .tag("😎 AUTH-인증/인가") // 문서에서 api들이 태그로 분류됨
@@ -487,7 +568,10 @@ public class AuthIntegrationTest {
     void 이메일인증실패4() throws Exception {
 
         //given
-        EmailAuthenticationDto.EmailAuthDto emailAuthDto = new EmailAuthenticationDto.EmailAuthDto("http://localhost:8080","myr@@@@naver.com");
+        EmailAuthenticationDto.EmailAuthDto emailAuthDto = new EmailAuthenticationDto.EmailAuthDto("url","testEmail@gmail.com");
+
+        doThrow(new CustomException(ResponseCodeEnum.INVALID_EMAIL_CONTENT,"message")).
+            when(customUserDetailService).emailAuthentication("url","testEmail@gmail.com");
 
         // when
         ResultActions resultActions = mockMvc.perform( // api 실행
@@ -555,6 +639,47 @@ public class AuthIntegrationTest {
                 )
         );
     }
+
+    @Test
+    @Transactional
+    @DisplayName("이메일 인증 api")
+    void 이메일인증실패6() throws Exception {
+
+
+        //given
+        doThrow(new CustomException(ResponseCodeEnum.FAIL_TO_SEND_EMAIL,"message"))
+                .when(customUserDetailService).emailAuthentication("http://localhost:8080","mygongjoo@naver.com");
+
+        EmailAuthenticationDto.EmailAuthDto emailAuthDto = new EmailAuthenticationDto.EmailAuthDto("","mygongjoo@naver.com");
+
+        // when
+        ResultActions resultActions = mockMvc.perform( // api 실행
+                RestDocumentationRequestBuilders
+                        .put("/api/auth/email/authentication")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(mapper.writeValueAsString(emailAuthDto))
+        );
+
+        // then
+        resultActions.andExpect(status().isBadRequest()).andExpect(jsonPath("code").value("C027"));
+
+        // 문서 작성
+        resultActions.andDo(
+                document(
+                        "이메일인증_FAIL_FAIL_TO_SEND_EMAIL", // api의 id
+                        resource(
+                                ResourceSnippetParameters.builder()
+                                        .tag("😎 AUTH-인증/인가") // 문서에서 api들이 태그로 분류됨
+                                        .summary("이메일 인증 요청 api") // api 이름
+                                        .description("이메일 인증용 딥링크 메일 전송 & 인증 코드 생성 api") // api 설명
+                                        .responseFields(resultDescriptors) // responseBody 설명
+                                        .build()
+                        )
+                )
+        );
+    }
+
+
 
     @Test
     @Transactional
@@ -636,13 +761,12 @@ public class AuthIntegrationTest {
     void 이메일토큰검증실패2() throws Exception {
 
         //given
-
-        EmailVerificationLogs emailVerificationLogs = EmailVerificationLogs.builder().email("emailTest@gmail.com").numberOfTrial(2).verificationStatus(VerificationStatus.PENDING).expiresAt(LocalDateTime.now()).build();
+        String email = "emailTest@gmail.com";
+        String token = tokenProvider.createVerificationToken(email);
+        EmailVerificationLogs emailVerificationLogs = EmailVerificationLogs.builder().email(email).numberOfTrial(2).verificationStatus(VerificationStatus.PENDING).expiresAt(LocalDateTime.now()).verificationToken(token).build();
         emailVerificationLogsRepository.save(emailVerificationLogs);
-        String token= emailVerificationLogs.getVerificationToken();
 
         EmailAuthenticationDto.EmailTokenAuthDto emailTokenAuthDto = new EmailAuthenticationDto.EmailTokenAuthDto(token);
-
         // when
         ResultActions resultActions = mockMvc.perform( // api 실행
                 RestDocumentationRequestBuilders
@@ -658,6 +782,47 @@ public class AuthIntegrationTest {
         resultActions.andDo(
                 document(
                         "이메일토큰검증_FAIL_EMAIL_VERIFICATION_CODE_EXPIRED",
+                        resource(
+                                ResourceSnippetParameters.builder()
+                                        .tag("😎 AUTH-인증/인가") // 문서에서 api들이 태그로 분류됨
+                                        .summary("이메일 토큰 검증 요청 api") // api 이름
+                                        .description("이메일 링크를 통해 제공받은 토큰을 검증하는 api") // api 설명
+                                        .responseFields(resultDescriptors) // responseBody 설명
+                                        .build()
+                        )
+                )
+        );
+    }
+
+
+    @Test
+    @Transactional
+    @DisplayName("이메일 토큰 검증 api")
+    void 이메일토큰검증실패3() throws Exception {
+
+        //given
+
+        EmailVerificationLogs emailVerificationLogs = EmailVerificationLogs.builder().email("emailTest@gmail.com").numberOfTrial(2).verificationStatus(VerificationStatus.PENDING).expiresAt(LocalDateTime.now().plusMinutes(15)).build();
+        emailVerificationLogsRepository.save(emailVerificationLogs);
+
+
+        EmailAuthenticationDto.EmailTokenAuthDto emailTokenAuthDto = new EmailAuthenticationDto.EmailTokenAuthDto("");
+
+        // when
+        ResultActions resultActions = mockMvc.perform( // api 실행
+                RestDocumentationRequestBuilders
+                        .put("/api/auth/email/token/authentication")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(mapper.writeValueAsString(emailTokenAuthDto))
+        );
+
+        // then
+        resultActions.andExpect(status().isBadRequest()).andExpect(jsonPath("code").value("C027"));
+
+        // 문서 작성
+        resultActions.andDo(
+                document(
+                        "이메일토큰검증_FAIL_INVALID_REQUEST_ARGUMENT",
                         resource(
                                 ResourceSnippetParameters.builder()
                                         .tag("😎 AUTH-인증/인가") // 문서에서 api들이 태그로 분류됨
@@ -969,6 +1134,41 @@ public class AuthIntegrationTest {
         );
     }
 
+
+    @Test
+    @Transactional
+    @DisplayName("jwt 토큰 update api")
+    void jwtTokenUpdate실패6() throws Exception {
+
+
+        TokenRequestDto tokenRequestDto = new TokenRequestDto("");
+
+        // when
+        ResultActions resultActions = mockMvc.perform( // api 실행
+                RestDocumentationRequestBuilders
+                        .put("/api/auth/tokens")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(mapper.writeValueAsString(tokenRequestDto))
+        );
+
+        // then
+        resultActions.andExpect(status().isBadRequest()).andExpect(jsonPath("code").value("C027"));
+
+        // 문서 작성
+        resultActions.andDo(
+                document(
+                        "jwtToken_재발급_FAIL_INVALID_REQUEST_ARGUMENT",
+                        resource(
+                                ResourceSnippetParameters.builder()
+                                        .tag("😎 AUTH-인증/인가") // 문서에서 api들이 태그로 분류됨
+                                        .summary("jwt 토큰 갱신 요청 api")
+                                        .description("refresh token을 통해 access token & refresh token 모두 갱신") // api 설명
+                                        .responseFields(resultDescriptors)
+                                        .build()
+                        )
+                )
+        );
+    }
 
 
 }

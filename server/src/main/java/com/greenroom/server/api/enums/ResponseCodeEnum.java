@@ -38,9 +38,11 @@ public enum ResponseCodeEnum {
     EMAIL_VERIFICATION_CODE_EXPIRED(HttpStatus.CONFLICT,"C021","email 인증 코드가 만료됨"),
     EMAIL_VERIFICATION_CODE_NOT_MATCHED(HttpStatus.CONFLICT,"C022","email 인증 코드가 일치하지 않음."),
     EMAIL_NOT_VERIFIED(HttpStatus.CONFLICT,"C023","인증되지 않은 email로 회원가입을 시도함"),
-    INVALID_EMAIL_FORMAT(HttpStatus.CONFLICT,"C024","email 주소,본문 등이 적절하지 않음."),
+    INVALID_EMAIL_CONTENT(HttpStatus.CONFLICT,"C024","email 주소,본문 등이 적절하지 않음."),
     ALREADY_VERIFIED_EMAIL(HttpStatus.CONFLICT,"C025","이미 인증된 email로 이메일 인증을 시도함."),
     REFRESH_TOKEN_NOT_EXISTS(HttpStatus.NOT_FOUND,"C026","사용자의 refresh token이 존재하지 않음."),
+    INVALID_REQUEST_ARGUMENT(HttpStatus.BAD_REQUEST,"C027","요청시 전달된 argument가 부적절하거나 존재하지 않음"),
+
     //500~
     UNKNOWN_SERVER_ERROR(HttpStatus.INTERNAL_SERVER_ERROR,"D000","알 수 없는 server error"),
     FAIL_DATA_PARSING(HttpStatus.INTERNAL_SERVER_ERROR,"D001","데이터 parsing에 실패했습니다."),
