@@ -11,6 +11,8 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.multipart.MaxUploadSizeExceededException;
 
+import java.util.Arrays;
+
 
 @Slf4j
 @RestControllerAdvice
@@ -55,7 +57,7 @@ public class GlobalExceptionHandler {
     public ResponseEntity<ApiResponse> handlingException(Exception e) {
 
         log.error("[Exception] code : {}  code message : {}", ResponseCodeEnum.UNKNOWN_SERVER_ERROR.getCode(), e.getMessage());
-
+        log.error(String.valueOf(e.getCause()) +"///"+ Arrays.toString(e.getStackTrace()));
         return ResponseEntity.status(ResponseCodeEnum.UNKNOWN_SERVER_ERROR.getStatus()).body(ApiResponse.failed(ResponseCodeEnum.UNKNOWN_SERVER_ERROR));
 
     }

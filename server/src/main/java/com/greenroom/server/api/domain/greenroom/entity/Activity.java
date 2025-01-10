@@ -1,6 +1,6 @@
 package com.greenroom.server.api.domain.greenroom.entity;
 
-import com.greenroom.server.api.domain.common.BaseTime;
+import com.greenroom.server.api.domain.common.entity.BaseTime;
 import com.greenroom.server.api.domain.greenroom.enums.ActivityName;
 import jakarta.persistence.*;
 import lombok.AccessLevel;

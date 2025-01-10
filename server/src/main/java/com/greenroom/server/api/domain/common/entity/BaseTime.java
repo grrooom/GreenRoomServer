@@ -1,4 +1,4 @@
-package com.greenroom.server.api.domain.common;
+package com.greenroom.server.api.domain.common.entity;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.EntityListeners;

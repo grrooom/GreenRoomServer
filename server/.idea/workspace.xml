@@ -5,16 +5,32 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="b2a8e82a-b6b3-41f3-b96e-46c6dfa5bf12" name="변경" comment="[fix]:add email 검증 로직">
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/greenroom/server/api/enums/EnumCodeController.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/greenroom/server/api/enums/ResponseCodeResponseDto.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/resources/templates/responseCode.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/greenroom/server/api/domain/alram/entity/Alarm.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/greenroom/server/api/domain/alram/entity/Alarm.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/greenroom/server/api/domain/board/entity/Suggestion.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/greenroom/server/api/domain/board/entity/Suggestion.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/greenroom/server/api/domain/common/BaseTime.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/greenroom/server/api/domain/common/entity/BaseTime.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/greenroom/server/api/domain/greenroom/entity/Activity.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/greenroom/server/api/domain/greenroom/entity/Activity.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/greenroom/server/api/domain/greenroom/entity/Adornment.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/greenroom/server/api/domain/greenroom/entity/Adornment.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/greenroom/server/api/domain/greenroom/entity/Diary.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/greenroom/server/api/domain/greenroom/entity/Diary.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/greenroom/server/api/domain/greenroom/entity/Grade.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/greenroom/server/api/domain/greenroom/entity/Grade.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/greenroom/server/api/domain/greenroom/entity/GreenRoom.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/greenroom/server/api/domain/greenroom/entity/GreenRoom.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/greenroom/server/api/domain/greenroom/entity/Item.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/greenroom/server/api/domain/greenroom/entity/Item.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/greenroom/server/api/domain/greenroom/entity/Plant.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/greenroom/server/api/domain/greenroom/entity/Plant.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/greenroom/server/api/domain/greenroom/entity/Todo.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/greenroom/server/api/domain/greenroom/entity/Todo.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/greenroom/server/api/domain/greenroom/entity/TodoLog.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/greenroom/server/api/domain/greenroom/entity/TodoLog.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/greenroom/server/api/domain/user/entity/User.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/greenroom/server/api/domain/user/entity/User.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/greenroom/server/api/enums/ResponseCodeEnum.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/greenroom/server/api/enums/ResponseCodeEnum.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/greenroom/server/api/handler/GlobalExceptionHandler.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/greenroom/server/api/handler/GlobalExceptionHandler.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/greenroom/server/api/security/controller/AuthController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/greenroom/server/api/security/controller/AuthController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/greenroom/server/api/security/config/SecurityConfig.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/greenroom/server/api/security/config/SecurityConfig.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/greenroom/server/api/security/dto/EmailAuthenticationDto.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/greenroom/server/api/security/dto/EmailAuthenticationDto.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/greenroom/server/api/security/dto/LoginRequestDto.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/greenroom/server/api/security/dto/LoginRequestDto.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/greenroom/server/api/security/dto/SignupRequestDto.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/greenroom/server/api/security/dto/SignupRequestDto.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/greenroom/server/api/security/dto/TokenRequestDto.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/greenroom/server/api/security/dto/TokenRequestDto.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/greenroom/server/api/security/service/CustomUserDetailService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/greenroom/server/api/security/service/CustomUserDetailService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/greenroom/server/api/utils/MailSender.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/greenroom/server/api/utils/MailSender.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/greenroom/server/api/security/dto/TokenDto.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/greenroom/server/api/security/dto/TokenDto.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/greenroom/server/api/security/entity/EmailVerificationLogs.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/greenroom/server/api/security/entity/EmailVerificationLogs.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/greenroom/server/api/security/entity/RefreshToken.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/greenroom/server/api/security/entity/RefreshToken.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/test/java/com/greenroom/server/api/AuthIntegrationTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/com/greenroom/server/api/AuthIntegrationTest.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -51,11 +67,6 @@
                 <item name="Tasks" type="e4a08cd1:TasksNode" />
                 <item name="other" type="c8890929:TasksNode$1" />
               </path>
-              <path>
-                <item name="" type="6a2764b6:ExternalProjectsStructure$RootNode" />
-                <item name="server" type="f1a62948:ProjectNode" />
-                <item name="실행 구성" type="7b0102dc:RunConfigurationsNode" />
-              </path>
             </expand>
             <select />
           </tree_state>
@@ -69,6 +80,7 @@
         <option value="Enum" />
         <option value="Interface" />
         <option value="Class" />
+        <option value="HTML File" />
       </list>
     </option>
   </component>
@@ -96,6 +108,7 @@
   </component>
   <component name="PropertiesComponent"><![CDATA[{
   "keyToString": {
+    "DefaultHtmlFileTemplate": "HTML File",
     "Gradle.AuthControllerTest.jwtTokenUpdate성공.executor": "Run",
     "Gradle.AuthControllerTest.jwtTokenUpdate실패1.executor": "Run",
     "Gradle.AuthControllerTest.jwtTokenUpdate실패2.executor": "Run",
@@ -132,6 +145,11 @@
     "Gradle.server [openapi3].executor": "Run",
     "Gradle.server [test].executor": "Run",
     "Gradle.server 빌드.executor": "Run",
+    "JUnit.AuthIntegrationTest.executor": "Run",
+    "JUnit.AuthIntegrationTest.로그인실패1.executor": "Run",
+    "JUnit.AuthIntegrationTest.로그인실패2.executor": "Run",
+    "JUnit.AuthIntegrationTest.이메일인증성공.executor": "Run",
+    "JUnit.AuthIntegrationTest.회원가입실패2.executor": "Run",
     "JavaScript 디버그.index.html.executor": "Run",
     "RequestMappingsPanelOrder0": "0",
     "RequestMappingsPanelOrder1": "1",
@@ -140,7 +158,7 @@
     "RunOnceActivity.OpenProjectViewOnStart": "true",
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "Spring Boot.ServerApplication.executor": "Run",
-    "git-widget-placeholder": "feature/apply-arg-validation",
+    "git-widget-placeholder": "develop 병합 중",
     "kotlin-language-version-configured": "true",
     "last_opened_file_path": "C:/sideProject/greenroom/server/src/test/resources",
     "node.js.detected.package.eslint": "true",
@@ -162,118 +180,23 @@
       <recent name="C:\사이드프로젝트모음\greenroomNew\server\src\main\java\com\greenroom\server\api\security" />
     </key>
     <key name="MoveFile.RECENT_KEYS">
+      <recent name="C:\sideProject\greenroom\server\src\main\resources\template" />
+      <recent name="C:\sideProject\greenroom\server\src\main\java\com\greenroom\server\api\domain\common\" />
       <recent name="C:\sideProject\greenroom\server\src\main\resources" />
       <recent name="C:\sideProject\greenroom\server\src\test\resources" />
       <recent name="C:\사이드프로젝트모음\greenroomNew\server\src\main\resources\static\" />
-      <recent name="C:\사이드프로젝트모음\greenroomNew\server\src\main\resources\static" />
     </key>
     <key name="CopyClassDialog.RECENTS_KEY">
       <recent name="com.greenroom.server.api.domain.greenroom.repository" />
     </key>
   </component>
-  <component name="RunManager" selected="Gradle.AuthIntegrationTest">
-    <configuration name="AuthIntegrationTest" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
-      <ExternalSystemSettings>
-        <option name="executionName" />
-        <option name="externalProjectPath" value="$PROJECT_DIR$" />
-        <option name="externalSystemIdString" value="GRADLE" />
-        <option name="scriptParameters" value="" />
-        <option name="taskDescriptions">
-          <list />
-        </option>
-        <option name="taskNames">
-          <list>
-            <option value=":test" />
-            <option value="--tests" />
-            <option value="&quot;com.greenroom.server.api.AuthIntegrationTest&quot;" />
-          </list>
-        </option>
-        <option name="vmOptions" />
-      </ExternalSystemSettings>
-      <ExternalSystemDebugServerProcess>false</ExternalSystemDebugServerProcess>
-      <ExternalSystemReattachDebugProcess>true</ExternalSystemReattachDebugProcess>
-      <DebugAllEnabled>false</DebugAllEnabled>
-      <RunAsTest>true</RunAsTest>
-      <method v="2" />
-    </configuration>
-    <configuration name="AuthIntegrationTest.이메일토큰검증실패2" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
-      <ExternalSystemSettings>
-        <option name="executionName" />
-        <option name="externalProjectPath" value="$PROJECT_DIR$" />
-        <option name="externalSystemIdString" value="GRADLE" />
-        <option name="scriptParameters" value="" />
-        <option name="taskDescriptions">
-          <list />
-        </option>
-        <option name="taskNames">
-          <list>
-            <option value=":test" />
-            <option value="--tests" />
-            <option value="&quot;com.greenroom.server.api.AuthIntegrationTest.이메일토큰검증실패2&quot;" />
-          </list>
-        </option>
-        <option name="vmOptions" />
-      </ExternalSystemSettings>
-      <ExternalSystemDebugServerProcess>false</ExternalSystemDebugServerProcess>
-      <ExternalSystemReattachDebugProcess>true</ExternalSystemReattachDebugProcess>
-      <DebugAllEnabled>false</DebugAllEnabled>
-      <RunAsTest>true</RunAsTest>
-      <method v="2" />
-    </configuration>
-    <configuration name="AuthIntegrationTest.이메일인증실패4" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
-      <ExternalSystemSettings>
-        <option name="executionName" />
-        <option name="externalProjectPath" value="$PROJECT_DIR$" />
-        <option name="externalSystemIdString" value="GRADLE" />
-        <option name="scriptParameters" value="" />
-        <option name="taskDescriptions">
-          <list />
-        </option>
-        <option name="taskNames">
-          <list>
-            <option value=":test" />
-            <option value="--tests" />
-            <option value="&quot;com.greenroom.server.api.AuthIntegrationTest.이메일인증실패4&quot;" />
-          </list>
-        </option>
-        <option name="vmOptions" />
-      </ExternalSystemSettings>
-      <ExternalSystemDebugServerProcess>false</ExternalSystemDebugServerProcess>
-      <ExternalSystemReattachDebugProcess>true</ExternalSystemReattachDebugProcess>
-      <DebugAllEnabled>false</DebugAllEnabled>
-      <RunAsTest>true</RunAsTest>
-      <method v="2" />
-    </configuration>
-    <configuration name="AuthIntegrationTest.이메일인증실패6" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
-      <ExternalSystemSettings>
-        <option name="executionName" />
-        <option name="externalProjectPath" value="$PROJECT_DIR$" />
-        <option name="externalSystemIdString" value="GRADLE" />
-        <option name="scriptParameters" value="" />
-        <option name="taskDescriptions">
-          <list />
-        </option>
-        <option name="taskNames">
-          <list>
-            <option value=":test" />
-            <option value="--tests" />
-            <option value="&quot;com.greenroom.server.api.AuthIntegrationTest.이메일인증실패6&quot;" />
-          </list>
-        </option>
-        <option name="vmOptions" />
-      </ExternalSystemSettings>
-      <ExternalSystemDebugServerProcess>false</ExternalSystemDebugServerProcess>
-      <ExternalSystemReattachDebugProcess>true</ExternalSystemReattachDebugProcess>
-      <DebugAllEnabled>false</DebugAllEnabled>
-      <RunAsTest>true</RunAsTest>
-      <method v="2" />
-    </configuration>
+  <component name="RunManager" selected="Spring Boot.ServerApplication">
     <configuration name="server [copyOasToSwagger]" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
       <ExternalSystemSettings>
         <option name="executionName" />
         <option name="externalProjectPath" value="$PROJECT_DIR$" />
         <option name="externalSystemIdString" value="GRADLE" />
-        <option name="scriptParameters" value="" />
+        <option name="scriptParameters" />
         <option name="taskDescriptions">
           <list />
         </option>
@@ -290,15 +213,76 @@
       <RunAsTest>false</RunAsTest>
       <method v="2" />
     </configuration>
-    <configuration default="true" type="JetRunConfigurationType">
-      <module name="server.main" />
+    <configuration name="AuthIntegrationTest" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <module name="server.test" />
+      <shortenClasspath name="ARGS_FILE" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="com.greenroom.server.api.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <option name="PACKAGE_NAME" value="com.greenroom.server.api" />
+      <option name="MAIN_CLASS_NAME" value="com.greenroom.server.api.AuthIntegrationTest" />
+      <option name="TEST_OBJECT" value="class" />
       <method v="2">
         <option name="Make" enabled="true" />
       </method>
     </configuration>
-    <configuration default="true" type="KotlinStandaloneScriptRunConfigurationType">
-      <module name="server.main" />
-      <option name="filePath" />
+    <configuration name="AuthIntegrationTest.이메일인증성공" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <module name="server.test" />
+      <shortenClasspath name="ARGS_FILE" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="com.greenroom.server.api.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <option name="PACKAGE_NAME" value="com.greenroom.server.api" />
+      <option name="MAIN_CLASS_NAME" value="com.greenroom.server.api.AuthIntegrationTest" />
+      <option name="METHOD_NAME" value="이메일인증성공" />
+      <option name="TEST_OBJECT" value="method" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="AuthIntegrationTest.로그인실패1" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <module name="server.test" />
+      <shortenClasspath name="ARGS_FILE" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="com.greenroom.server.api.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <option name="PACKAGE_NAME" value="com.greenroom.server.api" />
+      <option name="MAIN_CLASS_NAME" value="com.greenroom.server.api.AuthIntegrationTest" />
+      <option name="METHOD_NAME" value="로그인실패1" />
+      <option name="TEST_OBJECT" value="method" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="AuthIntegrationTest.로그인실패2" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <module name="server.test" />
+      <shortenClasspath name="ARGS_FILE" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="com.greenroom.server.api.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <option name="PACKAGE_NAME" value="com.greenroom.server.api" />
+      <option name="MAIN_CLASS_NAME" value="com.greenroom.server.api.AuthIntegrationTest" />
+      <option name="METHOD_NAME" value="로그인실패2" />
+      <option name="TEST_OBJECT" value="method" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration default="true" type="JUnit" factoryName="JUnit">
+      <shortenClasspath name="ARGS_FILE" />
+      <option name="TEST_OBJECT" value="class" />
       <method v="2">
         <option name="Make" enabled="true" />
       </method>
@@ -314,20 +298,20 @@
       </method>
     </configuration>
     <list>
-      <item itemvalue="Gradle.AuthIntegrationTest.이메일인증실패4" />
-      <item itemvalue="Gradle.AuthIntegrationTest.이메일인증실패6" />
-      <item itemvalue="Gradle.AuthIntegrationTest.이메일토큰검증실패2" />
-      <item itemvalue="Gradle.AuthIntegrationTest" />
       <item itemvalue="Gradle.server [copyOasToSwagger]" />
+      <item itemvalue="JUnit.AuthIntegrationTest" />
+      <item itemvalue="JUnit.AuthIntegrationTest.로그인실패1" />
+      <item itemvalue="JUnit.AuthIntegrationTest.로그인실패2" />
+      <item itemvalue="JUnit.AuthIntegrationTest.이메일인증성공" />
       <item itemvalue="Spring Boot.ServerApplication" />
     </list>
     <recent_temporary>
       <list>
-        <item itemvalue="Gradle.AuthIntegrationTest" />
-        <item itemvalue="Gradle.AuthIntegrationTest.이메일인증실패4" />
-        <item itemvalue="Gradle.AuthIntegrationTest.이메일인증실패6" />
-        <item itemvalue="Gradle.AuthIntegrationTest.이메일토큰검증실패2" />
         <item itemvalue="Gradle.server [copyOasToSwagger]" />
+        <item itemvalue="JUnit.AuthIntegrationTest" />
+        <item itemvalue="JUnit.AuthIntegrationTest.이메일인증성공" />
+        <item itemvalue="JUnit.AuthIntegrationTest.로그인실패1" />
+        <item itemvalue="JUnit.AuthIntegrationTest.로그인실패2" />
       </list>
     </recent_temporary>
   </component>
@@ -438,7 +422,15 @@
       <option name="project" value="LOCAL" />
       <updated>1736419798783</updated>
     </task>
-    <option name="localTasksCounter" value="11" />
+    <task id="LOCAL-00011" summary="[feat]:custom response error code 문서화 &amp; test code 개선">
+      <option name="closed" value="true" />
+      <created>1736535081326</created>
+      <option name="number" value="00011" />
+      <option name="presentableId" value="LOCAL-00011" />
+      <option name="project" value="LOCAL" />
+      <updated>1736535081326</updated>
+    </task>
+    <option name="localTasksCounter" value="12" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -451,7 +443,8 @@
     <MESSAGE value="[fix]:test code 수정 &amp; test profile 추가 &amp; dockerfile 수정" />
     <MESSAGE value="[fix]:openapi3 url 명세 변경" />
     <MESSAGE value="[fix]:add email 검증 로직" />
-    <option name="LAST_COMMIT_MESSAGE" value="[fix]:add email 검증 로직" />
+    <MESSAGE value="[feat]:custom response error code 문서화 &amp; test code 개선" />
+    <option name="LAST_COMMIT_MESSAGE" value="[feat]:custom response error code 문서화 &amp; test code 개선" />
   </component>
   <component name="com.intellij.coverage.CoverageDataManagerImpl">
     <SUITE FILE_PATH="coverage/server$AuthUnitControllerTest_.ic" NAME="AuthUnitControllerTest.회원가입성공 커버리지 결과" MODIFIED="1736226512865" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="idea" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" />
