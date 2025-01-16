@@ -87,14 +87,9 @@ tasks.named('bootBuildImage') {
 }
 
 
-ext {
-	snippetsDir = file('build/generated-snippets')
-}
-
 tasks.named('test') {
 	delete file('build/generated-snippets')
 	useJUnitPlatform()
-	outputs.dir snippetsDir
 }
 
 

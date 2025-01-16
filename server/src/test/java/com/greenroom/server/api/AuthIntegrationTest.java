@@ -137,7 +137,7 @@ public class AuthIntegrationTest {
     }
 
     private RestDocumentationResultHandler documentApiForSignup(Integer identifier) {
-        return document("/api/auth/signup/"+String.valueOf(identifier)
+        return document("api/auth/signup/"+ identifier
                 , // api의 id
                 preprocessRequest(prettyPrint()),   // (2)
                 preprocessResponse(prettyPrint(),getModifiedHeader()),  // (3)
@@ -266,7 +266,7 @@ public class AuthIntegrationTest {
 
     private RestDocumentationResultHandler documentApiForLogin(Integer identifier) {
         return document(
-                "/api/auth/login/"+ String.valueOf(identifier), // api의 id
+                "api/auth/login/"+ identifier, // api의 id
                 preprocessRequest(prettyPrint()),   // (2)
                 preprocessResponse(prettyPrint(),getModifiedHeader()),
                 responseFields(tokenResultDescriptors), // responseBody 설명
@@ -371,7 +371,7 @@ public class AuthIntegrationTest {
 
     private RestDocumentationResultHandler documentApiForEmailAuth(Integer identifier){
         return document(
-                "/api/auth/email/authentication/"+String.valueOf(identifier), // api의 id
+                "api/auth/email/authentication/"+ identifier, // api의 id
                 preprocessRequest(prettyPrint()),   // (2)
                 preprocessResponse(prettyPrint(),getModifiedHeader()),
                 responseFields(resultDescriptors), // responseBody 설명
@@ -580,7 +580,7 @@ public class AuthIntegrationTest {
 
     private RestDocumentationResultHandler documentApiForEmailToken(Integer identifier){
         return document(
-                "api/auth/email/token/authentication/"+String.valueOf(identifier),
+                "api/auth/email/token/authentication/"+ identifier,
                 preprocessRequest(prettyPrint()),   // (2)
                 preprocessResponse(prettyPrint(),getModifiedHeader()),
                 responseFields(resultDescriptors), // responseBody 설명
@@ -721,7 +721,7 @@ public class AuthIntegrationTest {
 
     private RestDocumentationResultHandler documentApiForTokenUpdate(Integer identifier){
         return document(
-                "api/auth/tokens/"+String.valueOf(identifier),
+                "api/auth/tokens/"+ identifier,
                 preprocessRequest(prettyPrint()),   // (2)
                 preprocessResponse(prettyPrint(),getModifiedHeader()),
                 responseFields(tokenResultDescriptors), // responseBody 설명
