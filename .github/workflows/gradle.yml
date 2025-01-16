@@ -37,14 +37,7 @@ jobs:
         cd ./server/src/test/resources
         touch ./schema-test.sql
         echo "${{secrets.SCHEMA_TEST_SQL}}" | base64 --decode >  ./schema-test.sql
-    - name: Check schema content
-      run: |
-        cd ./server/src/test/resources
-        echo "---- test-schema.sql ----"
-        cat schema-test.sql
-        echo "--------------------------------"
-      shell: bash
-      
+        
     - name: Make application-secret.yml
       run: |
         cd ./server/src/main/resources # resources 폴더로 이동
@@ -58,10 +51,15 @@ jobs:
     - name : grant on gradlew
       run : chmod +x ./server/gradlew
       
-    - name: Gradle Test And Create API SPEC
+    - name: Gradle Test And Create Swagger API SPEC
       run: |
         cd server
         ./gradlew copyOasToSwagger 
+        
+    - name: Create Rest Docs
+      run: |
+        cd server
+        ./gradlew copyDocument    
         
     - name: BootJar 
       run: |
