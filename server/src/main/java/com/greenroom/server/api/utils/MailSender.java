@@ -5,7 +5,6 @@ import com.greenroom.server.api.exception.CustomException;
 import jakarta.mail.MessagingException;
 import jakarta.mail.internet.MimeMessage;
 import lombok.RequiredArgsConstructor;
-import org.eclipse.angus.mail.smtp.SMTPAddressFailedException;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.mail.*;
 import org.springframework.mail.javamail.JavaMailSender;
@@ -34,11 +33,11 @@ public class MailSender {
             helper.setSubject("그린룸 이메일 인증을 진행해 주세요");
             helper.setText(mailContent, true);
             mailSender.send(message);
-        } catch (SMTPAddressFailedException e){
-            throw new CustomException((ResponseCodeEnum.EMAIL_ADDRESS_UNAVAILABLE),e.getMessage());
-        }
-        catch (MailException | MessagingException e ) {
+        } catch (MailException e ) {
             throw new CustomException(ResponseCodeEnum.FAIL_TO_SEND_EMAIL,e.getMessage());
+        }
+        catch (MessagingException e){
+            throw new CustomException(ResponseCodeEnum.INVALID_EMAIL_CONTENT,e.getMessage());
         }
     }
 }

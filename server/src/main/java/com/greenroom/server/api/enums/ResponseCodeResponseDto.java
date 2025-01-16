@@ -7,7 +7,7 @@ import lombok.Getter;
 @Data
 @Getter
 @Builder
-public class ResponseCodeEnumDto {
+public class ResponseCodeResponseDto {
 
     String code;
     Integer statusCode;
@@ -15,8 +15,8 @@ public class ResponseCodeEnumDto {
     String reason;
     String postProcess;
 
-    public static ResponseCodeEnumDto from(ResponseCodeEnum responseCodeEnum){
-        return ResponseCodeEnumDto.builder()
+    public static ResponseCodeResponseDto from(ResponseCodeEnum responseCodeEnum){
+        return ResponseCodeResponseDto.builder()
                 .code(responseCodeEnum.getCode())
                 .reason(responseCodeEnum.getMessage())
                 .postProcess(responseCodeEnum.getPostProcess())

@@ -95,12 +95,12 @@ public class TokenProvider implements InitializingBean {
         return new UsernamePasswordAuthenticationToken(user,token, authorities);
     }
 
-    public String getPrincipalEmail(String token){
+    public String findUser(String refreshToken){
         Claims claims = Jwts
                 .parserBuilder()
                 .setSigningKey(key)
                 .build()
-                .parseClaimsJws(token)
+                .parseClaimsJws(refreshToken)
                 .getBody();
         return claims.getSubject();
     }

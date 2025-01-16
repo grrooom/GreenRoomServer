@@ -10,8 +10,4 @@ public interface EmailVerificationLogsRepository extends JpaRepository<EmailVeri
     Optional<EmailVerificationLogs> findByEmail(String email);
 
     Optional<EmailVerificationLogs> findByVerificationToken(String token);
-
-    Boolean existsByEmail(String email);
-
-    void deleteByEmail(String email);
 }

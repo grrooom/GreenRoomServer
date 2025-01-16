@@ -22,9 +22,5 @@ jwt:
   token-validity-in-seconds: 3600
 logging:
   config: classpath:logback-spring.xml
-  level:
-    org:
-      springframework:
-        restdocs= DEBUG:
-greenroom:
-  domain: greenroom-server.site
+
+
