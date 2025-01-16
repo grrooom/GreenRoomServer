@@ -80,7 +80,7 @@ public class SecurityConfig {
                         Stream.of(ANONYMOUS_MATCHERS)
                                 .map(uri->new MvcRequestMatcher(introspector,uri))
                                 .toArray(MvcRequestMatcher[]::new)
-                ).permitAll().requestMatchers("/swagger-ui/**","/document/**").hasAuthority("ADMIN").anyRequest().authenticated())
+                ).permitAll().requestMatchers("/swagger-ui/**","/docs/errorCode/**","/docs/**").hasAuthority("ADMIN").anyRequest().authenticated())
                 .formLogin(Customizer.withDefaults())
 
                 .build();

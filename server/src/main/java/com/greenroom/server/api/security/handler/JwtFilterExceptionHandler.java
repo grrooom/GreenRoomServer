@@ -41,7 +41,7 @@ public class JwtFilterExceptionHandler extends OncePerRequestFilter {
         }
         catch (SecurityException | MalformedJwtException e) {
             log.info("invalidate jwt signature : " +e.getMessage());
-            throwException(ResponseCodeEnum.INVALIDATE_JWT_SIGN,response);
+            throwException(ResponseCodeEnum.INVALID_JWT_SIGN,response);
         } catch (ExpiredJwtException e) {
             log.info("token이 만료되었습니다 : " +e.getMessage());
             throwException(ResponseCodeEnum.ACCESS_TOKEN_EXPIRED,response);

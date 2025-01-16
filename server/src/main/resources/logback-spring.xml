@@ -35,26 +35,14 @@
         </rollingPolicy>
     </appender>
 
-    <!-- spring.profile에 따른 분기 -->
-    <!--    현재 prod 서버가 없으니 주석처리 -->
-    <!--    <springProfile name = "prod">-->
-    <!--        <root level = "INFO">-->
-    <!--            <appender-ref ref="FILE"/>-->
-    <!--            <appender-ref ref="ERROR"/>-->
-    <!--        </root>-->
-    <!--        <logger name="com.zaxxer.hikari" level = "ERROR" />-->
-    <!--        <logger name="org.apache" level = "ERROR" />-->
-    <!--    </springProfile>-->
-    <!--
-        + 외부 프로젝트가 아닌 내 프로젝트와 관련된 것은 DEBUG level에서 출력함.
-        + security와 관련된 것은 DEBUG level에서 출력함.
-        + com.zaxxer.hikari패키지와 관련된 것은 ERROR레벨일 경우만 log를 출력
-        + console에만 log를 남기고 file에 따로 기록하지 않음 -->
+<!--        + 외부 프로젝트가 아닌 내 프로젝트와 관련된 것은 DEBUG level에서 출력함.-->
+<!--        + security와 관련된 것은 DEBUG level에서 출력함.-->
+<!--        + com.zaxxer.hikari패키지와 관련된 것은 ERROR레벨일 경우만 log를 출력-->
+<!--        + console에만 log를 남기고 file에 따로 기록하지 않음 &ndash;&gt;-->
 
     <springProfile name = "dev">
         <root level = "INFO">
-<!--            <appender-ref ref="FILE"/>-->
-            <appender-ref ref="CONSOLE"/>
+            <appender-ref ref="FILE"/>
         </root>
         <logger name="com.greenroom.server" level="DEBUG" />
         <logger name="org.springframework.security" level = "DEBUG" />
@@ -81,5 +69,7 @@
         <logger name="com.zaxxer.hikari" level = "ERROR" />
         <logger name="org.apache" level = "ERROR" />
     </springProfile>
+
+
 
 </configuration>

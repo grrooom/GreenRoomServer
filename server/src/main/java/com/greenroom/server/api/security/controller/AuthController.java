@@ -46,17 +46,19 @@ public class AuthController {
 
     @PutMapping("/email/authentication")
     public ResponseEntity<ApiResponse> authenticateEmail(@Valid @RequestBody EmailAuthenticationDto.EmailAuthDto authenticationDto){
-        userDetailService.emailAuthentication(authenticationDto.getRedirectUrl(),authenticationDto.getEmail());
-        return ResponseEntity.ok().body(ApiResponse.success(ResponseCodeEnum.SUCCESS));
+        userDetailService.emailAuthentication(authenticationDto.getEmail());
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).body(ApiResponse.success(ResponseCodeEnum.NO_CONTENT));
 
     }
 
     @PutMapping("/email/token/authentication")
     public ResponseEntity<ApiResponse> verifyEmailToken(@Valid @RequestBody EmailAuthenticationDto.EmailTokenAuthDto authenticationDto){
         userDetailService.verifyEmailToken( authenticationDto.getToken());
-        return ResponseEntity.ok().body(ApiResponse.success(ResponseCodeEnum.SUCCESS));
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).body(ApiResponse.success(ResponseCodeEnum.NO_CONTENT));
 
     }
+
+
 
 
 

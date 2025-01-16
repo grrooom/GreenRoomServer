@@ -41,7 +41,8 @@ application-secret.yml
 
 ### db ###
 data-test.sql
-shema-test.sql
 
 ### api ###
 openapi3.yaml
+**/resources/static/docs/index.html
+**/src/docs/asciidoc/index.html
