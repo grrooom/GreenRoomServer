@@ -4,6 +4,7 @@ plugins {
 	id 'org.springframework.boot' version '3.4.0'
 	id 'io.spring.dependency-management' version '1.1.6'
 	id 'com.epages.restdocs-api-spec' version '0.18.2'
+	id "org.asciidoctor.jvm.convert" version "3.3.2"
 }
 
 group = 'com.greenroom'
@@ -19,9 +20,15 @@ configurations {
 	}
 }
 
+configurations {
+	asciidoctorExt
+}
+
+
 repositories {
 	mavenCentral()
 }
+
 
 dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
@@ -55,6 +62,8 @@ dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-webflux' //webclient
 	implementation "org.json:json:20210307" //json
 
+	//restdocs
+	asciidoctorExt 'org.springframework.restdocs:spring-restdocs-asciidoctor'
 
 
 	///api 문서화
@@ -62,7 +71,7 @@ dependencies {
 	testImplementation 'com.epages:restdocs-api-spec-mockmvc:0.18.2'
 	testImplementation 'com.epages:restdocs-api-spec-restassured:0.18.2'
 	testImplementation 'org.springframework.restdocs:spring-restdocs-restassured'
-	//local용 db
+//	//local용 db
 	runtimeOnly 'org.mariadb.jdbc:mariadb-java-client'
 
 	//at&rt blacklist 관리
@@ -70,23 +79,41 @@ dependencies {
 
 	//smtp 메일 전송
 	implementation 'org.springframework.boot:spring-boot-starter-mail'
-}
 
+}
 
 tasks.named('bootBuildImage') {
 	builder = 'paketobuildpacks/builder-jammy-base:latest'
 }
 
+
+ext {
+	snippetsDir = file('build/generated-snippets')
+}
+
 tasks.named('test') {
 	delete file('build/generated-snippets')
 	useJUnitPlatform()
+	outputs.dir snippetsDir
 }
+
+
+asciidoctor {
+	configurations 'asciidoctorExt'
+}
+
+tasks.register('copyDocument', Copy){
+	dependsOn tasks.named('asciidoctor')
+	delete file('src/main/resources/static/docs/index.html')
+	from file("build/docs/asciidoc")
+	into file("src/main/resources/static/docs")
+}
+
 
 openapi3 {
 	servers = [
 			{ url = "http://localhost:8080" },
-			{ url = "https://greenroom-server.site" },
-			{ url = "http://greenroom-server.site"}
+			{ url = "https://greenroom-server.site" }
 	]
 	title = '그린룸 API DOCUMENT'
 	description = '그린룸 api 명세서입니다.'
@@ -98,27 +125,21 @@ openapi3 {
 tasks.register('copyOasToSwagger', Copy) {
 
 	// 기존 yaml 파일 삭제
-	delete 'src/main/resources/static/swagger-ui/openapi3.yaml'
+	delete 'src/main/resources/static/docs/openapi3.yaml'
 
 	// 복제할 yaml 파일 타겟팅
 	from "build/api-spec/openapi3.yaml"
 
 	// 타겟 디렉토리로 파일 복제
-	into 'src/main/resources/static/swagger-ui'
+	into 'src/main/resources/static/docs'
 
-	//test가 먼저 실행되도록 설정
+	//test 먼저 실행
 	dependsOn tasks.named('test')
 
 	// openapi3 task가 먼저 실행되도록 설정
 	dependsOn tasks.named('openapi3')
+
 }
 
-//sourceSets {
-//	ext.profile = (!project.hasProperty('profile') || !profile) ? 'local' : profile
-//	println "current profile : ${profile}"
-//	main {
-//		java {
-//			srcDirs "src/main/java"
-//		}
-//	}
-//}
+
+
