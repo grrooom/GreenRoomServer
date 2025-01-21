@@ -10,9 +10,7 @@ spring:
         format_sql: true
   sql:
     init:
-      mode: always
-      schema-locations: classpath*:schema-test.sql
-      data-locations: classpath*:data-test.sql
+      mode: never
   datasource:
     url: jdbc:h2:mem:testDb;MODE=MYSQL
     username: sa
@@ -50,4 +48,5 @@ decorator:
   datasource:
     p6spy:
       enable-logging: true
+
 

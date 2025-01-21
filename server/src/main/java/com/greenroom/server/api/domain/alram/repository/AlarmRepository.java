@@ -13,4 +13,7 @@ public interface AlarmRepository extends JpaRepository<Alarm,Long> {
 
     @EntityGraph(attributePaths = "user")
     Optional<Alarm> findByUser(User user);
+
+    void deleteByUser(User user);
+
 }

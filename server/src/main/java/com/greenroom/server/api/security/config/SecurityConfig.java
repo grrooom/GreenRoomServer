@@ -38,13 +38,15 @@ public class SecurityConfig {
     private final JWTAccessDeniedHandler jwtAccessDeniedHandler;
     private final TokenProvider tokenProvider;
     private static final String[] ANONYMOUS_MATCHERS = {
-            "/", "/api/auth/**","/error",
+            "/api/auth/**","/error","/login"
     };
 
     @Order(2)
     @Bean
     SecurityFilterChain filterChain1(HttpSecurity http, HandlerMappingIntrospector introspector) throws Exception {
-        return http.csrf(AbstractHttpConfigurer::disable)
+        return http
+                .securityMatcher(new AntPathRequestMatcher("/api/**"))
+                .csrf(AbstractHttpConfigurer::disable)
                 .headers((headerConfig) ->
                         headerConfig.frameOptions(HeadersConfigurer.FrameOptionsConfig::disable)
                 )
@@ -75,12 +77,13 @@ public class SecurityConfig {
     SecurityFilterChain filterChain2(HttpSecurity http, HandlerMappingIntrospector introspector) throws Exception {
 
         //Requests starting with /api/ are excluded from these security rules, possibly because they are handled differently
-        return http.securityMatcher(new NegatedRequestMatcher(new AntPathRequestMatcher("/api/**")))
+        return http
+                .securityMatcher(new NegatedRequestMatcher(new AntPathRequestMatcher("/api/**")))
                 .authorizeHttpRequests((request)->request.requestMatchers(
                         Stream.of(ANONYMOUS_MATCHERS)
                                 .map(uri->new MvcRequestMatcher(introspector,uri))
                                 .toArray(MvcRequestMatcher[]::new)
-                ).permitAll().requestMatchers("/swagger-ui/**","/docs/errorCode/**","/docs/**").hasAuthority("ADMIN").anyRequest().authenticated())
+                ).permitAll().requestMatchers("/docs/**").hasAuthority("ADMIN").anyRequest().authenticated())
                 .formLogin(Customizer.withDefaults())
 
                 .build();
