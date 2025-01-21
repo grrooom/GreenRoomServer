@@ -183,7 +183,7 @@ public class CustomUserDetailService implements UserDetailsService {
         //email 유효한지 다시 확인
         isValidEmail(email);
 
-        if(userRepository.existsByEmail(email)){throw new CustomException(ResponseCodeEnum.VERIFIED_USER_ALREADY_EXISTS,"이미 가입된 email을 가지고 인증을 시도함.");}
+        if(userRepository.findUserByEmailAndUserStatus(email,UserStatus.IN_ACTION).isPresent()){throw new CustomException(ResponseCodeEnum.VERIFIED_USER_ALREADY_EXISTS,"이미 가입된 email을 가지고 인증을 시도함.");}
 
         String token ;
         Optional<EmailVerificationLogs> optionalEmailLog =  emailVerificationLogsRepository.findByEmail(email);

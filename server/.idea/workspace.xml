@@ -6,6 +6,14 @@
   <component name="ChangeListManager">
     <list default="true" id="b2a8e82a-b6b3-41f3-b96e-46c6dfa5bf12" name="변경" comment="[fix]:logback 수정">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/docs/asciidoc/index.adoc" beforeDir="false" afterPath="$PROJECT_DIR$/src/docs/asciidoc/index.adoc" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/greenroom/server/api/domain/user/controller/UserController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/greenroom/server/api/domain/user/controller/UserController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/greenroom/server/api/domain/user/service/UserExitReasonService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/greenroom/server/api/domain/user/service/UserExitReasonService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/greenroom/server/api/security/controller/AuthController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/greenroom/server/api/security/controller/AuthController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/greenroom/server/api/security/service/CustomUserDetailService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/greenroom/server/api/security/service/CustomUserDetailService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/java/com/greenroom/server/api/AuthIntegrationTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/com/greenroom/server/api/AuthIntegrationTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/java/com/greenroom/server/api/UserIntegrationTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/com/greenroom/server/api/UserIntegrationTest.java" afterDir="false" />
+
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -186,7 +194,7 @@
     "RunOnceActivity.OpenProjectViewOnStart": "true",
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "Spring Boot.ServerApplication.executor": "Run",
-    "git-widget-placeholder": "develop",
+    "git-widget-placeholder": "feature/fix-exception",
     "kotlin-language-version-configured": "true",
     "last_opened_file_path": "C:/sideProject/greenroom/server/src/main/java/com/greenroom/server/api/domain/common",
     "node.js.detected.package.eslint": "true",
@@ -223,6 +231,30 @@
     </key>
   </component>
   <component name="RunManager" selected="Spring Boot.ServerApplication">
+    <configuration name="AuthIntegrationTest.이메일토큰검증성공" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
+      <ExternalSystemSettings>
+        <option name="executionName" />
+        <option name="externalProjectPath" value="$PROJECT_DIR$" />
+        <option name="externalSystemIdString" value="GRADLE" />
+        <option name="scriptParameters" value="" />
+        <option name="taskDescriptions">
+          <list />
+        </option>
+        <option name="taskNames">
+          <list>
+            <option value=":test" />
+            <option value="--tests" />
+            <option value="&quot;com.greenroom.server.api.AuthIntegrationTest.이메일토큰검증성공&quot;" />
+          </list>
+        </option>
+        <option name="vmOptions" />
+      </ExternalSystemSettings>
+      <ExternalSystemDebugServerProcess>false</ExternalSystemDebugServerProcess>
+      <ExternalSystemReattachDebugProcess>true</ExternalSystemReattachDebugProcess>
+      <DebugAllEnabled>false</DebugAllEnabled>
+      <RunAsTest>true</RunAsTest>
+      <method v="2" />
+    </configuration>
     <configuration name="UserServiceUnitTest.hardDeleteTest" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
       <ExternalSystemSettings>
         <option name="executionName" />
@@ -237,54 +269,6 @@
             <option value=":test" />
             <option value="--tests" />
             <option value="&quot;com.greenroom.server.api.UserServiceUnitTest.hardDeleteTest&quot;" />
-          </list>
-        </option>
-        <option name="vmOptions" />
-      </ExternalSystemSettings>
-      <ExternalSystemDebugServerProcess>false</ExternalSystemDebugServerProcess>
-      <ExternalSystemReattachDebugProcess>true</ExternalSystemReattachDebugProcess>
-      <DebugAllEnabled>false</DebugAllEnabled>
-      <RunAsTest>true</RunAsTest>
-      <method v="2" />
-    </configuration>
-    <configuration name="UserServiceUnitTest.hardDeleteTest2" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
-      <ExternalSystemSettings>
-        <option name="executionName" />
-        <option name="externalProjectPath" value="$PROJECT_DIR$" />
-        <option name="externalSystemIdString" value="GRADLE" />
-        <option name="scriptParameters" value="" />
-        <option name="taskDescriptions">
-          <list />
-        </option>
-        <option name="taskNames">
-          <list>
-            <option value=":test" />
-            <option value="--tests" />
-            <option value="&quot;com.greenroom.server.api.UserServiceUnitTest.hardDeleteTest2&quot;" />
-          </list>
-        </option>
-        <option name="vmOptions" />
-      </ExternalSystemSettings>
-      <ExternalSystemDebugServerProcess>false</ExternalSystemDebugServerProcess>
-      <ExternalSystemReattachDebugProcess>true</ExternalSystemReattachDebugProcess>
-      <DebugAllEnabled>false</DebugAllEnabled>
-      <RunAsTest>true</RunAsTest>
-      <method v="2" />
-    </configuration>
-    <configuration name="UserServiceUnitTest.softDeleteTest" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
-      <ExternalSystemSettings>
-        <option name="executionName" />
-        <option name="externalProjectPath" value="$PROJECT_DIR$" />
-        <option name="externalSystemIdString" value="GRADLE" />
-        <option name="scriptParameters" value="" />
-        <option name="taskDescriptions">
-          <list />
-        </option>
-        <option name="taskNames">
-          <list>
-            <option value=":test" />
-            <option value="--tests" />
-            <option value="&quot;com.greenroom.server.api.UserServiceUnitTest.softDeleteTest&quot;" />
           </list>
         </option>
         <option name="vmOptions" />
@@ -339,6 +323,28 @@
       <RunAsTest>false</RunAsTest>
       <method v="2" />
     </configuration>
+    <configuration name="server [test]" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
+      <ExternalSystemSettings>
+        <option name="executionName" />
+        <option name="externalProjectPath" value="$PROJECT_DIR$" />
+        <option name="externalSystemIdString" value="GRADLE" />
+        <option name="scriptParameters" />
+        <option name="taskDescriptions">
+          <list />
+        </option>
+        <option name="taskNames">
+          <list>
+            <option value="test" />
+          </list>
+        </option>
+        <option name="vmOptions" />
+      </ExternalSystemSettings>
+      <ExternalSystemDebugServerProcess>true</ExternalSystemDebugServerProcess>
+      <ExternalSystemReattachDebugProcess>true</ExternalSystemReattachDebugProcess>
+      <DebugAllEnabled>false</DebugAllEnabled>
+      <RunAsTest>false</RunAsTest>
+      <method v="2" />
+    </configuration>
     <configuration default="true" type="JUnit" factoryName="JUnit">
       <shortenClasspath name="ARGS_FILE" />
       <option name="TEST_OBJECT" value="class" />
@@ -357,9 +363,9 @@
       </method>
     </configuration>
     <list>
+      <item itemvalue="Gradle.AuthIntegrationTest.이메일토큰검증성공" />
+      <item itemvalue="Gradle.server [test]" />
       <item itemvalue="Gradle.UserServiceUnitTest.hardDeleteTest" />
-      <item itemvalue="Gradle.UserServiceUnitTest.hardDeleteTest2" />
-      <item itemvalue="Gradle.UserServiceUnitTest.softDeleteTest" />
       <item itemvalue="Gradle.server [copyDocument]" />
       <item itemvalue="Gradle.server [copyOasToSwagger]" />
       <item itemvalue="Spring Boot.ServerApplication" />
@@ -368,9 +374,9 @@
       <list>
         <item itemvalue="Gradle.server [copyDocument]" />
         <item itemvalue="Gradle.server [copyOasToSwagger]" />
+        <item itemvalue="Gradle.AuthIntegrationTest.이메일토큰검증성공" />
+        <item itemvalue="Gradle.server [test]" />
         <item itemvalue="Gradle.UserServiceUnitTest.hardDeleteTest" />
-        <item itemvalue="Gradle.UserServiceUnitTest.hardDeleteTest2" />
-        <item itemvalue="Gradle.UserServiceUnitTest.softDeleteTest" />
       </list>
     </recent_temporary>
   </component>

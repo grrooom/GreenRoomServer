@@ -23,7 +23,7 @@ public class UserController {
     @DeleteMapping("")
     public ResponseEntity<ApiResponse> deactivateUser (@AuthenticationPrincipal User user, @RequestBody UserExitRequestDto userExitRequestDto){
         userService.deactivateUser(user.getUsername(), userExitRequestDto);
-        return ResponseEntity.status(HttpStatus.NO_CONTENT).body(ApiResponse.success(ResponseCodeEnum.NO_CONTENT));
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).body(null);
     }
 
     @GetMapping("/exitReasons")
@@ -34,7 +34,7 @@ public class UserController {
     @PostMapping("/logout")
     public ResponseEntity<ApiResponse> logout(@AuthenticationPrincipal User user){
         userService.logout(user.getUsername());
-        return ResponseEntity.status(HttpStatus.NO_CONTENT).body(ApiResponse.success(ResponseCodeEnum.NO_CONTENT));
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).body(null);
     }
 
 
