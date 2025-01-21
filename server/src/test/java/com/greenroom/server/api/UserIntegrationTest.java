@@ -119,7 +119,7 @@ public class UserIntegrationTest {
 
     private final List<FieldDescriptor> requestDescriptorsForDeactivation = List.of(
             fieldWithPath("reasonIdList").type(JsonFieldType.ARRAY).description("탈퇴 사유 id list")
-            , fieldWithPath("customReason").type(JsonFieldType.STRING).description("사용자 입력 기타 탈퇴 사유")
+            , fieldWithPath("customReason").type(JsonFieldType.STRING).description("기타 탈퇴 사유").optional()
     );
 
     public String getTokenForTest(Long time){
