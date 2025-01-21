@@ -4,7 +4,9 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="b2a8e82a-b6b3-41f3-b96e-46c6dfa5bf12" name="변경" comment="[feat]:custom response error code 문서화 &amp; test code 개선" />
+    <list default="true" id="b2a8e82a-b6b3-41f3-b96e-46c6dfa5bf12" name="변경" comment="[fix]:회원 탈퇴 test code 수정">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -491,7 +493,15 @@
       <option name="project" value="LOCAL" />
       <updated>1736535081326</updated>
     </task>
-    <option name="localTasksCounter" value="12" />
+    <task id="LOCAL-00012" summary="[fix]:회원 탈퇴 test code 수정">
+      <option name="closed" value="true" />
+      <created>1737448628123</created>
+      <option name="number" value="00012" />
+      <option name="presentableId" value="LOCAL-00012" />
+      <option name="project" value="LOCAL" />
+      <updated>1737448628123</updated>
+    </task>
+    <option name="localTasksCounter" value="13" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -505,7 +515,8 @@
     <MESSAGE value="[fix]:openapi3 url 명세 변경" />
     <MESSAGE value="[fix]:add email 검증 로직" />
     <MESSAGE value="[feat]:custom response error code 문서화 &amp; test code 개선" />
-    <option name="LAST_COMMIT_MESSAGE" value="[feat]:custom response error code 문서화 &amp; test code 개선" />
+    <MESSAGE value="[fix]:회원 탈퇴 test code 수정" />
+    <option name="LAST_COMMIT_MESSAGE" value="[fix]:회원 탈퇴 test code 수정" />
   </component>
   <component name="XSLT-Support.FileAssociations.UIState">
     <expand />
