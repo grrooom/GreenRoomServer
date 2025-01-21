@@ -10,6 +10,7 @@ CREATE TABLE `users` (
                          `role` varchar(255),
                          `provider` varchar(255),
                          `user_status` varchar(255),
+                         `delete_date` timestamp,
                          `create_date` timestamp  DEFAULT CURRENT_TIMESTAMP,
                          `update_date` timestamp ON UPDATE CURRENT_TIMESTAMP
 );
@@ -67,8 +68,8 @@ CREATE TABLE `todo` (
                         `todo_id` bigint PRIMARY KEY AUTO_INCREMENT,
                         `activity_id` bigint,
                         `greenroom_id` bigint,
-                        `first_start_day` timestamp,
-                        `last_update_day` timestamp,
+                        `first_start_date` timestamp,
+                        `last_update_date` timestamp,
                         `next_todo_date` timestamp,
                         `duration` date,
                         `use_yn` bit,
@@ -111,7 +112,7 @@ CREATE TABLE `plant` (
 CREATE TABLE `alarm` (
                          `alarm_id` bigint PRIMARY KEY AUTO_INCREMENT,
                          `user_id` bigint,
-                         `todo_Alarm` bit,
+                         `is_notified` bit,
                          `fcm_token` varchar(255),
                          `create_date` timestamp  DEFAULT CURRENT_TIMESTAMP,
                          `update_date` timestamp ON UPDATE CURRENT_TIMESTAMP
@@ -122,7 +123,7 @@ CREATE TABLE `diary` (
                          `greenroom_id` bigint,
                          `diary_picture_url` varchar(255),
                          `title` varchar(255),
-                         `content` varchar(255),
+                         `content` varchar(1000),
                          `create_date` timestamp DEFAULT CURRENT_TIMESTAMP,
                          `update_date` timestamp ON UPDATE CURRENT_TIMESTAMP
 );
@@ -140,11 +141,21 @@ CREATE TABLE `email_verification_logs` (
 
 CREATE TABLE `refresh_token` (
                                  `refresh_token_id` bigint PRIMARY KEY AUTO_INCREMENT,
-                                 `email` varchar(255),
+                                 `user_id` bigint,
                                  `refresh_token` varchar(255),
                                  `create_date` timestamp  DEFAULT CURRENT_TIMESTAMP,
                                  `update_date` timestamp ON UPDATE CURRENT_TIMESTAMP
 );
+
+
+CREATE TABLE `user_exit_reason` (
+                                `user_exit_reason_id` bigint PRIMARY KEY AUTO_INCREMENT,
+                                `reason` varchar(255),
+                                `reason_type` varchar(255),
+                                `count` bigint
+);
+
+
 
 ALTER TABLE `greenroom` ADD FOREIGN KEY (`user_id`) REFERENCES `users` (`user_id`);
 
@@ -169,3 +180,5 @@ ALTER TABLE `todo_log` ADD FOREIGN KEY (`todo_id`) REFERENCES `todo` (`todo_id`)
 ALTER TABLE `item` ADD FOREIGN KEY (`grade_id`) REFERENCES `grade` (`grade_id`);
 
 ALTER TABLE `alarm` ADD FOREIGN KEY (`user_id`) REFERENCES `users` (`user_id`);
+
+ALTER TABLE `refresh_token` ADD FOREIGN KEY(`user_id`) REFERENCES `users` (`user_id`);

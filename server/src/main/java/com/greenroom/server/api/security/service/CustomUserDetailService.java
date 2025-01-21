@@ -65,7 +65,6 @@ public class CustomUserDetailService implements UserDetailsService {
     private final GradeRepository gradeRepository;
     private final PasswordEncoder passwordEncoder;
     private final EmailVerificationLogsRepository emailVerificationLogsRepository;
-    private final UserService userService;
 
     @Value("${greenroom.domain}")
     String domain;
@@ -112,17 +111,20 @@ public class CustomUserDetailService implements UserDetailsService {
         //유효한 refresh token인지 확인 & parsing
         String email = getPrincipalFromRefreshToken(refreshToken);
 
-        Optional<RefreshToken> refreshTokenOptional= refreshTokenRepository.findRefreshTokenByEmail(email);
+        //존재하는 회원의 refresh token인지 확인 : ex. 이미 탈퇴한 회원의 유효한 refresh token일 경우 에러 반환
+        User user = findUserByEmail(email);
+
+        Optional<RefreshToken> refreshTokenOptional= refreshTokenRepository.findRefreshTokenByUser(user);
 
         //이상 없음 -> 새로 발급된 refresh token으로 update
         if(refreshTokenOptional.isPresent() && refreshTokenOptional.get().getRefreshToken().equals(refreshToken)){
-            TokenDto tokenDto = createToken(findUserByEmail(email));
+            TokenDto tokenDto = createToken(user);
             String newRefreshToken = tokenDto.getRefreshToken();
             refreshTokenOptional.get().updateRefreshToken(newRefreshToken);
             return tokenDto;
         }
 
-        if(refreshTokenOptional.isPresent()) {refreshTokenRepository.deleteRefreshTokenByEmail(email);}
+        if(refreshTokenOptional.isPresent()) {refreshTokenRepository.deleteRefreshTokenByUser(user);}
 
         throw new CustomException(ResponseCodeEnum.REFRESH_TOKEN_NOT_MATCHED,"저장된 refresh token과 요청된 refresh token의 정보가 일치하지 않습니다.");
     }
@@ -147,9 +149,6 @@ public class CustomUserDetailService implements UserDetailsService {
         //소셜 로그인으로만 가입이 되어 있는 경우
         else if(findUser.isPresent()) {throw new CustomException(ResponseCodeEnum.OAUTH_USER_ALREADY_EXIST_CONNECT_AVAILABLE,"연동 가능한 oauth user가 존재.");}
 
-        // 활동 중인 회원 정보가 없는 경우
-        findDeletePendingUserByEmail(email).ifPresent(userService::deleteUser); //삭제 대기 중인 회원이 있으면 즉시 삭제 후 재가입
-
         User user = User.createUser(new SignupRequestDto(email,password),gradeRepository.findByLevel(0).orElse(null));
         userRepository.save(user);
         alarmRepository.save(Alarm.builder().user(user).build());
@@ -167,12 +166,12 @@ public class CustomUserDetailService implements UserDetailsService {
         TokenDto tokenDto = createToken(user);
         String refreshToken = tokenDto.getRefreshToken();
 
-        Optional<RefreshToken> refreshTokenOptional =  refreshTokenRepository.findRefreshTokenByEmail(email);
+        Optional<RefreshToken> refreshTokenOptional =  refreshTokenRepository.findRefreshTokenByUser(user);
 
         //저장되어 있는 refresh token이 있으면 update
         if(refreshTokenOptional.isPresent()){refreshTokenOptional.get().updateRefreshToken(refreshToken);}
         //없으면 새로 생성.
-        else{refreshTokenRepository.save(RefreshToken.builder().email(email).refreshToken(refreshToken).build());}
+        else{refreshTokenRepository.save(RefreshToken.createRefreshToken(user,refreshToken));}
 
         return tokenDto;
     }
@@ -181,7 +180,7 @@ public class CustomUserDetailService implements UserDetailsService {
     @Transactional
     public void emailAuthentication(String email){
 
-        //email 유요한지 다시 확인
+        //email 유효한지 다시 확인
         isValidEmail(email);
 
         if(userRepository.existsByEmail(email)){throw new CustomException(ResponseCodeEnum.VERIFIED_USER_ALREADY_EXISTS,"이미 가입된 email을 가지고 인증을 시도함.");}

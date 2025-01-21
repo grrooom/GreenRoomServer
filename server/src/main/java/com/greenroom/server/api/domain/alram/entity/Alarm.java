@@ -22,18 +22,18 @@ public class Alarm extends BaseTime {
     @JoinColumn(name = "user_id")
     private User user;
 
-    private Boolean todoAlarm;
+    private Boolean isNotified;
 
     private String fcmToken;
 
     @Builder
     public Alarm(User user){
-        this.todoAlarm = Boolean.FALSE;
+        this.isNotified = Boolean.FALSE;
         this.user = user;
     }
 
     public Alarm updateAlarmSet(Boolean todoAlarm){
-        this.todoAlarm = todoAlarm;
+        this.isNotified = todoAlarm;
         return this;
     }
 

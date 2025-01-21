@@ -1,8 +1,8 @@
 package com.greenroom.server.api;
 
 import com.epages.restdocs.apispec.ResourceSnippetParameters;
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.greenroom.server.api.config.TestDatabaseExecutionListener;
 import com.greenroom.server.api.domain.user.entity.User;
 import com.greenroom.server.api.domain.user.enums.Role;
 import com.greenroom.server.api.domain.user.repository.UserRepository;
@@ -19,7 +19,6 @@ import com.greenroom.server.api.security.service.CustomUserDetailService;
 import com.greenroom.server.api.security.util.TokenProvider;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
-import lombok.extern.java.Log;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -36,19 +35,17 @@ import org.springframework.restdocs.mockmvc.RestDocumentationResultHandler;
 import org.springframework.restdocs.operation.preprocess.HeadersModifyingOperationPreprocessor;
 import org.springframework.restdocs.payload.FieldDescriptor;
 import org.springframework.restdocs.payload.JsonFieldType;
-import org.springframework.restdocs.snippet.Attributes;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.test.context.TestExecutionListeners;
 import org.springframework.test.context.bean.override.mockito.MockitoSpyBean;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.test.context.ActiveProfiles;
 
-import java.io.File;
-import java.io.FileDescriptor;
 import java.time.LocalDateTime;
 import java.util.*;
 import java.util.stream.Collectors;
@@ -68,7 +65,9 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @AutoConfigureRestDocs
 @SpringBootTest
 @ActiveProfiles("test")
-@ExtendWith(RestDocumentationExtension.class)
+@ExtendWith({RestDocumentationExtension.class})
+//MERGE_WITH_DEFAULTS 옵션을 사용하면 기존의 리스너와 함께 동작 가능
+@TestExecutionListeners(value = TestDatabaseExecutionListener.class, mergeMode = TestExecutionListeners.MergeMode.MERGE_WITH_DEFAULTS)
 public class AuthIntegrationTest {
 
     @Autowired
@@ -95,23 +94,16 @@ public class AuthIntegrationTest {
     @Autowired
     private RefreshTokenRepository refreshTokenRepository;
 
-    @Value("${jwt.secret-key}") String secretKey;
+    @Value("${jwt.secret-key}")
+    String secretKey;
 
     private final ObjectMapper mapper = new ObjectMapper();
-
-    // enum 설명 적을 때 편리하게 적기 위한 메서드
-    private final <E extends Enum<E>> String getEnumValuesAsString(Class<E> enumClass) {
-        String enumValues = Arrays.stream(enumClass.getEnumConstants())
-                .map(Enum::name)
-                .collect(Collectors.joining(", "));
-        return " (종류: " + enumValues + ")";
-    }
 
     //  기본 응답 관련해서 공통 descriptor로 처리
     private final List<FieldDescriptor> resultDescriptors = List.of(
             fieldWithPath("status").type(JsonFieldType.STRING).description("응답 상태")
-            ,fieldWithPath("code").type(JsonFieldType.STRING).description("상태 코드")
-            ,fieldWithPath("data").type(JsonFieldType.OBJECT).optional().description("null 또는 data")
+            , fieldWithPath("code").type(JsonFieldType.STRING).description("상태 코드")
+            , fieldWithPath("data").type(JsonFieldType.OBJECT).optional().description("null 또는 data")
     );
 
     // request body descriptor
@@ -125,22 +117,22 @@ public class AuthIntegrationTest {
 
     protected List<FieldDescriptor> tokenResultDescriptors = List.of(
             fieldWithPath("status").type(JsonFieldType.STRING).description("응답 상태")
-            ,fieldWithPath("code").type(JsonFieldType.STRING).description("상태 코드")
-            ,fieldWithPath("data").type(JsonFieldType.OBJECT).optional().description("null 또는 data")
-            ,fieldWithPath("data.email").type(JsonFieldType.STRING).optional().description("user email")
-            ,fieldWithPath("data.accessToken").type(JsonFieldType.STRING).optional().description("access token")
-            ,fieldWithPath("data.refreshToken").type(JsonFieldType.STRING).optional().description("refresh token")
+            , fieldWithPath("code").type(JsonFieldType.STRING).description("상태 코드")
+            , fieldWithPath("data").type(JsonFieldType.OBJECT).optional().description("null 또는 data")
+            , fieldWithPath("data.email").type(JsonFieldType.STRING).optional().description("user email")
+            , fieldWithPath("data.accessToken").type(JsonFieldType.STRING).optional().description("access token")
+            , fieldWithPath("data.refreshToken").type(JsonFieldType.STRING).optional().description("refresh token")
     );
 
-    private HeadersModifyingOperationPreprocessor getModifiedHeader(){
+    private HeadersModifyingOperationPreprocessor getModifiedHeader() {
         return modifyHeaders().remove("X-Content-Type-Options").remove("X-XSS-Protection").remove("Cache-Control").remove("Pragma").remove("Expires").remove("Content-Length");
     }
 
     private RestDocumentationResultHandler documentApiForSignup(Integer identifier) {
-        return document("api/auth/signup/"+ identifier
+        return document("api/auth/signup/" + identifier
                 , // api의 id
                 preprocessRequest(prettyPrint()),   // (2)
-                preprocessResponse(prettyPrint(),getModifiedHeader()),  // (3)
+                preprocessResponse(prettyPrint(), getModifiedHeader()),  // (3)
                 responseFields(resultDescriptors), // responseBody 설명
                 requestFields(emailAndPasswordDescriptors),
                 resource(
@@ -170,37 +162,12 @@ public class AuthIntegrationTest {
         //given
         emailVerificationLogsRepository.save(EmailVerificationLogs.builder().email("testEmail@gmail.com").verificationStatus(VerificationStatus.VERIFIED).verificationToken(tokenProvider.createVerificationToken("testEmail@gmail.com")).build());
 
-        SignupRequestDto signupRequestDto = new SignupRequestDto("testEmail@gmail.com","!123456");
+        SignupRequestDto signupRequestDto = new SignupRequestDto("testEmail@gmail.com", "!123456");
 
         // when
         ResultActions resultActions = getResultActionsForSignup(signupRequestDto);
         // then
         resultActions.andExpect(status().isCreated()); // 상태 코드 created인지 확인
-        resultActions.andDo(documentApiForSignup(1));
-    }
-
-    @Test
-    @Transactional // 테스트 완료 후 rollback
-    @DisplayName("회원가입 api")
-    void 회원가입성공2() throws Exception {
-
-        //given
-        emailVerificationLogsRepository.save(EmailVerificationLogs.builder().email("testEmail@gmail.com").verificationStatus(VerificationStatus.VERIFIED).verificationToken(tokenProvider.createVerificationToken("testEmail@gmail.com")).build());
-        userRepository.save(User.builder().email("testEmail@gmail.com").password("!123456").role(Role.GENERAL).build());
-
-        userService.deactivateUser("testEmail@gmail.com");
-
-        emailVerificationLogsRepository.save(EmailVerificationLogs.builder().email("testEmail@gmail.com").verificationStatus(VerificationStatus.VERIFIED).verificationToken(tokenProvider.createVerificationToken("testEmail@gmail.com")).build());
-
-
-        SignupRequestDto signupRequestDto = new SignupRequestDto("testEmail@gmail.com","!123456");
-
-        // when
-        ResultActions resultActions = getResultActionsForSignup(signupRequestDto);
-
-        // then
-        resultActions.andExpect(status().isCreated()); // 상태 코드 created인지 확인
-
         resultActions.andDo(documentApiForSignup(1));
     }
 
@@ -748,7 +715,8 @@ public class AuthIntegrationTest {
     void jwtTokenUpdate성공() throws Exception {
 
         String email = "testEmail@gmail.com";
-        userRepository.save(User.builder().email(email).role(Role.GENERAL).build());
+        User user = User.builder().email(email).role(Role.GENERAL).build();
+        userRepository.save(user);
 
         //given
         List<GrantedAuthority> authorities = new ArrayList<>();
@@ -760,7 +728,7 @@ public class AuthIntegrationTest {
         Authentication authentication = new UsernamePasswordAuthenticationToken(principal, null, authorities);
 
         TokenDto tokenDto  = tokenProvider.createAllToken(authentication);
-        refreshTokenRepository.save(RefreshToken.builder().email(email).refreshToken(tokenDto.getRefreshToken()).build());
+        refreshTokenRepository.save(RefreshToken.createRefreshToken(user, tokenDto.getRefreshToken()));
 
         TokenRequestDto tokenRequestDto = new TokenRequestDto(tokenDto.getRefreshToken());
 
@@ -780,7 +748,8 @@ public class AuthIntegrationTest {
     void jwtTokenUpdate실패1() throws Exception {
 
         String email = "testEmail@gmail.com";
-        userRepository.save(User.builder().email(email).role(Role.GENERAL).build());
+        User user= User.builder().email(email).role(Role.GENERAL).build();
+        userRepository.save(user);
 
         //given
         List<GrantedAuthority> authorities = new ArrayList<>();
@@ -793,7 +762,7 @@ public class AuthIntegrationTest {
                 .signWith(SignatureAlgorithm.HS512, secretKey)
                 .setExpiration(new Date((new Date()).getTime()))
                 .compact();
-        refreshTokenRepository.save(RefreshToken.builder().email(email).refreshToken(refreshToken).build());
+        refreshTokenRepository.save(RefreshToken.createRefreshToken(user,refreshToken));
 
         TokenRequestDto tokenRequestDto = new TokenRequestDto(refreshToken);
 
@@ -824,7 +793,7 @@ public class AuthIntegrationTest {
                 .signWith(SignatureAlgorithm.HS512, secretKey)
                 .setExpiration(new Date((new Date()).getTime()+1211))
                 .compact();
-        refreshTokenRepository.save(RefreshToken.builder().email(email).refreshToken(refreshToken).build());
+
         TokenRequestDto tokenRequestDto = new TokenRequestDto(refreshToken);
 
         // when
@@ -843,7 +812,8 @@ public class AuthIntegrationTest {
     void jwtTokenUpdate실패4() throws Exception {
 
         String email = "testEmail@gmail.com";
-        userRepository.save(User.builder().email(email).role(Role.GENERAL).build());
+        User user = User.builder().email(email).role(Role.GENERAL).build();
+        userRepository.save(user);
 
         //given
         List<GrantedAuthority> authorities = new ArrayList<>();
@@ -857,7 +827,7 @@ public class AuthIntegrationTest {
                 .setExpiration(new Date((new Date()).getTime()+1211))
                 .compact();
 
-        refreshTokenRepository.save(RefreshToken.builder().email(email).refreshToken(refreshToken+"qq").build());
+        refreshTokenRepository.save(RefreshToken.createRefreshToken(user,refreshToken+"qq"));
         TokenRequestDto tokenRequestDto = new TokenRequestDto(refreshToken);
 
         // when

@@ -34,7 +34,7 @@ public enum ResponseCodeEnum {
     EMAIL_VERIFICATION_CODE_EXPIRED(HttpStatus.CONFLICT,"C018","email 인증 코드가 만료됨.","email 인증 다시 요청 필요"),
     EMAIL_VERIFICATION_CODE_NOT_MATCHED(HttpStatus.CONFLICT,"C019","email 인증 코드가 일치하지 않음.",""),
     EMAIL_NOT_VERIFIED(HttpStatus.CONFLICT,"C020","인증되지 않은 email로 회원가입을 시도함","회원가입 제한 & email 인증 요구"),
-    EMAIL_ADDRESS_UNAVAILABLE(HttpStatus.CONFLICT,"C021","존재하지 않는 email 주소이거나 해당 email 주소의 메일박스 등의 문제로 email을 보낼 수 없음.","email을 보낼 수 있는 유요한 email이 필요."),
+    EMAIL_ADDRESS_UNAVAILABLE(HttpStatus.CONFLICT,"C021","존재하지 않는 email 주소이거나 해당 email 주소의 메일박스 등의 문제로 email을 보낼 수 없음.","email을 보낼 수 있는 유효한 email 필요."),
     ALREADY_VERIFIED_EMAIL(HttpStatus.CONFLICT,"C022","이미 인증된 email로 이메일 인증을 시도함.",""),
     INVALID_REQUEST_ARGUMENT(HttpStatus.BAD_REQUEST,"C023","요청시 request body로 전달된 argument가 조건을 만족시키지 않음. ","명세된 request 조건에 맞는 요청 다시 전송 필요"),
     INVALID_EMAIL_VERIFICATION_TOKEN(HttpStatus.CONFLICT,"C024","부적절한 이메일 인증 토큰이 전송됨",""),

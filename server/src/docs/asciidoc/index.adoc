@@ -5,12 +5,10 @@
 :source-highlighter: highlightjs
 :sectlinks:
 
-= GreenRoom API Document
-2025-01-15
+= **GreenRoom API Document**
 
-== 개요
 
-=== 문서
+== 문서
 [cols="2,4,4", options="header"]
 |===
 | Name |Url| 비고
@@ -19,15 +17,29 @@
 | Error Code Document |/docs/error| Custom Error Code 명세
 |===
 
-=== API 서버 경로
+== API 서버 경로
 [cols="2,4,4", options="header"]
 |===
 | 환경 | DNS | 비고
 | 개발(dev) | https://greenroom-server.site | API 문서 제공
 |===
 
-=== 응답형식
-다음과 같이 응답형식을 제공합니다.
+== 응답형식
+
+
+=== 성공 응답
+
+요청이 성공했을 경우 아래의 Http Status를  반환합니다.
+
+[cols="5,6,10,6", options="header"]
+|===
+| Http Status | Http Status Code | 비고 | Response Body
+| OK | 200 | 요청에 성공  | O
+| CREATED | 201 | resource 생성 | O
+| NO CONTENT | 204 | 요청에 성공했으나 반환할 응답값이 없음 | X
+|===
+
+=== 응답 예시
 
 ==== 응답데이터가 없는 경우 예시
 [source, json]
@@ -44,7 +56,7 @@ Content-Type: application/json
 ==== 응답데이터가 있는 경우 예시
 [source, json]
 ----
-HTTP/1.1 200 Conflict
+HTTP/1.1 200 OK
 Content-Type: application/json
 {
   "status": "OK", //예시
@@ -56,8 +68,11 @@ Content-Type: application/json
 }
 ----
 
-==== 공통  ERROR
-이 문서에 명시된 실패 응답 외에 서버 측에서 처리하지 못한 예외가 발생하면 다음과 같은 error가 공통적으로 반환됩니다.
+== 실패 응답
+
+=== 공통 ERROR
+
+이 문서에 명시된 실패 응답 외에 서버 측에서 처리하지 못한 예외가 발생하면 다음 error가 공통적으로 반환됩니다.
 
 [cols="2,4,4", options="header"]
 |===
@@ -66,9 +81,31 @@ Content-Type: application/json
 |===
 
 
+=== JWT TOKEN 관련 실패 응답
+
+Authorization header가 요구되는 모든 API 요청에서 발생 할 수 있는 ERROR 응답입니다.
+
+==== 1. Access Token을 header에서 찾을 수 없음
+
+include::{snippets}/jwt/error1/http-response.adoc[]
+
+==== 2. 부적절한 Access token이 전달됨
+
+include::{snippets}/jwt/error2/http-response.adoc[]
+
+==== 3. Access Token이 만료됨
+
+include::{snippets}/jwt/error3/http-response.adoc[]
+
+++++
+<br><br>
+++++
+
 == 인증/인가
 
-=== 회원가입
+*별도의 Authorization Header가 필요하지 않습니다.*
+
+=== **1. 회원가입**
 사용자가 이메일과 비밀번호를 기반으로 새로운 계정을 생성할 수 있습니다. +
 회원 가입 시 사용되는 사용자의 email 계정은 이메일 인증을 통한 유효성 검사를 거친 후 사용이 가능합니다. +
 중복 email로 가입하는 것은 제한됩니다.
@@ -97,7 +134,7 @@ include::{snippets}/api/auth/signup/4/http-response.adoc[]
 
 ---
 
-=== 로그인
+=== **2. 로그인**
 
 등록된 이메일과 비밀번호를 기반으로 사용자를 인증합니다. +
 인증 성공 시 Access Token과 Refresh Token을 발급합니다.
@@ -125,7 +162,7 @@ include::{snippets}/api/auth/login/4/http-response.adoc[]
 
 ---
 
-=== 토큰 재발급
+=== **3. 토큰 재발급**
 
 사용자가 보유한 Refresh Token을 기반으로 새로운 Access Token과 Refresh Token을 발급합니다. +
 유효한 Refresh Token이 제공되면 새롭게 갱신된 토큰 세트를 반환합니다. +
@@ -154,9 +191,10 @@ include::{snippets}/api/auth/tokens/3/http-response.adoc[]
 include::{snippets}/api/auth/tokens/4/http-response.adoc[]
 실패4.
 include::{snippets}/api/auth/tokens/5/http-response.adoc[]
+
 ---
 
-=== 이메일 인증
+=== **4. 이메일 인증**
 회원가입 이전에 사용자의 이메일 주소를 검증하기 위해 사용됩니다. +
 API를 요청하면 이메일을 인증하기 위한 jwt 토큰을 앱링크와 함께 전송합니다. +
 5회를 초과하여 인증을 시도할 경우 15분간 추가적인 시도가 제한됩니다. +
@@ -192,7 +230,7 @@ include::{snippets}/api/auth/email/authentication/7/http-response.adoc[]
 
 ---
 
-=== 이메일 토큰 검증
+=== **5. 이메일 토큰 검증**
 
 이메일 인증 요청 시 전송된 JWT 토큰을 검증하여, 해당 토큰이 유효한 경우 이메일 인증을 완료하고, 잘못되거나 만료된 토큰을 전송한 경우 인증을 거부합니다. +
 JWT 토큰은 15분의 유효 시간을 가지며 가장 마지막 인증 시도 시 전달된 JWT 토큰만 유효성을 가집니다.
@@ -218,5 +256,76 @@ include::{snippets}/api/auth/email/token/authentication/2/http-response.adoc[]
 include::{snippets}/api/auth/email/token/authentication/3/http-response.adoc[]
 실패3.
 include::{snippets}/api/auth/email/token/authentication/4/http-response.adoc[]
+
+++++
+<br><br>
+++++
+
+==  USER - 회원 관련
+
+=== **1. 로그아웃**
+
+현재 로그인된 사용자를 로그아웃 시키고, 저장된 refresh token을 무효화합니다.
+
+==== Request
+include::{snippets}/api/users/logout/1/http-request.adoc[]
+
+==== Headers
+include::{snippets}/api/users/logout/1/request-headers.adoc[]
+
+==== 성공 Response
+include::{snippets}/api/users/logout/1/http-response.adoc[]
+
+==== Response Fields
+include::{snippets}/api/users/logout/1/response-fields.adoc[]
+
+==== 실패 Response
+실패1.
+include::{snippets}/api/users/logout/2/http-response.adoc[]
+
+---
+
+=== **2. 회원 탈퇴 사유 조회**
+
+미리 정의된 회원 탈퇴 사유를 조회합니다.
+
+==== Request
+include::{snippets}/api/users/exitReason/1/http-request.adoc[]
+
+==== Headers
+include::{snippets}/api/users/exitReason/1/request-headers.adoc[]
+
+==== 성공 Response
+include::{snippets}/api/users/exitReason/1/http-response.adoc[]
+
+==== Response Fields
+include::{snippets}/api/users/exitReason/1/response-fields.adoc[]
+
+---
+
+=== **3. 회원 탈퇴**
+
+회원 탈퇴 사유를 처리하고, 회원을 삭제 대기 상태로 전환 합니다. 90일 뒤 회원과 관련한 모든 정보르 삭제합니다.
+
+==== Request
+include::{snippets}/api/users/delete/1/http-request.adoc[]
+
+==== Request Fields
+include::{snippets}/api/users/delete/1/request-fields.adoc[]
+
+==== Headers
+include::{snippets}/api/users/delete/1/request-headers.adoc[]
+
+==== 성공 Response
+include::{snippets}/api/users/delete/1/http-response.adoc[]
+
+==== Response Fields
+include::{snippets}/api/users/delete/1/response-fields.adoc[]
+
+==== 실패 Response
+실패1.
+include::{snippets}/api/users/delete/2/http-response.adoc[]
+
+
 
 

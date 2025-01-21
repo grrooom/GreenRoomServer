@@ -5,10 +5,29 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="b2a8e82a-b6b3-41f3-b96e-46c6dfa5bf12" name="변경" comment="[feat]:custom response error code 문서화 &amp; test code 개선">
-      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/build.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/build.gradle" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/docs/asciidoc/index.adoc" beforeDir="false" afterPath="$PROJECT_DIR$/src/docs/asciidoc/index.adoc" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/greenroom/server/api/domain/alram/entity/Alarm.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/greenroom/server/api/domain/alram/entity/Alarm.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/greenroom/server/api/domain/alram/repository/AlarmRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/greenroom/server/api/domain/alram/repository/AlarmRepository.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/greenroom/server/api/domain/alram/service/AlarmService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/greenroom/server/api/domain/alram/service/AlarmService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/greenroom/server/api/domain/user/dto/MyPageDto.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/greenroom/server/api/domain/user/dto/UserBaseInfoDto.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/greenroom/server/api/domain/user/dto/UserWithdrawalRequestDto.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/greenroom/server/api/domain/user/entity/User.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/greenroom/server/api/domain/user/entity/User.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/greenroom/server/api/domain/user/repository/UserRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/greenroom/server/api/domain/user/repository/UserRepository.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/greenroom/server/api/domain/user/service/UserService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/greenroom/server/api/domain/user/service/UserService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/greenroom/server/api/enums/ResponseCodeEnum.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/greenroom/server/api/enums/ResponseCodeEnum.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/greenroom/server/api/security/config/SecurityConfig.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/greenroom/server/api/security/config/SecurityConfig.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/greenroom/server/api/security/entity/RefreshToken.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/greenroom/server/api/security/entity/RefreshToken.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/greenroom/server/api/security/handler/JWTFilter.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/greenroom/server/api/security/handler/JWTFilter.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/greenroom/server/api/security/handler/JwtFilterExceptionHandler.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/greenroom/server/api/security/handler/JwtFilterExceptionHandler.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/greenroom/server/api/security/repository/RefreshTokenRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/greenroom/server/api/security/repository/RefreshTokenRepository.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/greenroom/server/api/security/service/CustomUserDetailService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/greenroom/server/api/security/service/CustomUserDetailService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/java/com/greenroom/server/api/AuthControllerUnitTest.java" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/src/test/java/com/greenroom/server/api/AuthIntegrationTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/com/greenroom/server/api/AuthIntegrationTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/resources/application-test.yml" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/resources/application-test.yml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/resources/schema-test.sql" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/resources/schema-test.sql" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -72,9 +91,9 @@
   <component name="FileTemplateManagerImpl">
     <option name="RECENT_TEMPLATES">
       <list>
+        <option value="HTML File" />
         <option value="Enum" />
         <option value="Interface" />
-        <option value="HTML File" />
         <option value="Class" />
       </list>
     </option>
@@ -104,84 +123,104 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;DefaultHtmlFileTemplate&quot;: &quot;HTML File&quot;,
-    &quot;Gradle.AuthControllerTest.jwtTokenUpdate성공.executor&quot;: &quot;Run&quot;,
-    &quot;Gradle.AuthControllerTest.jwtTokenUpdate실패1.executor&quot;: &quot;Run&quot;,
-    &quot;Gradle.AuthControllerTest.jwtTokenUpdate실패2.executor&quot;: &quot;Run&quot;,
-    &quot;Gradle.AuthControllerTest.jwtTokenUpdate실패3.executor&quot;: &quot;Run&quot;,
-    &quot;Gradle.AuthControllerTest.jwtTokenUpdate실패4.executor&quot;: &quot;Run&quot;,
-    &quot;Gradle.AuthControllerTest.jwtTokenUpdate실패5.executor&quot;: &quot;Run&quot;,
-    &quot;Gradle.AuthControllerTest.로그인성공.executor&quot;: &quot;Run&quot;,
-    &quot;Gradle.AuthControllerTest.로그인실패1.executor&quot;: &quot;Run&quot;,
-    &quot;Gradle.AuthControllerTest.로그인실패2.executor&quot;: &quot;Run&quot;,
-    &quot;Gradle.AuthControllerTest.이메일인증성공.executor&quot;: &quot;Run&quot;,
-    &quot;Gradle.AuthControllerTest.이메일인증실패1.executor&quot;: &quot;Run&quot;,
-    &quot;Gradle.AuthControllerTest.이메일인증실패2.executor&quot;: &quot;Run&quot;,
-    &quot;Gradle.AuthControllerTest.이메일인증실패3.executor&quot;: &quot;Run&quot;,
-    &quot;Gradle.AuthControllerTest.이메일인증실패4.executor&quot;: &quot;Run&quot;,
-    &quot;Gradle.AuthControllerTest.이메일인증실패5.executor&quot;: &quot;Run&quot;,
-    &quot;Gradle.AuthControllerTest.이메일토큰검증성공.executor&quot;: &quot;Run&quot;,
-    &quot;Gradle.AuthControllerTest.이메일토큰검증실패1.executor&quot;: &quot;Run&quot;,
-    &quot;Gradle.AuthControllerTest.이메일토큰검증실패2.executor&quot;: &quot;Run&quot;,
-    &quot;Gradle.AuthControllerTest.회원가입성공.executor&quot;: &quot;Run&quot;,
-    &quot;Gradle.AuthControllerTest.회원가입실패1.executor&quot;: &quot;Run&quot;,
-    &quot;Gradle.AuthControllerTest.회원가입실패2.executor&quot;: &quot;Run&quot;,
-    &quot;Gradle.AuthIntegrationTest.executor&quot;: &quot;Run&quot;,
-    &quot;Gradle.AuthIntegrationTest.jwtTokenUpdate실패4.executor&quot;: &quot;Run&quot;,
-    &quot;Gradle.AuthIntegrationTest.로그인성공.executor&quot;: &quot;Run&quot;,
-    &quot;Gradle.AuthIntegrationTest.이메일인증실패1.executor&quot;: &quot;Run&quot;,
-    &quot;Gradle.AuthIntegrationTest.이메일인증실패4.executor&quot;: &quot;Run&quot;,
-    &quot;Gradle.AuthIntegrationTest.이메일인증실패6.executor&quot;: &quot;Run&quot;,
-    &quot;Gradle.AuthIntegrationTest.이메일토큰검증성공.executor&quot;: &quot;Run&quot;,
-    &quot;Gradle.AuthIntegrationTest.이메일토큰검증실패2.executor&quot;: &quot;Run&quot;,
-    &quot;Gradle.AuthIntegrationTest.회원가입성공.executor&quot;: &quot;Run&quot;,
-    &quot;Gradle.AuthIntegrationTest.회원가입성공1.executor&quot;: &quot;Run&quot;,
-    &quot;Gradle.AuthServiceTest.executor&quot;: &quot;Run&quot;,
-    &quot;Gradle.AuthServiceTest.로그인성공.executor&quot;: &quot;Run&quot;,
-    &quot;Gradle.AuthServiceTest.회원가입성공 (1).executor&quot;: &quot;Run&quot;,
-    &quot;Gradle.AuthServiceTest.회원가입성공.executor&quot;: &quot;Run&quot;,
-    &quot;Gradle.AuthServiceTest.회원가입실패1.executor&quot;: &quot;Run&quot;,
-    &quot;Gradle.AuthUnitControllerTest.회원가입성공.executor&quot;: &quot;Run&quot;,
-    &quot;Gradle.server [asciidoctor].executor&quot;: &quot;Run&quot;,
-    &quot;Gradle.server [bootJar].executor&quot;: &quot;Run&quot;,
-    &quot;Gradle.server [copyDocument].executor&quot;: &quot;Run&quot;,
-    &quot;Gradle.server [copyOasToSwagger].executor&quot;: &quot;Run&quot;,
-    &quot;Gradle.server [copyTestFileToStatic].executor&quot;: &quot;Run&quot;,
-    &quot;Gradle.server [dependentComponents].executor&quot;: &quot;Run&quot;,
-    &quot;Gradle.server [openapi3].executor&quot;: &quot;Run&quot;,
-    &quot;Gradle.server [postman].executor&quot;: &quot;Run&quot;,
-    &quot;Gradle.server [test].executor&quot;: &quot;Run&quot;,
-    &quot;Gradle.server 빌드.executor&quot;: &quot;Run&quot;,
-    &quot;JUnit.AuthIntegrationTest.executor&quot;: &quot;Run&quot;,
-    &quot;JUnit.AuthIntegrationTest.로그인실패1.executor&quot;: &quot;Run&quot;,
-    &quot;JUnit.AuthIntegrationTest.로그인실패2.executor&quot;: &quot;Run&quot;,
-    &quot;JUnit.AuthIntegrationTest.이메일인증성공.executor&quot;: &quot;Run&quot;,
-    &quot;JUnit.AuthIntegrationTest.회원가입실패2.executor&quot;: &quot;Run&quot;,
-    &quot;JavaScript 디버그.index.html (1).executor&quot;: &quot;Run&quot;,
-    &quot;JavaScript 디버그.index.html (2).executor&quot;: &quot;Run&quot;,
-    &quot;JavaScript 디버그.index.html.executor&quot;: &quot;Run&quot;,
-    &quot;RequestMappingsPanelOrder0&quot;: &quot;0&quot;,
-    &quot;RequestMappingsPanelOrder1&quot;: &quot;1&quot;,
-    &quot;RequestMappingsPanelWidth0&quot;: &quot;75&quot;,
-    &quot;RequestMappingsPanelWidth1&quot;: &quot;75&quot;,
-    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;Spring Boot.ServerApplication.executor&quot;: &quot;Run&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;feature/fix-auth-api&quot;,
-    &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
-    &quot;last_opened_file_path&quot;: &quot;C:/sideProject/greenroom/server/src/main/java/com/greenroom/server/api/domain/common&quot;,
-    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
-    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
-    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
-    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
-    &quot;nodejs_interpreter_path&quot;: &quot;C:/Program Files/nodejs/node&quot;,
-    &quot;nodejs_package_manager_path&quot;: &quot;C:\\Program Files\\nodejs&quot;,
-    &quot;settings.editor.selected.configurable&quot;: &quot;preferences.fileTypes&quot;,
-    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "DefaultHtmlFileTemplate": "HTML File",
+    "Downloaded.Files.Path.Enabled": "false",
+    "Gradle.AuthControllerTest.jwtTokenUpdate성공.executor": "Run",
+    "Gradle.AuthControllerTest.jwtTokenUpdate실패1.executor": "Run",
+    "Gradle.AuthControllerTest.jwtTokenUpdate실패2.executor": "Run",
+    "Gradle.AuthControllerTest.jwtTokenUpdate실패3.executor": "Run",
+    "Gradle.AuthControllerTest.jwtTokenUpdate실패4.executor": "Run",
+    "Gradle.AuthControllerTest.jwtTokenUpdate실패5.executor": "Run",
+    "Gradle.AuthControllerTest.로그인성공.executor": "Run",
+    "Gradle.AuthControllerTest.로그인실패1.executor": "Run",
+    "Gradle.AuthControllerTest.로그인실패2.executor": "Run",
+    "Gradle.AuthControllerTest.이메일인증성공.executor": "Run",
+    "Gradle.AuthControllerTest.이메일인증실패1.executor": "Run",
+    "Gradle.AuthControllerTest.이메일인증실패2.executor": "Run",
+    "Gradle.AuthControllerTest.이메일인증실패3.executor": "Run",
+    "Gradle.AuthControllerTest.이메일인증실패4.executor": "Run",
+    "Gradle.AuthControllerTest.이메일인증실패5.executor": "Run",
+    "Gradle.AuthControllerTest.이메일토큰검증성공.executor": "Run",
+    "Gradle.AuthControllerTest.이메일토큰검증실패1.executor": "Run",
+    "Gradle.AuthControllerTest.이메일토큰검증실패2.executor": "Run",
+    "Gradle.AuthControllerTest.회원가입성공.executor": "Run",
+    "Gradle.AuthControllerTest.회원가입실패1.executor": "Run",
+    "Gradle.AuthControllerTest.회원가입실패2.executor": "Run",
+    "Gradle.AuthIntegrationTest.executor": "Run",
+    "Gradle.AuthIntegrationTest.jwtTokenUpdate실패4.executor": "Run",
+    "Gradle.AuthIntegrationTest.로그인성공.executor": "Run",
+    "Gradle.AuthIntegrationTest.이메일인증실패1.executor": "Run",
+    "Gradle.AuthIntegrationTest.이메일인증실패4.executor": "Run",
+    "Gradle.AuthIntegrationTest.이메일인증실패6.executor": "Run",
+    "Gradle.AuthIntegrationTest.이메일토큰검증성공.executor": "Run",
+    "Gradle.AuthIntegrationTest.이메일토큰검증실패2.executor": "Run",
+    "Gradle.AuthIntegrationTest.회원가입성공.executor": "Run",
+    "Gradle.AuthIntegrationTest.회원가입성공1.executor": "Run",
+    "Gradle.AuthServiceTest.executor": "Run",
+    "Gradle.AuthServiceTest.로그인성공.executor": "Run",
+    "Gradle.AuthServiceTest.회원가입성공 (1).executor": "Run",
+    "Gradle.AuthServiceTest.회원가입성공.executor": "Run",
+    "Gradle.AuthServiceTest.회원가입실패1.executor": "Run",
+    "Gradle.AuthUnitControllerTest.회원가입성공.executor": "Run",
+    "Gradle.JWTErrorTest.executor": "Run",
+    "Gradle.JpaTest.test1.executor": "Run",
+    "Gradle.JpaTest.test2.executor": "Run",
+    "Gradle.UserIntegrationTest.executor": "Run",
+    "Gradle.UserIntegrationTest.로그아웃_성공.executor": "Run",
+    "Gradle.UserIntegrationTest.로그아웃_실패1.executor": "Run",
+    "Gradle.UserIntegrationTest.회원_탈퇴_성공.executor": "Run",
+    "Gradle.UserServiceTest.executor": "Run",
+    "Gradle.UserServiceTest.hardDeleteTest.executor": "Run",
+    "Gradle.UserServiceTest.hardDeleteTest2.executor": "Run",
+    "Gradle.UserServiceTest.softDeleteTest.executor": "Run",
+    "Gradle.UserServiceTest.탈퇴이유가져오기.executor": "Run",
+    "Gradle.UserServiceUnitTest.executor": "Run",
+    "Gradle.UserServiceUnitTest.hardDeleteTest.executor": "Run",
+    "Gradle.UserServiceUnitTest.hardDeleteTest2.executor": "Run",
+    "Gradle.UserServiceUnitTest.softDeleteTest.executor": "Run",
+    "Gradle.server [asciidoctor].executor": "Run",
+    "Gradle.server [bootJar].executor": "Run",
+    "Gradle.server [copyDocument].executor": "Run",
+    "Gradle.server [copyOasToSwagger].executor": "Run",
+    "Gradle.server [copyTestFileToStatic].executor": "Run",
+    "Gradle.server [dependentComponents].executor": "Run",
+    "Gradle.server [openapi3].executor": "Run",
+    "Gradle.server [postman].executor": "Run",
+    "Gradle.server [test].executor": "Run",
+    "Gradle.server 빌드.executor": "Run",
+    "JUnit.AuthIntegrationTest.executor": "Run",
+    "JUnit.AuthIntegrationTest.로그인실패1.executor": "Run",
+    "JUnit.AuthIntegrationTest.로그인실패2.executor": "Run",
+    "JUnit.AuthIntegrationTest.이메일인증성공.executor": "Run",
+    "JUnit.AuthIntegrationTest.회원가입실패2.executor": "Run",
+    "JavaScript 디버그.index.html (1).executor": "Run",
+    "JavaScript 디버그.index.html (2).executor": "Run",
+    "JavaScript 디버그.index.html.executor": "Run",
+    "Repository.Attach.Annotations": "false",
+    "Repository.Attach.JavaDocs": "false",
+    "Repository.Attach.Sources": "false",
+    "RequestMappingsPanelOrder0": "0",
+    "RequestMappingsPanelOrder1": "1",
+    "RequestMappingsPanelWidth0": "75",
+    "RequestMappingsPanelWidth1": "75",
+    "RunOnceActivity.OpenProjectViewOnStart": "true",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "Spring Boot.ServerApplication.executor": "Run",
+    "git-widget-placeholder": "feature/user-logout-withdrawl",
+    "kotlin-language-version-configured": "true",
+    "last_opened_file_path": "C:/sideProject/greenroom/server/src/main/java/com/greenroom/server/api/domain/common",
+    "node.js.detected.package.eslint": "true",
+    "node.js.detected.package.tslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.tslint": "(autodetect)",
+    "nodejs_interpreter_path": "C:/Program Files/nodejs/node",
+    "nodejs_package_manager_path": "C:\\Program Files\\nodejs",
+    "settings.editor.selected.configurable": "preferences.fileTypes",
+    "vue.rearranger.settings.migration": "true"
   }
-}</component>
+}]]></component>
   <component name="ReactorSettings">
     <option name="notificationShown" value="true" />
   </component>
@@ -194,11 +233,11 @@
       <recent name="C:\사이드프로젝트모음\greenroomNew\server\src\main\java\com\greenroom\server\api\security" />
     </key>
     <key name="MoveFile.RECENT_KEYS">
+      <recent name="C:\sideProject\greenroom\server\src\test\resources" />
       <recent name="C:\sideProject\greenroom\server\src\main\resources\static\docss" />
       <recent name="C:\sideProject\greenroom\server\src\main\resources\static\docs" />
       <recent name="C:\sideProject\greenroom\server\src\main\resources\templates\docs" />
       <recent name="C:\sideProject\greenroom\server\src\test\resources\org\springframework\restdocs\templates\asciidoctor" />
-      <recent name="C:\sideProject\greenroom\server\src\test\resources\org\springframework\restdocs\templates" />
     </key>
     <key name="CopyClassDialog.RECENTS_KEY">
       <recent name="com.greenroom.server.api.util" />
@@ -206,6 +245,78 @@
     </key>
   </component>
   <component name="RunManager" selected="Spring Boot.ServerApplication">
+    <configuration name="UserServiceUnitTest.hardDeleteTest" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
+      <ExternalSystemSettings>
+        <option name="executionName" />
+        <option name="externalProjectPath" value="$PROJECT_DIR$" />
+        <option name="externalSystemIdString" value="GRADLE" />
+        <option name="scriptParameters" value="" />
+        <option name="taskDescriptions">
+          <list />
+        </option>
+        <option name="taskNames">
+          <list>
+            <option value=":test" />
+            <option value="--tests" />
+            <option value="&quot;com.greenroom.server.api.UserServiceUnitTest.hardDeleteTest&quot;" />
+          </list>
+        </option>
+        <option name="vmOptions" />
+      </ExternalSystemSettings>
+      <ExternalSystemDebugServerProcess>false</ExternalSystemDebugServerProcess>
+      <ExternalSystemReattachDebugProcess>true</ExternalSystemReattachDebugProcess>
+      <DebugAllEnabled>false</DebugAllEnabled>
+      <RunAsTest>true</RunAsTest>
+      <method v="2" />
+    </configuration>
+    <configuration name="UserServiceUnitTest.hardDeleteTest2" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
+      <ExternalSystemSettings>
+        <option name="executionName" />
+        <option name="externalProjectPath" value="$PROJECT_DIR$" />
+        <option name="externalSystemIdString" value="GRADLE" />
+        <option name="scriptParameters" value="" />
+        <option name="taskDescriptions">
+          <list />
+        </option>
+        <option name="taskNames">
+          <list>
+            <option value=":test" />
+            <option value="--tests" />
+            <option value="&quot;com.greenroom.server.api.UserServiceUnitTest.hardDeleteTest2&quot;" />
+          </list>
+        </option>
+        <option name="vmOptions" />
+      </ExternalSystemSettings>
+      <ExternalSystemDebugServerProcess>false</ExternalSystemDebugServerProcess>
+      <ExternalSystemReattachDebugProcess>true</ExternalSystemReattachDebugProcess>
+      <DebugAllEnabled>false</DebugAllEnabled>
+      <RunAsTest>true</RunAsTest>
+      <method v="2" />
+    </configuration>
+    <configuration name="UserServiceUnitTest.softDeleteTest" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
+      <ExternalSystemSettings>
+        <option name="executionName" />
+        <option name="externalProjectPath" value="$PROJECT_DIR$" />
+        <option name="externalSystemIdString" value="GRADLE" />
+        <option name="scriptParameters" value="" />
+        <option name="taskDescriptions">
+          <list />
+        </option>
+        <option name="taskNames">
+          <list>
+            <option value=":test" />
+            <option value="--tests" />
+            <option value="&quot;com.greenroom.server.api.UserServiceUnitTest.softDeleteTest&quot;" />
+          </list>
+        </option>
+        <option name="vmOptions" />
+      </ExternalSystemSettings>
+      <ExternalSystemDebugServerProcess>false</ExternalSystemDebugServerProcess>
+      <ExternalSystemReattachDebugProcess>true</ExternalSystemReattachDebugProcess>
+      <DebugAllEnabled>false</DebugAllEnabled>
+      <RunAsTest>true</RunAsTest>
+      <method v="2" />
+    </configuration>
     <configuration name="server [copyDocument]" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
       <ExternalSystemSettings>
         <option name="executionName" />
@@ -250,59 +361,12 @@
       <RunAsTest>false</RunAsTest>
       <method v="2" />
     </configuration>
-    <configuration name="server [dependentComponents]" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
-      <ExternalSystemSettings>
-        <option name="executionName" />
-        <option name="externalProjectPath" value="$PROJECT_DIR$" />
-        <option name="externalSystemIdString" value="GRADLE" />
-        <option name="scriptParameters" />
-        <option name="taskDescriptions">
-          <list />
-        </option>
-        <option name="taskNames">
-          <list>
-            <option value="dependentComponents" />
-          </list>
-        </option>
-        <option name="vmOptions" />
-      </ExternalSystemSettings>
-      <ExternalSystemDebugServerProcess>true</ExternalSystemDebugServerProcess>
-      <ExternalSystemReattachDebugProcess>true</ExternalSystemReattachDebugProcess>
-      <DebugAllEnabled>false</DebugAllEnabled>
-      <RunAsTest>false</RunAsTest>
-      <method v="2" />
-    </configuration>
-    <configuration name="server [test]" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
-      <ExternalSystemSettings>
-        <option name="executionName" />
-        <option name="externalProjectPath" value="$PROJECT_DIR$" />
-        <option name="externalSystemIdString" value="GRADLE" />
-        <option name="scriptParameters" />
-        <option name="taskDescriptions">
-          <list />
-        </option>
-        <option name="taskNames">
-          <list>
-            <option value="test" />
-          </list>
-        </option>
-        <option name="vmOptions" />
-      </ExternalSystemSettings>
-      <ExternalSystemDebugServerProcess>true</ExternalSystemDebugServerProcess>
-      <ExternalSystemReattachDebugProcess>true</ExternalSystemReattachDebugProcess>
-      <DebugAllEnabled>false</DebugAllEnabled>
-      <RunAsTest>false</RunAsTest>
-      <method v="2" />
-    </configuration>
     <configuration default="true" type="JUnit" factoryName="JUnit">
       <shortenClasspath name="ARGS_FILE" />
       <option name="TEST_OBJECT" value="class" />
       <method v="2">
         <option name="Make" enabled="true" />
       </method>
-    </configuration>
-    <configuration name="index.html" type="JavascriptDebugType" temporary="true" nameIsGenerated="true" uri="http://localhost:63342/server/server/src/docs/asciidoc/index.html" useBuiltInWebServerPort="true">
-      <method v="2" />
     </configuration>
     <configuration name="ServerApplication" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot" nameIsGenerated="true">
       <module name="server.main" />
@@ -315,20 +379,20 @@
       </method>
     </configuration>
     <list>
+      <item itemvalue="Gradle.UserServiceUnitTest.hardDeleteTest" />
+      <item itemvalue="Gradle.UserServiceUnitTest.hardDeleteTest2" />
+      <item itemvalue="Gradle.UserServiceUnitTest.softDeleteTest" />
       <item itemvalue="Gradle.server [copyDocument]" />
-      <item itemvalue="Gradle.server [dependentComponents]" />
-      <item itemvalue="Gradle.server [test]" />
       <item itemvalue="Gradle.server [copyOasToSwagger]" />
-      <item itemvalue="JavaScript 디버그.index.html" />
       <item itemvalue="Spring Boot.ServerApplication" />
     </list>
     <recent_temporary>
       <list>
         <item itemvalue="Gradle.server [copyDocument]" />
         <item itemvalue="Gradle.server [copyOasToSwagger]" />
-        <item itemvalue="Gradle.server [test]" />
-        <item itemvalue="Gradle.server [dependentComponents]" />
-        <item itemvalue="JavaScript 디버그.index.html" />
+        <item itemvalue="Gradle.UserServiceUnitTest.hardDeleteTest" />
+        <item itemvalue="Gradle.UserServiceUnitTest.hardDeleteTest2" />
+        <item itemvalue="Gradle.UserServiceUnitTest.softDeleteTest" />
       </list>
     </recent_temporary>
   </component>
@@ -360,6 +424,8 @@
       <workItem from="1736407981744" duration="1484000" />
       <workItem from="1736598553810" duration="53201000" />
       <workItem from="1736822470317" duration="60058000" />
+      <workItem from="1737177277202" duration="22815000" />
+      <workItem from="1737337465873" duration="63933000" />
     </task>
     <task id="LOCAL-00001" summary="[feat]:security 설정 &amp; auth &amp; api docs 설정 &amp; dockerFile">
       <option name="closed" value="true" />

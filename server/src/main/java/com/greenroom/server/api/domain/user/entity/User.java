@@ -14,6 +14,8 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDateTime;
+
 @Table(name = "users")
 @Entity
 @Getter
@@ -30,11 +32,13 @@ public class User extends BaseTime {
 
     private String password;
 
-    private int totalSeed;
+    private Integer totalSeed;
 
-    private int weeklySeed;
+    private Integer weeklySeed;
 
     private String profileUrl;
+
+    private LocalDateTime deleteDate;
 
 
     @Enumerated(EnumType.STRING)
@@ -65,18 +69,6 @@ public class User extends BaseTime {
         this.userStatus = UserStatus.IN_ACTION;
     }
 
-    public static User createUser(UserDto userDto, Grade grade){
-
-        return User.builder()
-                .name(userDto.getName())
-                .email(userDto.getEmail())
-                .grade(grade)
-                .role(Role.GENERAL)
-                .provider(userDto.getProvider())
-                .build();
-    }
-
-
     public static User createUser(SignupRequestDto signupRequestDto, Grade grade){
 
         User user =  User.builder()
@@ -98,7 +90,8 @@ public class User extends BaseTime {
         return this;
     }
 
-    public void withdrawalUser(){
+    public void deactivateUser(){
+        this.deleteDate = LocalDateTime.now();
         this.userStatus = UserStatus.DELETE_PENDING;
     }
 
