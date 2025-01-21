@@ -367,7 +367,7 @@ public class AuthIntegrationTest {
     @Test
     @Transactional
     @DisplayName("이메일 인증 api")
-    void 이메일인증성공1() throws Exception {
+    void 이메일인증성공() throws Exception {
 
         //given
         EmailAuthenticationDto.EmailAuthDto emailAuthDto = new EmailAuthenticationDto.EmailAuthDto("emailTest@gmail.com");
@@ -379,41 +379,21 @@ public class AuthIntegrationTest {
         resultActions.andExpect(status().isNoContent());
 
         // 문서 작성
-        resultActions.andDo(documentApiForEmailAuth(1));
+        resultActions.andDo(document(
+                "api/auth/email/authentication/"+ 1, // api의 id
+                preprocessRequest(prettyPrint()),   // (2)
+                preprocessResponse(prettyPrint(),getModifiedHeader()),
+                requestFields(emailVerificationDescriptors),
+                resource(
+                        ResourceSnippetParameters.builder()
+                                .tag("😎 AUTH-인증/인가") // 문서에서 api들이 태그로 분류됨
+                                .summary("이메일 인증 요청 api") // api 이름
+                                .description("회원가입 이전에 사용자의 이메일 주소를 검증하기 위해 사용됩니다. 이 API를 요청하면 이메일을 인증하기 위한 jwt 토큰을 앱링크와 함께 전송합니다. \n5회를 초과하여 인증을 시도할 경우 15분간 추가적인 시도가 제한됩니다. 이미 가입된 user의 email 또는 이미 인증이 완료된 email에 대해서는 추가적인 인증을 제한합니다.") // api 설명
+                                .requestFields(emailVerificationDescriptors)
+                                .build()
+                )
+        ));
     }
-
-    @Test
-    @Transactional
-    @DisplayName("이메일 인증 api")
-    void 이메일인증성공2() throws Exception {
-
-        //given
-        String email = "testEmail@gmail.com";
-        List<GrantedAuthority> authorities = new ArrayList<>();
-        authorities.add(new SimpleGrantedAuthority("guest"));
-        authorities.add(new SimpleGrantedAuthority("general"));
-
-        String token = Jwts.builder()
-                .setSubject(email)
-                .claim("auth", authorities)
-                .signWith(SignatureAlgorithm.HS512, secretKey)
-                .setExpiration(new Date(new Date().getTime()+15*60*1000))
-                .compact();
-        EmailVerificationLogs emailVerificationLogs =  EmailVerificationLogs.builder().email(email).numberOfTrial(5).verificationToken(token).verificationStatus(VerificationStatus.PENDING).build();
-        emailVerificationLogs.setUpdateDate(LocalDateTime.now().minusMinutes(16));
-        emailVerificationLogsRepository.save(emailVerificationLogs);
-
-        EmailAuthenticationDto.EmailAuthDto emailAuthDto = new EmailAuthenticationDto.EmailAuthDto(email);
-
-        // when
-        ResultActions resultActions = getResultActionsForEmailAuth(emailAuthDto);
-        // then
-        resultActions.andExpect(status().isNoContent());
-
-        // 문서 작성
-        resultActions.andDo(documentApiForEmailAuth(1));
-    }
-
 
     @Test
     @DisplayName("이메일 인증 api")
@@ -603,7 +583,20 @@ public class AuthIntegrationTest {
         resultActions.andExpect(status().isNoContent());
 
         // 문서 작성
-        resultActions.andDo(documentApiForEmailToken(1));
+        resultActions.andDo(document(
+                "api/auth/email/token/authentication/"+ 1,
+                preprocessRequest(prettyPrint()),   // (2)
+                preprocessResponse(prettyPrint(),getModifiedHeader()),
+                requestFields(emailVerificationTokenDescriptor),
+                resource(
+                        ResourceSnippetParameters.builder()
+                                .tag("😎 AUTH-인증/인가") // 문서에서 api들이 태그로 분류됨
+                                .summary("이메일 토큰 검증 요청 api") // api 이름
+                                .description("이메일 인증 요청 시 전송된 JWT 토큰을 검증하여, 해당 토큰이 유효한 경우 이메일 인증을 완료하고, 잘못되거나 만료된 토큰을 전송한 경우 인증을 거부합니다. \nJWT 토큰은 15분의 유효 시간을 가지며 가장 마지막 인증 시도 시 전달된 JWT 토큰만 유효성을 가집니다. ") // api 설명
+                                .requestFields(emailVerificationTokenDescriptor)
+                                .build()
+                )
+        ));
     }
 
     @Test

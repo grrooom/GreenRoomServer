@@ -118,7 +118,7 @@ public class UserIntegrationTest {
     );
 
     private final List<FieldDescriptor> requestDescriptorsForDeactivation = List.of(
-            fieldWithPath("reasonIdList").type(JsonFieldType.ARRAY).description("탈퇴 사유 id list")
+            fieldWithPath("reasonIdList").type(JsonFieldType.ARRAY).description("탈퇴 사유 id list").optional()
             , fieldWithPath("customReason").type(JsonFieldType.STRING).description("기타 탈퇴 사유").optional()
     );
 
@@ -137,24 +137,7 @@ public class UserIntegrationTest {
 
     }
 
-    private RestDocumentationResultHandler documentApiForLogout(Integer identifier) {
-        return document("api/users/logout/" + identifier
-                ,
-                preprocessRequest(prettyPrint()),   // (2)
-                preprocessResponse(prettyPrint(), getModifiedHeader()),  // (3)
-                responseFields(resultDescriptors), // responseBody 설명
-                requestHeaders(
-                        headerWithName(HttpHeaders.AUTHORIZATION).description("Bearer : 사용자 access Token")
-                ),
-                resource(
-                        ResourceSnippetParameters.builder()
-                                .tag("User-회원 관련") // 문서에서 api들이 태그로 분류됨
-                                .summary("로그아웃 요청 api") // api 이름
-                                .description("현재 로그인된 사용자를 로그아웃 시키고, 저장된 refresh token을 무효화합니다.") // api 설명
-                                .responseFields(resultDescriptors) // responseBody 설명
-                                .requestHeaders(headerWithName(HttpHeaders.AUTHORIZATION).description("Bearer : 사용자 access Token"))
-                                .build()));
-    }
+
     private ResultActions getResultActionsForLogout(String token) throws Exception {
         return mockMvc.perform( // api 실행
                 RestDocumentationRequestBuilders
@@ -178,7 +161,20 @@ public class UserIntegrationTest {
         //then
         resultActions
                 .andExpect(status().isNoContent())
-                .andDo(documentApiForLogout(1));
+                .andDo(document("api/users/logout/" + 1
+                        ,
+                        preprocessRequest(prettyPrint()),   // (2)
+                        preprocessResponse(prettyPrint(), getModifiedHeader()),  // (3)
+                        requestHeaders(
+                                headerWithName(HttpHeaders.AUTHORIZATION).description("Bearer : 사용자 access Token")
+                        ),
+                        resource(
+                                ResourceSnippetParameters.builder()
+                                        .tag("User-회원 관련") // 문서에서 api들이 태그로 분류됨
+                                        .summary("로그아웃 요청 api") // api 이름
+                                        .description("현재 로그인된 사용자를 로그아웃 시키고, 저장된 refresh token을 무효화합니다.") // api 설명
+                                        .requestHeaders(headerWithName(HttpHeaders.AUTHORIZATION).description("Bearer : 사용자 access Token"))
+                                        .build())));
     }
 
 
@@ -192,7 +188,22 @@ public class UserIntegrationTest {
         //then
         resultActions
                 .andExpect(status().is(ResponseCodeEnum.USER_NOT_FOUND.getStatus().value())).andExpect(MockMvcResultMatchers.jsonPath("code").value(ResponseCodeEnum.USER_NOT_FOUND.getCode()))
-                .andDo(documentApiForLogout(2));
+                .andDo(document("api/users/logout/" + 2
+                        ,
+                        preprocessRequest(prettyPrint()),   // (2)
+                        preprocessResponse(prettyPrint(), getModifiedHeader()),  // (3)
+                        responseFields(resultDescriptors), // responseBody 설명
+                        requestHeaders(
+                                headerWithName(HttpHeaders.AUTHORIZATION).description("Bearer : 사용자 access Token")
+                        ),
+                        resource(
+                                ResourceSnippetParameters.builder()
+                                        .tag("User-회원 관련") // 문서에서 api들이 태그로 분류됨
+                                        .summary("로그아웃 요청 api") // api 이름
+                                        .description("현재 로그인된 사용자를 로그아웃 시키고, 저장된 refresh token을 무효화합니다.") // api 설명
+                                        .responseFields(resultDescriptors) // responseBody 설명
+                                        .requestHeaders(headerWithName(HttpHeaders.AUTHORIZATION).description("Bearer : 사용자 access Token"))
+                                        .build())));
     }
 
     @Test
@@ -204,7 +215,6 @@ public class UserIntegrationTest {
                         .get("/api/users/exitReasons")
                         .header(HttpHeaders.AUTHORIZATION, "Bearer "+token)
         );
-
 
         resultActions
                 .andExpect(status().isOk())
@@ -226,26 +236,6 @@ public class UserIntegrationTest {
                                 .build())));
     }
 
-    private RestDocumentationResultHandler documentApiForDeactivation(Integer identifier) {
-        return document("api/users/delete/" + identifier,
-                preprocessRequest(prettyPrint()),   // (2)
-                preprocessResponse(prettyPrint(), getModifiedHeader()),  // (3)
-                responseFields(resultDescriptors), // responseBody 설명
-                requestHeaders(
-                        headerWithName("Authorization").description("Bearer : 사용자 access Token")
-                ),
-                requestFields(requestDescriptorsForDeactivation),
-                resource(
-                        ResourceSnippetParameters.builder()
-                                .tag("User-회원 관련") // 문서에서 api들이 태그로 분류됨
-                                .summary("탈퇴 api") // api 이름
-                                .description("회원 탈퇴 사유를 처리하고, 회원을 삭제 대기 상태로 전환 합니다. 90일 뒤 회원과 관련한 모든 정보르 삭제합니다.") // api 설명
-                                .responseFields(resultDescriptors) // responseBody 설명
-                                .requestFields(requestDescriptorsForDeactivation)
-                                .requestHeaders(headerWithName(HttpHeaders.AUTHORIZATION).description("Bearer : 사용자 access Token"))
-                                .build())
-        );
-    }
     private ResultActions getResultActionsForDeactivation(String token) throws Exception {
 
         UserExitRequestDto userExitRequestDto = new UserExitRequestDto(List.of(1L,2L),"그냥 마음에 들지 않음.");
@@ -258,7 +248,6 @@ public class UserIntegrationTest {
                         .content(mapper.writeValueAsString(userExitRequestDto))
         );
     }
-
 
     @Test
     @Transactional
@@ -273,7 +262,22 @@ public class UserIntegrationTest {
 
         resultActions
                 .andExpect(status().is(ResponseCodeEnum.NO_CONTENT.getStatus().value()))
-                .andDo(documentApiForDeactivation(1));
+                .andDo(document("api/users/delete/" + 1,
+                        preprocessRequest(prettyPrint()),   // (2)
+                        preprocessResponse(prettyPrint(), getModifiedHeader()),  // (3)
+                        requestHeaders(
+                                headerWithName("Authorization").description("Bearer : 사용자 access Token")
+                        ),
+                        requestFields(requestDescriptorsForDeactivation),
+                        resource(
+                                ResourceSnippetParameters.builder()
+                                        .tag("User-회원 관련") // 문서에서 api들이 태그로 분류됨
+                                        .summary("탈퇴 api") // api 이름
+                                        .description("회원 탈퇴 사유를 처리하고, 회원을 삭제 대기 상태로 전환 합니다. 90일 뒤 회원과 관련한 모든 정보르 삭제합니다.") // api 설명
+                                        .requestFields(requestDescriptorsForDeactivation)
+                                        .requestHeaders(headerWithName(HttpHeaders.AUTHORIZATION).description("Bearer : 사용자 access Token"))
+                                        .build())
+                ));
     }
 
 
@@ -287,9 +291,24 @@ public class UserIntegrationTest {
         //then
         resultActions
                 .andExpect(status().is(ResponseCodeEnum.USER_NOT_FOUND.getStatus().value())).andExpect(MockMvcResultMatchers.jsonPath("code").value(ResponseCodeEnum.USER_NOT_FOUND.getCode()))
-                .andDo(documentApiForDeactivation(2));
+                .andDo(document("api/users/delete/" + 2,
+                        preprocessRequest(prettyPrint()),   // (2)
+                        preprocessResponse(prettyPrint(), getModifiedHeader()),  // (3)
+                        responseFields(resultDescriptors), // responseBody 설명
+                        requestHeaders(
+                                headerWithName("Authorization").description("Bearer : 사용자 access Token")
+                        ),
+                        requestFields(requestDescriptorsForDeactivation),
+                        resource(
+                                ResourceSnippetParameters.builder()
+                                        .tag("User-회원 관련") // 문서에서 api들이 태그로 분류됨
+                                        .summary("탈퇴 api") // api 이름
+                                        .description("회원 탈퇴 사유를 처리하고, 회원을 삭제 대기 상태로 전환 합니다. 90일 뒤 회원과 관련한 모든 정보르 삭제합니다.") // api 설명
+                                        .responseFields(resultDescriptors) // responseBody 설명
+                                        .requestFields(requestDescriptorsForDeactivation)
+                                        .requestHeaders(headerWithName(HttpHeaders.AUTHORIZATION).description("Bearer : 사용자 access Token"))
+                                        .build())
+                ));
     }
-
-
 
 }
