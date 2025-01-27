@@ -31,8 +31,8 @@ public class AuthController {
     //이메일 회원가입
     @PostMapping("/signup")
     public ResponseEntity<ApiResponse> signup( @Valid @RequestBody SignupRequestDto signupRequestDto){
-        userDetailService.save(signupRequestDto);
-        return ResponseEntity.status(HttpStatus.CREATED).body(ApiResponse.success(ResponseCodeEnum.CREATED));
+        TokenDto tokenDto = userDetailService.save(signupRequestDto);
+        return ResponseEntity.status(HttpStatus.CREATED).body(ApiResponse.success(ResponseCodeEnum.CREATED,tokenDto));
     }
 
    //일반 로그인

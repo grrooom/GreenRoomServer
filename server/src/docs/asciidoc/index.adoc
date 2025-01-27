@@ -20,23 +20,36 @@
 == API 서버 경로
 [cols="2,4,4", options="header"]
 |===
-| 환경 | DNS | 비고
+| 환경 | 도메인 | 비고
 | 개발(dev) | https://greenroom-server.site | API 문서 제공
 |===
 
 == 응답형식
 
+=== 공통 응답 형식
+
+[source, json]
+----
+HTTP/1.1 {HTTP STATUS CODE} {HTTP STATUS}
+Content-Type: application/json
+{
+  "status":  "http status" ,
+  "code":  "custom status code",
+  "data": "data"
+}
+
+----
 
 === 성공 응답
 
 요청이 성공했을 경우 아래의 Http Status를  반환합니다.
 
-[cols="5,6,10,6", options="header"]
+[cols="5,5,10,6", options="header"]
 |===
-| Http Status | Http Status Code | 비고 | Response Body
-| OK | 200 | 요청에 성공  | O
-| CREATED | 201 | resource 생성 | O
-| NO CONTENT | 204 | 요청에 성공했으나 반환할 응답값이 없음 | X
+| Http Status Code | Http Status | 비고 | Response Body
+| 200 | OK | 요청에 성공  | O
+| 201 | CREATED | resource 생성 | O
+| 204 | NO CONTENT |요청에 성공했으나 반환할 응답값이 없음 | X
 |===
 
 === 응답 예시
@@ -51,11 +64,11 @@ HTTP/1.1 204 NO CONTENT
 ==== 2. 응답 data가 없는 경우
 [source, json]
 ----
-HTTP/1.1 409 Conflict
+HTTP/1.1 201 CREATED
 Content-Type: application/json
 {
-  "status": "CONFLICT", // 예시
-  "code": "C002", //예시
+  "status": "CREATED", // 예시
+  "code": "A001", //예시
   "data": null
 }
 ----
@@ -77,40 +90,38 @@ Content-Type: application/json
 
 == 실패 응답
 
-=== 공통 ERROR
-
-이 문서에 명시된 실패 응답 외에 서버 측에서 처리하지 못한 예외가 발생하면 다음 error가 공통적으로 반환됩니다.
-
-[cols="2,4,4", options="header"]
+[cols="4,4,4,8", options="header"]
 |===
-| Http Status | Http Status Code | error code
-| INTERNAL_SERVER_ERROR | 500 | D000
+| Http Status Code | Http Status  | custom error code | 비고
+| 500 | INTERNAL_SERVER_ERROR | D000 | 서버 측에서 처리하지 못한 예외가 발생하면 모든 api 요청에 대해 공통적으로 반환됨.
+| 401 | UNAUTHORIZED | C004 |  Access Token이 만료됨
+| 401 | UNAUTHORIZED | C006 |  Access Token을 header에서 찾을 수 없음
+| 401 | UNAUTHORIZED | C008 |  부적절한 Access token이 전달됨
 |===
 
 
 === JWT TOKEN 관련 실패 응답
 
-Authorization header가 요구되는 모든 API 요청에서 발생 할 수 있는 ERROR 응답입니다.
+인증/인가 API를 제외한 모든 API 요청에서 발생 할 수 있는 ERROR 응답입니다.
 
-==== 1. Access Token을 header에서 찾을 수 없음
+==== 1. Access Token이 만료됨
+
+include::{snippets}/jwt/error3/http-response.adoc[]
+
+==== 2. Access Token을 header에서 찾을 수 없음
 
 include::{snippets}/jwt/error1/http-response.adoc[]
 
-==== 2. 부적절한 Access token이 전달됨
+==== 3. 부적절한 Access token이 전달됨
 
 include::{snippets}/jwt/error2/http-response.adoc[]
 
-==== 3. Access Token이 만료됨
-
-include::{snippets}/jwt/error3/http-response.adoc[]
 
 ++++
 <br><br>
 ++++
 
 == 인증/인가
-
-*별도의 Authorization Header가 필요하지 않습니다.*
 
 === **1. 회원가입**
 사용자가 이메일과 비밀번호를 기반으로 새로운 계정을 생성할 수 있습니다. +
@@ -207,6 +218,8 @@ API를 요청하면 이메일을 인증하기 위한 jwt 토큰을 앱링크와 
 5회를 초과하여 인증을 시도할 경우 15분간 추가적인 시도가 제한됩니다. +
 이미 가입된 user의 email 또는 이미 인증이 완료된 email에 대해서는 추가적인 인증을 제한합니다.
 
+app link  : greenroom://email?token={token}
+
 ==== Request
 include::{snippets}/api/auth/email/authentication/1/http-request.adoc[]
 
@@ -227,8 +240,6 @@ include::{snippets}/api/auth/email/authentication/4/http-response.adoc[]
 include::{snippets}/api/auth/email/authentication/5/http-response.adoc[]
 실패5.
 include::{snippets}/api/auth/email/authentication/6/http-response.adoc[]
-실패6.
-include::{snippets}/api/auth/email/authentication/7/http-response.adoc[]
 
 ---
 

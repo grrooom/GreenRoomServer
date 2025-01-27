@@ -75,6 +75,7 @@ public class User extends BaseTime {
                 .email(signupRequestDto.getEmail())
                 .grade(grade)
                 .role(Role.GENERAL)
+                .name(signupRequestDto.getName())
                 .build();
         user.updatePassword(signupRequestDto.getPassword());
         return user;

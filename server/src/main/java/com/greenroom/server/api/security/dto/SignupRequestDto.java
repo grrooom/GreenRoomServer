@@ -15,4 +15,6 @@ public class SignupRequestDto {
     String email;
     @NotBlank(message = "비어 있는 회원가입 password를 전달 받음.")
     String password;
+    @NotBlank(message = "닉네임이 비어있음.")
+    String name;
 }

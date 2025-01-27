@@ -66,9 +66,6 @@ public class CustomUserDetailService implements UserDetailsService {
     private final PasswordEncoder passwordEncoder;
     private final EmailVerificationLogsRepository emailVerificationLogsRepository;
 
-    @Value("${greenroom.domain}")
-    String domain;
-
     //spring application이 모두 세팅돼서 시작할 준비를 마쳤을 때, authorityMap의 값이 세팅됨
     private static final Map<Role,List<GrantedAuthority>> authorityMap = new HashMap<>();
 
@@ -131,12 +128,13 @@ public class CustomUserDetailService implements UserDetailsService {
 
     //일반 email,password 회원가입
     @Transactional
-    public void save(SignupRequestDto signupRequestDto){
+    public TokenDto save(SignupRequestDto signupRequestDto){
 
         String email = signupRequestDto.getEmail();
         isValidEmail(email); //email 검증
-        String password = passwordEncoder.encode(signupRequestDto.getPassword());
+        String password = passwordEncoder.encode(signupRequestDto.getPassword()); //password 인코딩
 
+        //이메일 검증 상태 확인
         Optional <EmailVerificationLogs> eLog =  emailVerificationLogsRepository.findByEmail(email);
         if(eLog.isEmpty() || !eLog.get().getVerificationStatus().equals(VerificationStatus.VERIFIED)){
             throw new CustomException(ResponseCodeEnum.EMAIL_NOT_VERIFIED); //이메일 인증을 시도한적 없거나 시도했으나 아직 인증상태가 아닌 경우 에러 반환
@@ -145,13 +143,21 @@ public class CustomUserDetailService implements UserDetailsService {
         Optional<User> findUser = findOptionalUserByEmail(email); //현재 활동중인 user 검색(삭제 대기중 포함 x)
 
         //이메일로 가입된 적 있는 경우 에러 반환
-        if(findUser.isPresent() && !findUser.get().getPassword().isEmpty()){throw new CustomException(ResponseCodeEnum.USER_ALREADY_EXIST,"해당 email로 가입된 user가 이미 존재");}
-        //소셜 로그인으로만 가입이 되어 있는 경우
-        else if(findUser.isPresent()) {throw new CustomException(ResponseCodeEnum.OAUTH_USER_ALREADY_EXIST_CONNECT_AVAILABLE,"연동 가능한 oauth user가 존재.");}
+        if(findUser.isPresent()){throw new CustomException(ResponseCodeEnum.USER_ALREADY_EXIST,"해당 email로 가입된 user가 이미 존재");}
 
-        User user = User.createUser(new SignupRequestDto(email,password),gradeRepository.findByLevel(0).orElse(null));
+        User user = User.createUser(new SignupRequestDto(email,password,signupRequestDto.getName()),gradeRepository.findByLevel(0).orElse(null));
         userRepository.save(user);
-        alarmRepository.save(Alarm.builder().user(user).build());
+
+        //푸시 알림 설정
+        alarmRepository.save(Alarm.builder().user(user).build()); //기본값음 알림 받지 않음
+
+        //토큰 발급
+        TokenDto tokenDto = createToken(user);
+        String refreshToken = tokenDto.getRefreshToken();
+        refreshTokenRepository.save(RefreshToken.createRefreshToken(user,refreshToken));
+
+        return tokenDto;
+
     }
 
     @Transactional
@@ -176,7 +182,6 @@ public class CustomUserDetailService implements UserDetailsService {
         return tokenDto;
     }
 
-
     @Transactional
     public void emailAuthentication(String email){
 
@@ -189,10 +194,6 @@ public class CustomUserDetailService implements UserDetailsService {
         Optional<EmailVerificationLogs> optionalEmailLog =  emailVerificationLogsRepository.findByEmail(email);
         if(optionalEmailLog.isPresent()){
             EmailVerificationLogs emailLog = optionalEmailLog.get();
-
-            if(emailLog.getVerificationStatus().equals(VerificationStatus.VERIFIED)){
-                throw new CustomException(ResponseCodeEnum.ALREADY_VERIFIED_EMAIL,"이미 인증된 email을 가지고 인증을 시도함.");
-            }
 
             //5회 이상 시도했고, 마지막 인증 시도로부터 15분이 지나지 않았을 경우
             if(emailLog.getNumberOfTrial()>=5 && !emailLog.getUpdateDate().plusMinutes(15).isBefore(LocalDateTime.now())){
@@ -208,7 +209,7 @@ public class CustomUserDetailService implements UserDetailsService {
             token = tokenProvider.createVerificationToken(email);
             emailVerificationLogsRepository.save(EmailVerificationLogs.createLog(email,token));
         }
-        String appLink = domain+"?token="+token;
+        String appLink = "https://greenroom-server.site?token="+token;
         mailSender.sendEmail(email,appLink);
     }
 

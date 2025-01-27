@@ -45,10 +45,6 @@ public class JWTFilter extends OncePerRequestFilter {
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
 
-        if(request.getRequestURI().startsWith("/docs/") || request.getRequestURI().equals("favicon.ico")){
-            filterChain.doFilter(request,response);
-            return;
-        }
         HttpServletRequest httpServletRequest = request;
 
         String jwt = null;
@@ -76,7 +72,7 @@ public class JWTFilter extends OncePerRequestFilter {
     @Override
     protected boolean shouldNotFilter(HttpServletRequest request) throws ServletException {
 
-        String[] excludePath = { "/api/auth/","/error","/login"};
+        String[] excludePath = { "/api/auth/","/error","/login","/docs/","/admin/","/.well-known/","/"};
         String path = request.getRequestURI();
         log.info(path);
         return Arrays.stream(excludePath).anyMatch(path::startsWith);
