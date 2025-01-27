@@ -139,7 +139,6 @@ public class UserIntegrationTest {
 
     }
 
-
     private ResultActions getResultActionsForLogout(String token) throws Exception {
         return mockMvc.perform( // api 실행
                 RestDocumentationRequestBuilders

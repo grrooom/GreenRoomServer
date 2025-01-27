@@ -72,7 +72,7 @@ public class JWTFilter extends OncePerRequestFilter {
     @Override
     protected boolean shouldNotFilter(HttpServletRequest request) throws ServletException {
 
-        String[] excludePath = { "/api/auth/","/error","/login","/docs/","/admin/","/.well-known/","/"};
+        String[] excludePath = { "/api/auth/","/error","/login","/docs/","/admin/","/.well-known/"};
         String path = request.getRequestURI();
         log.info(path);
         return Arrays.stream(excludePath).anyMatch(path::startsWith);
