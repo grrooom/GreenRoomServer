@@ -92,7 +92,7 @@ public class CommonJWTErrorTest {
         String email = EMAIL;
         List<GrantedAuthority> authorities = new ArrayList<>();
         authorities.add(new SimpleGrantedAuthority("GUEST"));
-        authorities.add(new SimpleGrantedAuthority("GUEST"));
+        authorities.add(new SimpleGrantedAuthority("GENERAL"));
 
         return Jwts.builder()
                 .setSubject(email)

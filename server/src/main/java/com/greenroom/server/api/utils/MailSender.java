@@ -24,7 +24,7 @@ public class MailSender {
                 = "<html>"
                 +"<body style = \"align:center\">"
                 + "<h2>그린룸 이메일 인증 링크입니다</h2>"
-                + "<a href = \""+text+"\">인증 링크</a>"
+                + "<a href=\""+text+"\">인증 링크</a>"
                 + "<p>해당 링크를 통해 앱에 접속하여 이메일 인증을 완료 해 주세요.</p>"
                 + "</body>"
                 + "</html>";

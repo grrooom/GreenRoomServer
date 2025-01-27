@@ -38,10 +38,10 @@ public class SecurityConfig {
     private final JWTAccessDeniedHandler jwtAccessDeniedHandler;
     private final TokenProvider tokenProvider;
     private static final String[] ANONYMOUS_MATCHERS = {
-            "/api/auth/**","/error","/login"
+            "/api/auth/**","/error","/login", "/docs/**","/admin/**","/.well-known/**","/"
     };
 
-    @Order(2)
+    @Order(1)
     @Bean
     SecurityFilterChain filterChain1(HttpSecurity http, HandlerMappingIntrospector introspector) throws Exception {
         return http
@@ -72,22 +72,24 @@ public class SecurityConfig {
                 .build();
     }
 
-    @Order(1)
-    @Bean
-    SecurityFilterChain filterChain2(HttpSecurity http, HandlerMappingIntrospector introspector) throws Exception {
-
-        //Requests starting with /api/ are excluded from these security rules, possibly because they are handled differently
-        return http
-                .securityMatcher(new NegatedRequestMatcher(new AntPathRequestMatcher("/api/**")))
-                .authorizeHttpRequests((request)->request.requestMatchers(
-                        Stream.of(ANONYMOUS_MATCHERS)
-                                .map(uri->new MvcRequestMatcher(introspector,uri))
-                                .toArray(MvcRequestMatcher[]::new)
-                ).permitAll().requestMatchers("/docs/**").hasAuthority("ADMIN").anyRequest().authenticated())
-                .formLogin(Customizer.withDefaults())
-
-                .build();
-    }
+//    @Order(1)
+//    @Bean
+//    SecurityFilterChain filterChain2(HttpSecurity http, HandlerMappingIntrospector introspector) throws Exception {
+//
+//        //Requests starting with /api/ are excluded from these security rules, possibly because they are handled differently
+//        return http
+//                .securityMatcher(new NegatedRequestMatcher(new AntPathRequestMatcher("/api/**")))
+//                .authorizeHttpRequests((request)->request.requestMatchers(
+//                        Stream.of(ANONYMOUS_MATCHERS)
+//                                .map(uri->new MvcRequestMatcher(introspector,uri))
+//                                .toArray(MvcRequestMatcher[]::new)
+//                ).permitAll()
+//                        .requestMatchers("/docs/**","/admin/data").hasAuthority("ADMIN").
+//                        anyRequest().authenticated())
+//                .formLogin(Customizer.withDefaults())
+//
+//                .build();
+//    }
 
     @Bean
     public WebSecurityCustomizer webSecurityCustomizer() {

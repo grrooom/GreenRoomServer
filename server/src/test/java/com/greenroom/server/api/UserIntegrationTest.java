@@ -73,6 +73,8 @@ public class UserIntegrationTest {
     private static final String EMAIL ="testEmail@gmail.com";
     private static final String PW = "!123456";
 
+    private static final String NAME= "user1";
+
     private final ObjectMapper mapper = new ObjectMapper();
 
     @Autowired
@@ -151,7 +153,7 @@ public class UserIntegrationTest {
     public void 로그아웃_성공() throws Exception {
         //given
         String token = getTokenForTest((long) (15*60*1000));
-        User user = User.createUser(new SignupRequestDto(EMAIL,PW), gradeRepository.findById(1L).orElse(null));
+        User user = User.createUser(new SignupRequestDto(EMAIL,PW,NAME), gradeRepository.findById(1L).orElse(null));
         userRepository.save(user);
         refreshTokenRepository.save(RefreshToken.builder().user(user).refreshToken(token).build());
 
@@ -253,7 +255,7 @@ public class UserIntegrationTest {
     @Transactional
     public void 회원_탈퇴_성공() throws Exception {
 
-        User user = User.createUser(new SignupRequestDto(EMAIL,PW), gradeRepository.findById(1L).orElse(null));
+        User user = User.createUser(new SignupRequestDto(EMAIL,PW,NAME), gradeRepository.findById(1L).orElse(null));
         userRepository.save(user);
 
         String token = getTokenForTest((long) (15*60*1000));

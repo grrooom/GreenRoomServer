@@ -1,0 +1,12 @@
+[
+  {
+    "relation": ["delegate_permission/common.handle_all_urls"],
+    "target": {
+      "namespace": "android_app",
+      "package_name": "green.room",
+      "sha256_cert_fingerprints": [
+        "FA:AE:BF:35:FC:D7:D0:2D:64:50:70:0C:B9:F2:0D:85:85:C7:07:99:FB:11:EB:A3:BC:8F:B8:22:F8:AC:74:3E"
+      ]
+    }
+  }
+]
