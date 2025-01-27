@@ -38,7 +38,7 @@ public class SecurityConfig {
     private final JWTAccessDeniedHandler jwtAccessDeniedHandler;
     private final TokenProvider tokenProvider;
     private static final String[] ANONYMOUS_MATCHERS = {
-            "/api/auth/**","/error","/login", "/docs/**","/admin/**","/.well-known/**","/"
+            "/api/auth/**","/error","/login", "/docs/**","/admin/**","/.well-known/**"
     };
 
     @Order(1)
