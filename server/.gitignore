@@ -47,3 +47,6 @@ data-test.sql
 openapi3.yaml
 **/resources/static/docs/index.html
 **/src/docs/asciidoc/index.html
+
+### firebase secret key
+fcm-admin.json

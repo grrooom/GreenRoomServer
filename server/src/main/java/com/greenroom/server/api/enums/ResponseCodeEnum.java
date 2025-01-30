@@ -38,6 +38,8 @@ public enum ResponseCodeEnum {
     ALREADY_VERIFIED_EMAIL(HttpStatus.CONFLICT,"C022","이미 인증된 email로 이메일 인증을 시도함.",""),
     INVALID_REQUEST_ARGUMENT(HttpStatus.BAD_REQUEST,"C023","요청시 request body로 전달된 argument가 조건을 만족시키지 않음. ","명세된 request 조건에 맞는 요청 다시 전송 필요"),
     INVALID_EMAIL_VERIFICATION_TOKEN(HttpStatus.CONFLICT,"C024","부적절한 이메일 인증 토큰이 전송됨",""),
+    FCM_TOKEN_NOT_FOUND(HttpStatus.NOT_FOUND,"C025","등록된 FCM Token 객체를 찾을 수 없음.","fcm token을 먼저 발급받아야 함."),
+
     //500~
     UNKNOWN_SERVER_ERROR(HttpStatus.INTERNAL_SERVER_ERROR,"D000","정의되지 않은 알 수 없는 서버 에러가 발생함.","서버에 문의"),
     FAIL_DATA_PARSING(HttpStatus.INTERNAL_SERVER_ERROR,"D001","알 수 없는 서버 문제로 데이터 parsing에 실패함.",""),

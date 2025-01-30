@@ -109,10 +109,10 @@ CREATE TABLE `plant` (
                          `update_date` timestamp ON UPDATE CURRENT_TIMESTAMP
 );
 
-CREATE TABLE `alarm` (
-                         `alarm_id` bigint PRIMARY KEY AUTO_INCREMENT,
+CREATE TABLE `notification` (
+                         `notification_id` bigint PRIMARY KEY AUTO_INCREMENT,
                          `user_id` bigint,
-                         `is_notified` bit,
+                         `notification_enabled` bit,
                          `fcm_token` varchar(255),
                          `create_date` timestamp  DEFAULT CURRENT_TIMESTAMP,
                          `update_date` timestamp ON UPDATE CURRENT_TIMESTAMP
@@ -179,6 +179,6 @@ ALTER TABLE `todo_log` ADD FOREIGN KEY (`todo_id`) REFERENCES `todo` (`todo_id`)
 
 ALTER TABLE `item` ADD FOREIGN KEY (`grade_id`) REFERENCES `grade` (`grade_id`);
 
-ALTER TABLE `alarm` ADD FOREIGN KEY (`user_id`) REFERENCES `users` (`user_id`);
+ALTER TABLE `notification` ADD FOREIGN KEY (`user_id`) REFERENCES `users` (`user_id`);
 
 ALTER TABLE `refresh_token` ADD FOREIGN KEY(`user_id`) REFERENCES `users` (`user_id`);
