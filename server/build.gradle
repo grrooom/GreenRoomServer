@@ -83,6 +83,9 @@ dependencies {
 	//smtp 메일 전송
 	implementation 'org.springframework.boot:spring-boot-starter-mail'
 
+	//fcm
+	implementation 'com.google.firebase:firebase-admin:9.4.3'
+
 }
 
 tasks.named('bootBuildImage') {

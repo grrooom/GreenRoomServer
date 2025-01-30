@@ -1,13 +1,11 @@
 package com.greenroom.server.api.security.service;
 
-import com.greenroom.server.api.domain.alram.entity.Alarm;
-import com.greenroom.server.api.domain.alram.repository.AlarmRepository;
+import com.greenroom.server.api.domain.notification.repository.NotificationRepository;
 import com.greenroom.server.api.domain.greenroom.repository.GradeRepository;
 import com.greenroom.server.api.domain.user.entity.User;
 import com.greenroom.server.api.domain.user.enums.Role;
 import com.greenroom.server.api.domain.user.enums.UserStatus;
 import com.greenroom.server.api.domain.user.repository.UserRepository;
-import com.greenroom.server.api.domain.user.service.UserService;
 import com.greenroom.server.api.enums.ResponseCodeEnum;
 import com.greenroom.server.api.exception.CustomException;
 import com.greenroom.server.api.security.dto.SignupRequestDto;
@@ -15,7 +13,6 @@ import com.greenroom.server.api.security.dto.TokenDto;
 import com.greenroom.server.api.security.entity.EmailVerificationLogs;
 import com.greenroom.server.api.security.entity.RefreshToken;
 import com.greenroom.server.api.security.enums.VerificationStatus;
-import com.greenroom.server.api.security.exception.JWTCustomException;
 import com.greenroom.server.api.security.repository.EmailVerificationLogsRepository;
 import com.greenroom.server.api.security.repository.RefreshTokenRepository;
 import com.greenroom.server.api.security.util.TokenProvider;
@@ -23,18 +20,12 @@ import com.greenroom.server.api.utils.MailSender;
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.MalformedJwtException;
 import io.jsonwebtoken.UnsupportedJwtException;
-import io.jsonwebtoken.lang.Strings;
 import io.jsonwebtoken.security.SecurityException;
-import io.jsonwebtoken.security.SignatureException;
 import jakarta.annotation.PostConstruct;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.boot.context.event.ApplicationReadyEvent;
-import org.springframework.context.event.EventListener;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -56,7 +47,7 @@ import java.util.regex.Pattern;
 @Component
 @RequiredArgsConstructor
 public class CustomUserDetailService implements UserDetailsService {
-    private final AlarmRepository alarmRepository;
+    private final NotificationRepository notificationRepository;
 
     private final RefreshTokenRepository refreshTokenRepository;
     private final UserRepository userRepository;
@@ -147,9 +138,6 @@ public class CustomUserDetailService implements UserDetailsService {
 
         User user = User.createUser(new SignupRequestDto(email,password,signupRequestDto.getName()),gradeRepository.findByLevel(0).orElse(null));
         userRepository.save(user);
-
-        //푸시 알림 설정
-        alarmRepository.save(Alarm.builder().user(user).build()); //기본값음 알림 받지 않음
 
         //토큰 발급
         TokenDto tokenDto = createToken(user);

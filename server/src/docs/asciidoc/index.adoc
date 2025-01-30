@@ -330,4 +330,52 @@ include::{snippets}/api/users/delete/2/http-response.adoc[]
 
 
 
+=== **4. FCM 토큰 발급**
 
+fcm 토큰을 생성 및 갱신 : 서버에 저장된 fcm token이 있으면 새롭게 저장되고, 없으면 새롭게 갱신됨.
+
+==== Request
+include::{snippets}/api/notification/fcmToken/1/http-request.adoc[]
+
+==== Request Fields
+include::{snippets}/api/notification/fcmToken/1/request-fields.adoc[]
+
+==== Headers
+include::{snippets}/api/notification/fcmToken/1/request-headers.adoc[]
+
+==== 성공 Response
+include::{snippets}/api/notification/fcmToken/1/http-response.adoc[]
+
+==== 실패 Response
+실패1.
+include::{snippets}/api/notification/fcmToken/2/http-response.adoc[]
+
+실패2.
+include::{snippets}/api/notification/fcmToken/3/http-response.adoc[]
+
+
+=== **5. 푸시 알림 수신 여부 변경**
+
+푸시 알림 수신 여부를 변경함.
+
+==== Request
+include::{snippets}/api/notification/update/1/http-request.adoc[]
+
+==== Request Fields
+include::{snippets}/api/notification/update/1/request-fields.adoc[]
+
+==== Headers
+include::{snippets}/api/notification/update/1/request-headers.adoc[]
+
+==== 성공 Response
+include::{snippets}/api/notification/update/1/http-response.adoc[]
+
+==== 실패 Response
+실패1.
+include::{snippets}/api/notification/update/2/http-response.adoc[]
+
+실패2.
+include::{snippets}/api/notification/update/3/http-response.adoc[]
+
+실패2.
+include::{snippets}/api/notification/update/4/http-response.adoc[]
