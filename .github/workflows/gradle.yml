@@ -30,7 +30,13 @@ jobs:
         touch ./application-secret.yml # application.yml 생성
         echo "${{ secrets.SECRETS}}" | base64 --decode > ./application-secret.yml
       shell: bash
-
+      
+    - name : Make fcm-admin.json 
+      run: | 
+        cd ./server/src/main/resources # resources 폴더로 이동
+        touch ./fcm-admin.json
+        echo "${{ secrets.FCM_SECRET}}" | base64 --decode > ./fcm-admin.json
+      
     - name: Setup Gradle
       uses: gradle/actions/setup-gradle@af1da67850ed9a4cedd57bfd976089dd991e2582 # v4.0.0
 
