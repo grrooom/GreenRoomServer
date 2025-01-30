@@ -1,6 +1,6 @@
 package com.greenroom.server.api.domain.user.service;
 
-import com.greenroom.server.api.domain.alram.repository.AlarmRepository;
+import com.greenroom.server.api.domain.notification.repository.NotificationRepository;
 import com.greenroom.server.api.domain.greenroom.repository.*;
 import com.greenroom.server.api.domain.user.dto.UserExitReasonResponseDto;
 import com.greenroom.server.api.domain.user.dto.UserExitRequestDto;
@@ -33,7 +33,7 @@ public class UserService {
     private final DiaryRepository diaryRepository;
     private final AdornmentRepository adornmentRepository;
     private final GreenRoomRepository greenRoomRepository;
-    private final AlarmRepository alarmRepository;
+    private final NotificationRepository notificationRepository;
 
 
     private final CustomUserDetailService customUserDetailService;
@@ -88,7 +88,7 @@ public class UserService {
         greenRoomRepository.deleteAllByGreenroomId(greenroomIdList);
 
         //alarm 삭제
-        alarmRepository.deleteByUser(user);
+        notificationRepository.deleteByUser(user);
 
         //연관관계 객체는 추후 추가
         userRepository.delete(user);
