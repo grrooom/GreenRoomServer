@@ -2,7 +2,7 @@ package com.greenroom.server.api;
 
 import com.epages.restdocs.apispec.ResourceSnippetParameters;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.greenroom.server.api.config.TestDatabaseExecutionListener;
+import com.greenroom.server.api.config.TestExecutionListener;
 import com.greenroom.server.api.domain.greenroom.repository.GradeRepository;
 import com.greenroom.server.api.domain.user.dto.UserExitRequestDto;
 import com.greenroom.server.api.domain.user.entity.User;
@@ -28,7 +28,6 @@ import org.springframework.http.MediaType;
 import org.springframework.restdocs.RestDocumentationContextProvider;
 import org.springframework.restdocs.RestDocumentationExtension;
 import org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders;
-import org.springframework.restdocs.mockmvc.RestDocumentationResultHandler;
 import org.springframework.restdocs.operation.preprocess.HeadersModifyingOperationPreprocessor;
 import org.springframework.restdocs.payload.FieldDescriptor;
 import org.springframework.restdocs.payload.JsonFieldType;
@@ -37,7 +36,6 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.TestExecutionListeners;
-import org.springframework.test.context.bean.override.mockito.MockitoSpyBean;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
@@ -66,7 +64,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @SpringBootTest
 @ActiveProfiles("test")
 @ExtendWith({RestDocumentationExtension.class})
-@TestExecutionListeners(value = TestDatabaseExecutionListener.class, mergeMode = TestExecutionListeners.MergeMode.MERGE_WITH_DEFAULTS)
+@TestExecutionListeners(value = TestExecutionListener.class, mergeMode = TestExecutionListeners.MergeMode.MERGE_WITH_DEFAULTS)
 
 public class UserIntegrationTest {
 
@@ -166,9 +164,7 @@ public class UserIntegrationTest {
                         ,
                         preprocessRequest(prettyPrint()),   // (2)
                         preprocessResponse(prettyPrint(), getModifiedHeader()),  // (3)
-                        requestHeaders(
-                                headerWithName(HttpHeaders.AUTHORIZATION).description("Bearer : 사용자 access Token")
-                        ),
+                        requestHeaders(headerWithName(HttpHeaders.AUTHORIZATION).description("Bearer : 사용자 access Token")),
                         resource(
                                 ResourceSnippetParameters.builder()
                                         .tag("User-회원 관련") // 문서에서 api들이 태그로 분류됨
@@ -210,16 +206,21 @@ public class UserIntegrationTest {
     @Test
     public void 탈퇴_사유_조회_성공() throws Exception {
 
+        //given
         String token = getTokenForTest((long) (15*60*1000));
+
+        //when
         ResultActions resultActions = mockMvc.perform( // api 실행
                 RestDocumentationRequestBuilders
                         .get("/api/users/exitReasons")
                         .header(HttpHeaders.AUTHORIZATION, "Bearer "+token)
         );
 
-        resultActions
-                .andExpect(status().isOk())
-                .andDo(
+        //then
+        resultActions.andExpect(status().isOk());
+
+        //문서화
+        resultActions.andDo(
                         document("api/users/exitReason/1" ,
                             preprocessRequest(prettyPrint()),   // (2)
                             preprocessResponse(prettyPrint(), getModifiedHeader()),  // (3)
@@ -254,21 +255,23 @@ public class UserIntegrationTest {
     @Transactional
     public void 회원_탈퇴_성공() throws Exception {
 
+        //given
         User user = User.createUser(new SignupRequestDto(EMAIL,PW,NAME), gradeRepository.findById(1L).orElse(null));
         userRepository.save(user);
 
         String token = getTokenForTest((long) (15*60*1000));
 
+        //when
         ResultActions resultActions = getResultActionsForDeactivation(token);
 
-        resultActions
-                .andExpect(status().is(ResponseCodeEnum.NO_CONTENT.getStatus().value()))
-                .andDo(document("api/users/delete/" + 1,
+        //then
+        resultActions.andExpect(status().is(ResponseCodeEnum.NO_CONTENT.getStatus().value()));
+
+        //문서화
+        resultActions.andDo(document("api/users/delete/" + 1,
                         preprocessRequest(prettyPrint()),   // (2)
                         preprocessResponse(prettyPrint(), getModifiedHeader()),  // (3)
-                        requestHeaders(
-                                headerWithName("Authorization").description("Bearer : 사용자 access Token")
-                        ),
+                        requestHeaders(headerWithName("Authorization").description("Bearer : 사용자 access Token")),
                         requestFields(requestDescriptorsForDeactivation),
                         resource(
                                 ResourceSnippetParameters.builder()
@@ -290,15 +293,14 @@ public class UserIntegrationTest {
         //when
         ResultActions resultActions = getResultActionsForDeactivation(token);
         //then
-        resultActions
-                .andExpect(status().is(ResponseCodeEnum.USER_NOT_FOUND.getStatus().value())).andExpect(MockMvcResultMatchers.jsonPath("code").value(ResponseCodeEnum.USER_NOT_FOUND.getCode()))
-                .andDo(document("api/users/delete/" + 2,
+        resultActions.andExpect(status().is(ResponseCodeEnum.USER_NOT_FOUND.getStatus().value())).andExpect(MockMvcResultMatchers.jsonPath("code").value(ResponseCodeEnum.USER_NOT_FOUND.getCode()));
+
+        //문서화
+        resultActions.andDo(document("api/users/delete/" + 2,
                         preprocessRequest(prettyPrint()),   // (2)
                         preprocessResponse(prettyPrint(), getModifiedHeader()),  // (3)
                         responseFields(resultDescriptors), // responseBody 설명
-                        requestHeaders(
-                                headerWithName("Authorization").description("Bearer : 사용자 access Token")
-                        ),
+                        requestHeaders(headerWithName("Authorization").description("Bearer : 사용자 access Token")),
                         requestFields(requestDescriptorsForDeactivation),
                         resource(
                                 ResourceSnippetParameters.builder()
@@ -308,8 +310,7 @@ public class UserIntegrationTest {
                                         .responseFields(resultDescriptors) // responseBody 설명
                                         .requestFields(requestDescriptorsForDeactivation)
                                         .requestHeaders(headerWithName(HttpHeaders.AUTHORIZATION).description("Bearer : 사용자 access Token"))
-                                        .build())
-                ));
+                                        .build())));
     }
 
 }

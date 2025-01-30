@@ -1,7 +1,7 @@
 package com.greenroom.server.api;
 
 import com.epages.restdocs.apispec.ResourceSnippetParameters;
-import com.greenroom.server.api.config.TestDatabaseExecutionListener;
+import com.greenroom.server.api.config.TestExecutionListener;
 import com.greenroom.server.api.enums.ResponseCodeEnum;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
@@ -56,7 +56,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @ExtendWith({RestDocumentationExtension.class})
 
 //테스트 클래스가 실행될 때 원하는 리스너(TestExecutionListener)를 실행할 수 있도록
-@TestExecutionListeners(value = TestDatabaseExecutionListener.class, mergeMode = TestExecutionListeners.MergeMode.MERGE_WITH_DEFAULTS)
+@TestExecutionListeners(value = TestExecutionListener.class, mergeMode = TestExecutionListeners.MergeMode.MERGE_WITH_DEFAULTS)
 
 public class CommonJWTErrorTest {
 
