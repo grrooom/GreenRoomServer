@@ -1,6 +1,6 @@
-package com.greenroom.server.api.domain.greenroom.repository;
+package com.greenroom.server.api.domain.user.repository;
 
-import com.greenroom.server.api.domain.greenroom.entity.Grade;
+import com.greenroom.server.api.domain.user.entity.Grade;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;

@@ -29,5 +29,4 @@ public class NotificationSender {
             log.error("[EXCEPTION] : fail to send fcm notification");
         }
     }
-
 }

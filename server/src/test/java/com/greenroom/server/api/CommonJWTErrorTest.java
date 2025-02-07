@@ -117,8 +117,6 @@ public class CommonJWTErrorTest {
                                 .tag("응답 공통 예외") // 문서에서 api들이 태그로 분류됨
                                 .summary("응답 공통 예외") // api 이름
                                 .description("JWT token관련 공통 Response Error") // api 설명
-                                .responseFields(resultDescriptors) // responseBody 설명
-                                .requestHeaders(headerWithName(HttpHeaders.AUTHORIZATION).description("Bearer : 사용자 access Token"))
                                 .build()));
     }
     private ResultActions getResultActionsForLogout(String token) throws Exception {

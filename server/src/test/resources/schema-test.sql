@@ -27,7 +27,7 @@ CREATE TABLE `suggestion` (
 CREATE TABLE `grade` (
                          `grade_id` bigint PRIMARY KEY AUTO_INCREMENT,
                          `level` int,
-                         `description` varchar(255),
+                         `grade_name` varchar(255),
                          `grade_image_url` varchar(255),
                          `required_seed` bigint,
                          `create_date` timestamp DEFAULT CURRENT_TIMESTAMP,

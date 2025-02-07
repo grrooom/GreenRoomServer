@@ -3,7 +3,7 @@ package com.greenroom.server.api;
 import com.epages.restdocs.apispec.ResourceSnippetParameters;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.greenroom.server.api.config.TestExecutionListener;
-import com.greenroom.server.api.domain.greenroom.repository.GradeRepository;
+import com.greenroom.server.api.domain.user.repository.GradeRepository;
 import com.greenroom.server.api.domain.notification.controller.NotificationController;
 import com.greenroom.server.api.domain.notification.dto.FcmTokenRequestDto;
 import com.greenroom.server.api.domain.notification.dto.NotificationEnabledUpdateRequestDto;
@@ -35,7 +35,6 @@ import org.springframework.restdocs.mockmvc.RestDocumentationResultHandler;
 import org.springframework.restdocs.operation.preprocess.HeadersModifyingOperationPreprocessor;
 import org.springframework.restdocs.payload.FieldDescriptor;
 import org.springframework.restdocs.payload.JsonFieldType;
-import org.springframework.restdocs.snippet.Attributes;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers;
@@ -153,10 +152,6 @@ public class NotificationIntegrationTest {
                                 .tag("User-회원 관련") // 문서에서 api들이 태그로 분류됨
                                 .summary("fcm token 등록 api") // api 이름
                                 .description("사용자의 fcm token을 등록. 이미 존재하면 갱신, 없으면 새로 등록됨.") // api 설명
-                                .responseFields(resultDescriptors) // responseBody 설명
-                                .requestFields(fcmTokenCreationDescriptor)
-                                .requestHeaders(
-                                headerWithName(HttpHeaders.AUTHORIZATION).description("Bearer : 사용자 access Token"))
                                 .build()));
     }
 
@@ -240,8 +235,6 @@ public class NotificationIntegrationTest {
                                 .tag("User-회원 관련") // 문서에서 api들이 태그로 분류됨
                                 .summary("알림 수신 여부 변경 api") // api 이름
                                 .description("푸시 알림 수신 여부를 변경") // api 설명
-                                .requestFields(notificationEnabledUpdateDescriptors)
-                                .requestHeaders(headerWithName(HttpHeaders.AUTHORIZATION).description("Bearer : 사용자 access Token"))
                                 .build()));
     }
 
@@ -266,16 +259,10 @@ public class NotificationIntegrationTest {
         //given
         User user = signupForTest();
         NotificationEnabledUpdateRequestDto notificationEnabledUpdateRequestDto = new NotificationEnabledUpdateRequestDto(true);
-        String accessToken = getTokenForTest((long) (60*15*1000));
         notificationRepository.save(Notification.builder().notificationEnabled(true).fcmToken("qrqrrq").user(user).build());
 
         //when
-        ResultActions resultActions =  mockMvc.perform( // api 실행
-                RestDocumentationRequestBuilders
-                        .patch("/api/notifications")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .header(HttpHeaders.AUTHORIZATION, "Bearer "+accessToken)
-                        .content(mapper.writeValueAsString(notificationEnabledUpdateRequestDto)));
+        ResultActions resultActions = resultActionsForUpdateNotificationEnabled(notificationEnabledUpdateRequestDto);
 
         //문서화
         resultActions.andDo(document("api/notification/update/"+1,
@@ -288,8 +275,6 @@ public class NotificationIntegrationTest {
                                 .tag("User-회원 관련") // 문서에서 api들이 태그로 분류됨
                                 .summary("알림 수신 여부 변경 api") // api 이름
                                 .description("푸시 알림 수신 여부를 변경") // api 설명
-                                .requestFields(notificationEnabledUpdateDescriptors)
-                                .requestHeaders(headerWithName(HttpHeaders.AUTHORIZATION).description("Bearer : 사용자 access Token"))
                                 .build())));
         //then
         resultActions.andExpect(status().isNoContent());
@@ -358,9 +343,6 @@ public class NotificationIntegrationTest {
                                 .tag("User-회원 관련") // 문서에서 api들이 태그로 분류됨
                                 .summary("알림 수신 여부 변경 api") // api 이름
                                 .description("푸시 알림 수신 여부를 변경") // api 설명
-                                .requestFields(fieldWithPath("notification_enabled").type(JsonFieldType.BOOLEAN).description("알림 수신 여부").optional())
-                                .requestHeaders(
-                                        headerWithName(HttpHeaders.AUTHORIZATION).description("Bearer : 사용자 access Token"))
                                 .build())));
         //then
         resultActions.andExpect(status().isBadRequest()).andExpect(jsonPath("code").value(ResponseCodeEnum.INVALID_REQUEST_ARGUMENT.getCode()));
