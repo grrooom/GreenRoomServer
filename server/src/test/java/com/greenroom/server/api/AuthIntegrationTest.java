@@ -146,8 +146,6 @@ public class AuthIntegrationTest {
                                 .tag("😎 AUTH-인증/인가") // 문서에서 api들이 태그로 분류됨
                                 .summary("회원가입 요청 api") // api 이름
                                 .description("사용자가 이메일과 비밀번호를 기반으로 새로운 계정을 생성할 수 있도록 지원합니다. \n 회원 가입 시 사용되는 사용자의 email 계정은 이메일 인증을 통한 유효성 검사를 거친 후 사용이 가능합니다. 중복 email로 가입하는 것은 제한됩니다.") // api 설명
-                                .responseFields(tokenResultDescriptors) // responseBody 설명
-                                .requestFields(emailAndPasswordAndNameDescriptors)
                                 .build()));
     }
 
@@ -249,8 +247,6 @@ public class AuthIntegrationTest {
                                 .tag("😎 AUTH-인증/인가") // 문서에서 api들이 태그로 분류됨
                                 .summary("로그인 요청 api") // api 이름
                                 .description("등록된 이메일과 비밀번호를 기반으로 사용자를 인증합니다. 인증 성공 시 Access Token과 Refresh Token을 발급하여 안전한 세션 관리를 지원합니다. \n발급된 토큰은 사용자가 애플리케이션의 보호된 리소스에 접근하는 데 사용됩니다.") // api 설명
-                                .responseFields(tokenResultDescriptors) // responseBody 설명
-                                .requestFields(emailAndPasswordDescriptors)
                                 .build()
                 )
         );
@@ -354,8 +350,6 @@ public class AuthIntegrationTest {
                                 .tag("😎 AUTH-인증/인가") // 문서에서 api들이 태그로 분류됨
                                 .summary("이메일 인증 요청 api") // api 이름
                                 .description("회원가입 이전에 사용자의 이메일 주소를 검증하기 위해 사용됩니다. 이 API를 요청하면 이메일을 인증하기 위한 jwt 토큰을 앱링크와 함께 전송합니다. \n5회를 초과하여 인증을 시도할 경우 15분간 추가적인 시도가 제한됩니다. 이미 가입된 user의 email 또는 이미 인증이 완료된 email에 대해서는 추가적인 인증을 제한합니다.") // api 설명
-                                .responseFields(resultDescriptors) // responseBody 설명
-                                .requestFields(emailVerificationDescriptors)
                                 .build()
                 )
         );
@@ -395,7 +389,6 @@ public class AuthIntegrationTest {
                                 .tag("😎 AUTH-인증/인가") // 문서에서 api들이 태그로 분류됨
                                 .summary("이메일 인증 요청 api") // api 이름
                                 .description("회원가입 이전에 사용자의 이메일 주소를 검증하기 위해 사용됩니다. 이 API를 요청하면 이메일을 인증하기 위한 jwt 토큰을 앱링크와 함께 전송합니다. \n5회를 초과하여 인증을 시도할 경우 15분간 추가적인 시도가 제한됩니다. 이미 가입된 user의 email 또는 이미 인증이 완료된 email에 대해서는 추가적인 인증을 제한합니다.") // api 설명
-                                .requestFields(emailVerificationDescriptors)
                                 .build()
                 )
         ));
@@ -521,8 +514,6 @@ public class AuthIntegrationTest {
                                 .tag("😎 AUTH-인증/인가") // 문서에서 api들이 태그로 분류됨
                                 .summary("이메일 토큰 검증 요청 api") // api 이름
                                 .description("이메일 인증 요청 시 전송된 JWT 토큰을 검증하여, 해당 토큰이 유효한 경우 이메일 인증을 완료하고, 잘못되거나 만료된 토큰을 전송한 경우 인증을 거부합니다. \nJWT 토큰은 15분의 유효 시간을 가지며 가장 마지막 인증 시도 시 전달된 JWT 토큰만 유효성을 가집니다. ") // api 설명
-                                .responseFields(resultDescriptors) // responseBody 설명
-                                .requestFields(emailVerificationTokenDescriptor)
                                 .build()
                 )
         );
@@ -577,7 +568,6 @@ public class AuthIntegrationTest {
                                 .tag("😎 AUTH-인증/인가") // 문서에서 api들이 태그로 분류됨
                                 .summary("이메일 토큰 검증 요청 api") // api 이름
                                 .description("이메일 인증 요청 시 전송된 JWT 토큰을 검증하여, 해당 토큰이 유효한 경우 이메일 인증을 완료하고, 잘못되거나 만료된 토큰을 전송한 경우 인증을 거부합니다. \nJWT 토큰은 15분의 유효 시간을 가지며 가장 마지막 인증 시도 시 전달된 JWT 토큰만 유효성을 가집니다. ") // api 설명
-                                .requestFields(emailVerificationTokenDescriptor)
                                 .build()
                 )
         ));
@@ -679,8 +669,6 @@ public class AuthIntegrationTest {
                                         "유효한 Refresh Token이 제공되면 새롭게 갱신된 토큰 세트를 반환합니다.\n" +
                                         "잘못된 토큰 혹은 만료되었거나 무효화된 토큰이 제공되면 에러를 반환합니다.\n" +
                                         "\n") // api 설명
-                                .responseFields(tokenResultDescriptors) // responseBody 설명
-                                .requestFields(refreshTokenDescriptor)
                                 .build()
                 )
         );

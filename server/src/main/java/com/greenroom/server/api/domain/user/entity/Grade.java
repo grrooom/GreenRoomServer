@@ -1,4 +1,4 @@
-package com.greenroom.server.api.domain.greenroom.entity;
+package com.greenroom.server.api.domain.user.entity;
 
 import com.greenroom.server.api.domain.common.entity.BaseTime;
 import jakarta.persistence.*;
@@ -14,7 +14,7 @@ public class Grade extends BaseTime {
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long gradeId;
 
-    private String description;
+    private String gradeName;
 
     private String gradeImageUrl;
 
@@ -23,8 +23,8 @@ public class Grade extends BaseTime {
     private int level;
 
     @Builder
-    public Grade(String description,String gradeImageUrl,int requiredSeed,int level){
-        this.description =description;
+    public Grade(String gradeName,String gradeImageUrl,int requiredSeed,int level){
+        this.gradeName =gradeName;
         this.gradeImageUrl = gradeImageUrl;
         this.requiredSeed = requiredSeed;
         this.level = level;

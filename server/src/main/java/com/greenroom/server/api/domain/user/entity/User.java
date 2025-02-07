@@ -1,8 +1,6 @@
 package com.greenroom.server.api.domain.user.entity;
 
 import com.greenroom.server.api.domain.common.entity.BaseTime;
-import com.greenroom.server.api.domain.greenroom.entity.Grade;
-import com.greenroom.server.api.domain.user.dto.UserDto;
 import com.greenroom.server.api.domain.user.enums.Provider;
 import com.greenroom.server.api.domain.user.enums.Role;
 import com.greenroom.server.api.domain.user.enums.UserStatus;
@@ -39,7 +37,6 @@ public class User extends BaseTime {
     private String profileUrl;
 
     private LocalDateTime deleteDate;
-
 
     @Enumerated(EnumType.STRING)
     public Role role;
@@ -81,14 +78,16 @@ public class User extends BaseTime {
         return user;
     }
 
-    public User updateUserName(String name){
+    public void updateUserName(String name){
         this.name = name;
-        return this;
     }
 
-    public User updateProfileUrl(String profileUrl){
+    public void updateProfileUrl(String profileUrl){
         this.profileUrl = profileUrl;
-        return this;
+    }
+
+    public void deleteProfileImage(){
+        this.profileUrl = null;
     }
 
     public void deactivateUser(){
@@ -96,18 +95,12 @@ public class User extends BaseTime {
         this.userStatus = UserStatus.DELETE_PENDING;
     }
 
-    public void updateTotalSeed(int plusSeed){
-        this.totalSeed +=plusSeed;
-    }
-    public void updateWeeklySeed(int plusSeed){
-        this.weeklySeed +=plusSeed;
-    }
-    public void updateGrade(Grade grade) {
-        this.grade = grade;
-    }
     public void updatePassword(String password){
         this.password= password;
     }
 
-    public void updateProvider(Provider provider) {this.provider= provider;}
+    public void updateCreateDate(LocalDateTime createDate){
+        this.createDate = createDate;
+    }
+
 }
