@@ -31,6 +31,24 @@ spring:
           auth: true
           starttls:
             enable: true
+cloud:
+  aws:
+    region:
+      static: ap-northeast-2
+      auto: false
+    credentials:
+      access-key: ENC(xUQajnpokjuZq6SkK/+p3PbfgNQM/yxwqAb/jU3aPZk=)
+      secret-key: ENC(FJ9UEHzhaVXzPeI0D4Ja99GYuFy4/riHuu9+S/e1zqgOS1ZmxsEf7j3OMFcSit1yhhAPvuw/4vA=)
+    s3:
+      bucket: ENC(HUCZanm+kg08GwIHJ9fzr1bHr6M0skCGAZJgRXGSPC4=)
+      path:
+        root: ENC(eBnxQq5PqbXeyZ73q30lhL40qXHlr46R5XbHnfgzZM+7NU6LQxoMevHgOP37yWp+)
+  cdn:
+    path:
+      root: ENC(VzfXK3IN7tLoueO7y0qdFvjl1CYogxmul6Dvd2uOnSq9x4Yie3FOUQk3xGbZLKLM)
+  image:
+    path:
+      user: dev/user
 temp:
   filePath: src/main/resources/
 logging.level:

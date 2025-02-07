@@ -17,8 +17,8 @@ spring:
       mode : never
   servlet:
     multipart:
-      max-request-size: 100MB
-      max-file-size: 100MB
+      max-request-size: 10MB
+      max-file-size: 10MB
   mail:
     host: smtp.gmail.com
     port: 587
@@ -30,30 +30,24 @@ spring:
           auth: true
           starttls:
             enable: true
-#cloud:
-#  aws:
-#    region:
-#      static: ap-northeast-2
-#      auto: false
-#    credentials:
-#      access-key: temporalValue
-#      secret-key: temporalValue
-#aws:
-#  s3:
-#    bucket: temporalValue
-#    path:
-#      root: temporalValue
-#      plant: local/plant
-#      greenroom : local/greenroom
-#      user: local/user
-#      diary: local/diary
-#  cdn:
-#    path:
-#      root: temporal value
-#      plant: local/plant
-#      greenroom : local/greenroom
-#      user: local/user
-#      diary: local/diary
+cloud:
+  aws:
+    region:
+      static: ap-northeast-2
+      auto: false
+    credentials:
+      access-key: ENC(xUQajnpokjuZq6SkK/+p3PbfgNQM/yxwqAb/jU3aPZk=)
+      secret-key: ENC(FJ9UEHzhaVXzPeI0D4Ja99GYuFy4/riHuu9+S/e1zqgOS1ZmxsEf7j3OMFcSit1yhhAPvuw/4vA=)
+    s3:
+      bucket: ENC(HUCZanm+kg08GwIHJ9fzr1bHr6M0skCGAZJgRXGSPC4=)
+      path:
+        root: ENC(eBnxQq5PqbXeyZ73q30lhL40qXHlr46R5XbHnfgzZM+7NU6LQxoMevHgOP37yWp+)
+  cdn:
+    path:
+      root: ENC(VzfXK3IN7tLoueO7y0qdFvjl1CYogxmul6Dvd2uOnSq9x4Yie3FOUQk3xGbZLKLM)
+  image:
+    path:
+      user: local/user
 temp:
   filePath: src/main/resources/
 logging.level:

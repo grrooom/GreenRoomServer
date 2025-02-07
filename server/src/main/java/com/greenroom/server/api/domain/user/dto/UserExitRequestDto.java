@@ -1,6 +1,7 @@
 package com.greenroom.server.api.domain.user.dto;
 
 import lombok.*;
+import org.hibernate.annotations.Array;
 
 import java.util.List;
 

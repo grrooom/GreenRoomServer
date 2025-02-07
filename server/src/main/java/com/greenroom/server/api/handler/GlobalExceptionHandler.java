@@ -10,6 +10,7 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.multipart.MaxUploadSizeExceededException;
+import org.springframework.web.multipart.support.MissingServletRequestPartException;
 
 import java.util.Arrays;
 
@@ -68,5 +69,14 @@ public class GlobalExceptionHandler {
         log.error("[Exception] code : {}  code message : {}", ResponseCodeEnum.INVALID_REQUEST_ARGUMENT.getCode(), e.getMessage());
         return ResponseEntity.status(ResponseCodeEnum.INVALID_REQUEST_ARGUMENT.getStatus()).body(ApiResponse.failed(ResponseCodeEnum.INVALID_REQUEST_ARGUMENT));
     }
+
+    @ExceptionHandler(MissingServletRequestPartException.class)
+    public ResponseEntity<ApiResponse> handleMissingServletRequestPartException(MissingServletRequestPartException e){
+
+        log.error("[Exception] code : {}  code message : {}", ResponseCodeEnum.INVALID_REQUEST_ARGUMENT.getCode(), e.getMessage());
+        return ResponseEntity.status(ResponseCodeEnum.INVALID_REQUEST_ARGUMENT.getStatus()).body(ApiResponse.failed(ResponseCodeEnum.INVALID_REQUEST_ARGUMENT));
+    }
+
+
 
 }

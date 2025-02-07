@@ -2,21 +2,26 @@ package com.greenroom.server.api.domain.user.service;
 
 import com.greenroom.server.api.domain.notification.repository.NotificationRepository;
 import com.greenroom.server.api.domain.greenroom.repository.*;
-import com.greenroom.server.api.domain.user.dto.UserExitReasonResponseDto;
-import com.greenroom.server.api.domain.user.dto.UserExitRequestDto;
+import com.greenroom.server.api.domain.user.dto.*;
 import com.greenroom.server.api.domain.user.entity.User;
 import com.greenroom.server.api.domain.user.enums.UserStatus;
+import com.greenroom.server.api.domain.user.repository.GradeRepository;
 import com.greenroom.server.api.domain.user.repository.UserRepository;
 import com.greenroom.server.api.security.repository.EmailVerificationLogsRepository;
 import com.greenroom.server.api.security.repository.RefreshTokenRepository;
 import com.greenroom.server.api.security.service.CustomUserDetailService;
+import com.greenroom.server.api.utils.S3ImageUploader;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
 import java.util.List;
 
 
@@ -34,10 +39,15 @@ public class UserService {
     private final AdornmentRepository adornmentRepository;
     private final GreenRoomRepository greenRoomRepository;
     private final NotificationRepository notificationRepository;
+    private final GradeRepository gradeRepository;
 
 
     private final CustomUserDetailService customUserDetailService;
     private final UserExitReasonService userExitReasonService;
+    private final S3ImageUploader s3ImageUploader;
+
+    @Value("${cloud.cdn.path.root}")
+    private String cdnRoot;
 
     // 회원 로그아웃 : 저장되어 있는 refresh token 삭제
     @Transactional
@@ -106,5 +116,57 @@ public class UserService {
     }
 
 
+    public UserInfoResponseDto getUserInformation(String email){
+
+        //User Not Found
+
+        User user = customUserDetailService.findUserByEmail(email); //없으면 not found error반환
+
+        LocalDateTime userJoinedDate = user.getCreateDate();
+        Long userDurationWithGreenroom = ChronoUnit.DAYS.between(userJoinedDate.toLocalDate(), LocalDate.now());
+
+        int nextGradeRequiredSeed = gradeRepository.findById(user.getGrade().getGradeId()+1).get().getRequiredSeed();
+        int seedsToNextGrade = nextGradeRequiredSeed -  user.getGrade().getRequiredSeed() ;
+
+        String imagePrefix = cdnRoot+"/";
+
+       return  UserInfoResponseDto.from(user,seedsToNextGrade,userDurationWithGreenroom, imagePrefix);
+
+    }
+
+    @Transactional
+    public UserNameUpdateDto updateUserName(String email, String name){
+
+        //UserNotFound
+
+        User user = customUserDetailService.findUserByEmail(email); //없으면 not found error 발생
+
+        user.updateUserName(name);
+
+        return new UserNameUpdateDto(user.getName());
+    }
+
+    @Transactional
+    public void deleteUserProfileImage(String email){
+
+        //UserNotFound
+        User user = customUserDetailService.findUserByEmail(email); //없으면 not found error 발생
+
+        user.deleteProfileImage();
+    }
+
+    @Transactional
+    public UserProfileImageResponseDto uploadUserProfileImage(String email, MultipartFile multipartFile){
+
+        //UserNotFound , FAIL_TO_UPLOAD_IMAGE, INVALID_IMAGE_FORMAT
+        User user = customUserDetailService.findUserByEmail(email);
+
+        String imageUrl = s3ImageUploader.uploadUserProfileImage(multipartFile);
+
+        user.updateProfileUrl(imageUrl);
+
+        return new UserProfileImageResponseDto(cdnRoot+"/"+imageUrl);
+
+    }
 
 }

@@ -86,7 +86,10 @@ dependencies {
 	//fcm
 	implementation 'com.google.firebase:firebase-admin:9.4.3'
 
+	//thumbnail
+	implementation group: 'net.coobird', name: 'thumbnailator', version: '0.4.1'
 }
+
 
 tasks.named('bootBuildImage') {
 	builder = 'paketobuildpacks/builder-jammy-base:latest'
@@ -97,6 +100,7 @@ tasks.named('test') {
 	delete file('build/generated-snippets')
 	useJUnitPlatform()
 }
+
 
 
 asciidoctor {
@@ -140,7 +144,6 @@ tasks.withType(GenerateSwaggerUI) {
 }
 
 
-
 tasks.register('copyOasToSwagger', Copy) {
 
 	// 기존 yaml 파일 삭제
@@ -159,6 +162,7 @@ tasks.register('copyOasToSwagger', Copy) {
 	dependsOn tasks.named('openapi3')
 
 }
+
 
 
 
