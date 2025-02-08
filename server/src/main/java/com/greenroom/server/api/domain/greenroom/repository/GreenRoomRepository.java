@@ -1,5 +1,6 @@
 package com.greenroom.server.api.domain.greenroom.repository;
 
+import com.greenroom.server.api.domain.greenroom.dto.GreenroomImageSimpleDto;
 import com.greenroom.server.api.domain.greenroom.entity.GreenRoom;
 import com.greenroom.server.api.domain.user.entity.User;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -17,8 +18,8 @@ public interface GreenRoomRepository extends JpaRepository<GreenRoom,Long> {
     List<GreenRoom> findAllByUser(User user);
 
     @Modifying
-    @Query("select g.greenroomId from GreenRoom g where g.user = :user")
-    List<Long> findAllGreenRoomIdByUser(@Param("user")User user);
+    @Query("select g.greenroomId,g.pictureUrl from GreenRoom g where g.user = :user")
+    List<GreenroomImageSimpleDto> findAllGreenRoomImageByUser(@Param("user")User user);
 
 
     @Modifying

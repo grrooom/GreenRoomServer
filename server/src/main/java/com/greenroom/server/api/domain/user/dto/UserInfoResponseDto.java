@@ -4,7 +4,6 @@ import com.greenroom.server.api.domain.user.entity.User;
 import lombok.*;
 
 @Data
-@Getter
 @AllArgsConstructor
 @RequiredArgsConstructor
 @Builder
