@@ -1,6 +1,9 @@
 package com.greenroom.server.api.utils;
 
+import com.amazonaws.AmazonServiceException;
+import com.amazonaws.SdkClientException;
 import com.amazonaws.services.s3.AmazonS3;
+import com.amazonaws.services.s3.model.DeleteObjectsRequest;
 import com.amazonaws.services.s3.model.ObjectMetadata;
 import com.greenroom.server.api.enums.ResponseCodeEnum;
 import com.greenroom.server.api.exception.CustomException;
@@ -14,6 +17,8 @@ import org.springframework.web.multipart.MultipartFile;
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.io.*;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
 @Component
@@ -58,5 +63,78 @@ public class S3ImageUploader {
         return serverFileName;
     }
 
+    public void deleteImage(String imageFileUrl){
 
+        try {
+            amazonS3.deleteObject(bucket,imageFileUrl);
+        }
+        catch (SdkClientException e){
+            //삭제 연산 실패 시 log 남김.
+            //추후 삭제 연산 실패 시 db 저장 -> 삭제 실패한 파일 삭제 재시도 (스케줄러) 도입 가능
+            log.error("[error] Fail to delete image files after 3 times retry : {}",imageFileUrl);
+        }
+
+    }
+
+    public void deleteImageInBatch(List<String> imageFileUrlList){
+
+        int maxBatchSize = 1000; //한번에 삭제 가능한 파일 개수
+        int listLength  = imageFileUrlList.size();
+        int startIndex = 0;
+        int endIndex = Math.min(listLength,maxBatchSize);
+
+        while(startIndex < listLength){
+            List<DeleteObjectsRequest.KeyVersion> keyVersionList = new ArrayList<>();
+            imageFileUrlList.subList(startIndex, endIndex).forEach(i-> keyVersionList.add(new DeleteObjectsRequest.KeyVersion(i)));
+
+            deleteWithRetry(keyVersionList);
+
+            startIndex = endIndex;
+            endIndex = Math.min(startIndex + maxBatchSize, listLength);
+        }
+
+    }
+
+    public void deleteWithRetry(List<DeleteObjectsRequest.KeyVersion> keyList){
+
+        final int MAX_TRY = 3;
+        int trial = 1;
+        int waitTime = 1000;
+
+        //error가 발생했을 경우 최대 3번까지 재시도 & slow down error(503) 발생했을 경우 지수 백오프
+        while(trial <= MAX_TRY){
+            try {
+                amazonS3.deleteObjects(new DeleteObjectsRequest(bucket).withKeys(keyList));
+                log.info("[success] Successfully deleted images: {}", keyList);
+                return ;
+            }
+            catch (AmazonServiceException e){
+                //503 error(slow down)  발생
+                if(e.getStatusCode()==503){
+                    log.warn("[warning] Slow Down error on attempt {}: Retrying after {}ms", trial, waitTime);
+                    try {
+                        Thread.sleep(waitTime);
+                    } catch (InterruptedException exception) {
+                        Thread.currentThread().interrupt();
+                    }
+                    waitTime =  waitTime * 2 ; // 지수 백오프 (1초 → 2초 → 4초)
+                }
+                //4xx 에러 발생 -> 재시도 x
+                else if(e.getStatusCode()>=400 && e.getStatusCode()<500){
+                    log.error("[exception] Client error (4xx) while deleting images: {} - {}", keyList, e.getMessage());
+                    return ;
+                }
+                //그 외 에러 발생
+                else {log.warn("[warning] AWS service error on attempt {}: {} - Retrying...", trial, e.getMessage());}
+            }
+            // 네트워크 문제, SDK 오류 시 재시도
+            catch (SdkClientException e){
+                log.warn("[warning] Network or SDK error on attempt {}: {} - Retrying...", trial, e.getMessage());
+            }
+            trial ++;
+        }
+        //삭제 연산 최종 실패 시 log로 남기고 넘어가기
+        //추후 삭제 연산 실패 시 db 저장 -> 삭제 실패한 파일 삭제 재시도 (스케줄러) 도입 가능
+        log.error("[error] Fail to delete image files after 3 times retry : {}",keyList);
+    }
 }

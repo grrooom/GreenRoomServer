@@ -6,7 +6,6 @@ import org.hibernate.annotations.Array;
 import java.util.List;
 
 @Data
-@Getter
 @Builder
 @RequiredArgsConstructor
 @AllArgsConstructor

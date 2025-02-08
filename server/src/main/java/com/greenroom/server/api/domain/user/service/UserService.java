@@ -1,5 +1,8 @@
 package com.greenroom.server.api.domain.user.service;
 
+import com.amazonaws.util.StringUtils;
+import com.greenroom.server.api.domain.greenroom.dto.DiaryImageSimpleDto;
+import com.greenroom.server.api.domain.greenroom.dto.GreenroomImageSimpleDto;
 import com.greenroom.server.api.domain.notification.repository.NotificationRepository;
 import com.greenroom.server.api.domain.greenroom.repository.*;
 import com.greenroom.server.api.domain.user.dto.*;
@@ -22,6 +25,7 @@ import org.springframework.web.multipart.MultipartFile;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
+import java.util.ArrayList;
 import java.util.List;
 
 
@@ -77,44 +81,65 @@ public class UserService {
         userExitReasonService.saveUserExitReason(userExitRequestDto);
     }
 
-    //회원 삭제
+    //회원 삭제 hard delete
     @Transactional
-    public void deleteAllWithUser(User user){
+    public List<String> deleteAllWithUser(User user){
 
-        // user hard delete
-        List<Long> greenroomIdList = greenRoomRepository.findAllGreenRoomIdByUser(user);
+        List<String> imageDeleteList = new ArrayList<>();
 
-        //모든 greenroom과 연관된 객체 삭제
+        //user 이미지 삭제 대상에 포함
+        if(StringUtils.hasValue(user.getProfileUrl())) imageDeleteList.add(user.getProfileUrl());
+
+        //user 관련 greenroom 조회 & greenroom 이미지 삭제 대상에 포함
+        List<Long> greenroomIdList = new ArrayList<>();
+
+        greenRoomRepository.findAllGreenRoomImageByUser(user).forEach(g->{
+            greenroomIdList.add(g.getGreenroomId());
+            if(StringUtils.hasValue(g.getPictureUrl())) imageDeleteList.add(g.getPictureUrl());
+        });
+
+        //greenroom 연관 adornment 객체 삭제
         adornmentRepository.deleteAllByGreenRoom(greenroomIdList);
 
-        diaryRepository.deleteAllByGreenRoom(greenroomIdList);
+        //greenroom 연관 diary 객체 삭제  + diary 객체 image 파일 삭제 대상에 포함.
+        List<Long> deletedDiaryIdList = new ArrayList<>();
 
-        // 모든 greenroom과 연관된 todo_log, todo 삭제
+        diaryRepository.findAllByGreenRoomIn(greenroomIdList).forEach(d-> {
+            deletedDiaryIdList.add(d.getDiaryId());
+            if(StringUtils.hasValue(d.getDiaryPictureUrl())) imageDeleteList.add(d.getDiaryPictureUrl());
+        });
+        diaryRepository.deleteAllByIdInBatch(deletedDiaryIdList);
+
+        // greenroom 연관된 todo_log, todo 삭제
         todoLogRepository.deleteAllByGreenRoom(greenroomIdList);
-
         todoRepository.deleteAllByGreenRoom(greenroomIdList);
 
         // greenroom 삭제
         greenRoomRepository.deleteAllByGreenroomId(greenroomIdList);
-
         //alarm 삭제
         notificationRepository.deleteByUser(user);
-
-        //연관관계 객체는 추후 추가
+        //user 객체 삭제
         userRepository.delete(user);
+
+        return imageDeleteList;
     }
 
     @Transactional
     @Scheduled(cron = "0 0 3 * * ?")
     public void deleteUserHard(){
 
+        log.info("[alert] User Deletion Scheduler has started running");
+
         LocalDateTime threshold = LocalDateTime.now().minusDays(90); // 90일 경과한 데이터 삭제
-
         List<User> users =  userRepository.findAllByUserStatusAndDeleteDateBefore(UserStatus.DELETE_PENDING,threshold);
+        List<String> imageDeleteList = new ArrayList<>();
+        users.forEach(user->imageDeleteList.addAll(deleteAllWithUser(user)));
 
-        users.forEach(this::deleteAllWithUser);
+        log.info("[alert] {} users deleted successfully", users.size());
+
+        //이미지 모두 삭제 (batch 삭제)
+        s3ImageUploader.deleteImageInBatch(imageDeleteList);
     }
-
 
     public UserInfoResponseDto getUserInformation(String email){
 
@@ -152,7 +177,12 @@ public class UserService {
         //UserNotFound
         User user = customUserDetailService.findUserByEmail(email); //없으면 not found error 발생
 
+        String imageFileUrl = user.getProfileUrl();
+
         user.deleteProfileImage();
+        //s3 버킷에서 삭제
+        if(StringUtils.hasValue(imageFileUrl)) s3ImageUploader.deleteImage(imageFileUrl);
+
     }
 
     @Transactional

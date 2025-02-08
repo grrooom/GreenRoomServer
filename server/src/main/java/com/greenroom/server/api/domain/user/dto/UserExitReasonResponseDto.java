@@ -7,7 +7,6 @@ import lombok.*;
 @RequiredArgsConstructor
 @AllArgsConstructor
 @Builder
-@Getter
 public class UserExitReasonResponseDto {
 
     private Long reasonId;

@@ -1,5 +1,6 @@
 package com.greenroom.server.api.domain.greenroom.repository;
 
+import com.greenroom.server.api.domain.greenroom.dto.DiaryImageSimpleDto;
 import com.greenroom.server.api.domain.greenroom.entity.Diary;
 import com.greenroom.server.api.domain.greenroom.entity.GreenRoom;
 import com.greenroom.server.api.domain.user.entity.User;
@@ -11,6 +12,7 @@ import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Repository;
 
 import java.util.Collection;
+import java.util.List;
 
 @Repository
 public interface DiaryRepository extends JpaRepository<Diary,Long> {
@@ -20,5 +22,8 @@ public interface DiaryRepository extends JpaRepository<Diary,Long> {
     @Modifying
     @Query("delete from Diary d where d.greenRoom.greenroomId in (:ids)")
     void deleteAllByGreenRoom(@Param("ids")Collection<Long> greenRoom);
+
+    @Query("select d.diaryId,d.diaryPictureUrl from Diary d where d.greenRoom.greenroomId in (:ids)")
+    List<DiaryImageSimpleDto> findAllByGreenRoomIn(Collection<Long> greenRoom);
 
 }
