@@ -119,6 +119,81 @@ include::{snippets}/jwt/error1/http-response.adoc[]
 include::{snippets}/jwt/error2/http-response.adoc[]
 
 
+=== Data 상세 정보
+
+==== Todo
+
+**할 일 목록**
+
+[cols="2,4,4", options="header"]
+|===
+| id | value | description
+| 1 | watering | 물주기
+| 2 | repotting | 분갈이
+| 3 | pruning | 가지치기
+| 4 | nutrition | 영양관리
+| 5 | ventilation | 환기
+| 6 | misting | 분무하기
+|===
+
+==== Item
+
+**item 목록**
+
+[cols="2,2,2,4", options="header"]
+|===
+| id | category | 구분 | name
+| 1 | shape | 형태 | Sunflower
+| 2 | shape | 형태 | Viola_Tricolor
+| 3 | shape | 형태 | Lilium
+| 4 | shape | 형태 | Narcissus
+| 5 | shape | 형태 | Tillandsia_Xerographica
+| 6 | shape | 형태 | Chamaedorea_Elegans
+| 7 | shape | 형태 | Monstera_Deliciosa
+| 8 | shape | 형태 | Portulaca_Grandiflora
+| 9 | shape | 형태 | Salvia_Rosmarinus
+| 10 | shape | 형태 | Vicks_Plant
+| 11 | shape | 형태 | Main_Character
+| 12 | shape | 형태 | EcheveriaIce_Green
+| 13 | shape | 형태 | Echinocactus_Grusonii
+| 14 | shape | 형태 | Epiphyllum_Auguliger
+| 15 | shape | 형태 | Sansevieria
+| 16 | shape | 형태 | Sansevieria_Stuckyi
+| 17 | shape | 형태 | Stephania_Kaweesaki
+| 18 | shape | 형태 | Hoya_Kerrii
+| 19 | shape | 형태 | Ipomoea_Nil
+| 20 | shape | 형태 | Scindapsus_Treubii
+| 21 | eyewear | 안경 | Hip_Sunglasses
+| 22 | eyewear | 안경 | Glasses
+| 23 | eyewear | 안경 | Sunglasses
+| 24 | eyewear | 안경 | Heart_Sunglasses
+| 25 | hair_accessory | 헤어핀 | FriedEgg
+| 26 | hair_accessory | 헤어핀 | Ribbon
+| 27 | hair_accessory | 헤어핀 | Flower_Hairpin
+| 28 | hair_accessory | 헤어핀 | Beret
+| 29 | hair_accessory | 헤어핀 | Big_Ribbon
+| 30 | hair_accessory | 헤어핀 | Straw_Hat
+| 31 | hair_accessory | 헤어핀 | Birthday_Hat
+| 32 | hair_accessory | 헤어핀 | Star_Hairpin
+| 33 | background_window | 창문 소품(왼쪽) | Fruit_Potted_Plant
+| 34 | background_window | 창문 소품(왼쪽) | Frame
+| 35 | background_window | 창문 소품(왼쪽) | Fleshy_Plant_Pot
+| 36 | background_window | 창문 소품(왼쪽) | Watering_Can
+| 37 | background_window | 창문 소품(왼쪽) | Trowel
+| 38 | background_window | 창문 소품(왼쪽) | Stuckyi_Pot
+| 39 | background_window | 창문 소품(왼쪽) | Tea_Pot
+| 40 | background_shelf | 선반 소품(오른쪽) | Flowering_Plant_Vase
+| 41 | background_shelf | 선반 소품(오른쪽) | FourLeaf_Flower_Vase
+| 42 | background_shelf | 선반 소품(오른쪽) | Fishbowl
+| 43 | background_shelf | 선반 소품(오른쪽) | Lamp
+| 44 | background_shelf | 선반 소품(오른쪽) | Aquatic_Plant_Pot
+| 45 | background_shelf | 선반 소품(오른쪽) | Round_Flower_Vase
+| 46 | background_shelf | 선반 소품(오른쪽) | Pile_Of_Books
+| 47 | background_shelf | 선반 소품(오른쪽) | Pencil_Holder
+| 48 | background_shelf | 선반 소품(오른쪽) | Teacup
+| 49 | background_shelf | 선반 소품(오른쪽) | Lily_Of_The_Valley_Vase
+|===
+
 ++++
 <br><br>
 ++++
@@ -443,6 +518,35 @@ include::{snippets}/api/users/profile-image/post/3/http-response.adoc[]
 
 실패2.
 include::{snippets}/api/users/profile-image/post/4/http-response.adoc[]
+
+++++
+<br><br>
+++++
+
+
+== 그린룸 관련
+
+=== **1. 유저 그린룸 조회**
+
+유저가 등록한 그린룸 정보를 조회함.
+
+==== Request
+include::{snippets}/api/greenroom/info/1/http-request.adoc[]
+
+==== Headers
+include::{snippets}/api/greenroom/info/1/request-headers.adoc[]
+
+==== 성공 Response 1.  등록된 식물이 없는 경우
+
+include::{snippets}/api/greenroom/info/2/http-response.adoc[]
+
+==== 성공 Response 2. 등록된 식물이 있는 경우
+
+include::{snippets}/api/greenroom/info/1/http-response.adoc[]
+
+==== Response Fields
+include::{snippets}/api/greenroom/info/1/response-fields.adoc[]
+
 
 
 

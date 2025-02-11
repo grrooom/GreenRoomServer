@@ -127,13 +127,13 @@ public class UserIntegrationTest {
     private final List<FieldDescriptor> resultDescriptors = List.of(
             fieldWithPath("status").type(JsonFieldType.STRING).description("응답 상태")
             , fieldWithPath("code").type(JsonFieldType.STRING).description("상태 코드")
-            , fieldWithPath("data").type(JsonFieldType.OBJECT).optional().description("null 또는 data")
+            , fieldWithPath("data").type(JsonFieldType.OBJECT).optional().description("data")
     );
 
     private final List<FieldDescriptor> resultDescriptorsForExitReason = List.of(
             fieldWithPath("status").type(JsonFieldType.STRING).description("응답 상태")
             , fieldWithPath("code").type(JsonFieldType.STRING).description("상태 코드")
-            , fieldWithPath("data").type(JsonFieldType.ARRAY).optional().description("null 또는 data")
+            , fieldWithPath("data").type(JsonFieldType.ARRAY).optional().description("data")
             ,fieldWithPath("data[].reasonId").type(JsonFieldType.NUMBER).description("탈퇴 사유 id")
             ,fieldWithPath("data[].reason").type(JsonFieldType.STRING).description("탈퇴 사유")
     );
@@ -329,14 +329,14 @@ public class UserIntegrationTest {
     private final List<FieldDescriptor> resultDescriptorsForUserInfo = List.of(
             fieldWithPath("status").type(JsonFieldType.STRING).description("응답 상태"),
             fieldWithPath("code").type(JsonFieldType.STRING).description("상태 코드"),
-            fieldWithPath("data").type(JsonFieldType.OBJECT).optional().description("data 또는 null"),
+            fieldWithPath("data").type(JsonFieldType.OBJECT).optional().description("data"),
             fieldWithPath("data.userName").type(JsonFieldType.STRING).description("user 이름"),
-            fieldWithPath("data.email").type(JsonFieldType.STRING).description("user email").optional(),
-            fieldWithPath("data.userDurationWithGreenroom").type(JsonFieldType.NUMBER).description("user 가입 일수").optional(),
-            fieldWithPath("data.level").type(JsonFieldType.NUMBER).description("user level").optional(),
-            fieldWithPath("data.levelName").type(JsonFieldType.STRING).description("user level 이름").optional(),
-            fieldWithPath("data.profileImgUrl").type(JsonFieldType.STRING).description("user profile image url 또는 null").optional(),
-            fieldWithPath("data.seedsToNextLevel").type(JsonFieldType.NUMBER).description("다음 레벨까지 남은 씨앗 개수").optional()
+            fieldWithPath("data.email").type(JsonFieldType.STRING).description("user email"),
+            fieldWithPath("data.userDurationWithGreenroom").type(JsonFieldType.NUMBER).description("user 가입 일수"),
+            fieldWithPath("data.level").type(JsonFieldType.NUMBER).description("user level"),
+            fieldWithPath("data.levelName").type(JsonFieldType.STRING).description("user level 이름"),
+            fieldWithPath("data.profileImgUrl").type(JsonFieldType.STRING).description("user profile image url").optional().attributes(new Attributes.Attribute("constraint","등록된 이미지가 없으면 null")),
+            fieldWithPath("data.seedsToNextLevel").type(JsonFieldType.NUMBER).description("다음 레벨까지 남은 씨앗 개수")
     );
     private ResultActions getResultActionsForUserInfo() throws Exception {
 

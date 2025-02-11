@@ -2,10 +2,7 @@ package com.greenroom.server.api.domain.greenroom.entity;
 
 import com.greenroom.server.api.domain.common.entity.BaseTime;
 import jakarta.persistence.*;
-import lombok.AccessLevel;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 @Table(name = "plant")
 @Entity
@@ -16,13 +13,13 @@ public class Plant extends BaseTime {
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long plantId;
 
-    private String plantAlias;
+    private String scientificName;
 
-    private String distributionName;
+    private String commonName;
 
     private String plantPictureUrl;
 
-    private int plantCount;
+    private Integer plantCount;
 
     private String waterCycle;
 
@@ -40,9 +37,9 @@ public class Plant extends BaseTime {
 
     private String plantCategory;
     @Builder
-    public Plant(String plantAlias, String distributionName, String plantPictureUrl, int plantCount, String waterCycle, String lightDemand, String growthTemperature, String humidity, String fertilizer, String manageLevel, String otherInformation,String plantCategory) {
-        this.plantAlias = plantAlias;
-        this.distributionName = distributionName;
+    public Plant(String scientificName, String commonName, String plantPictureUrl, int plantCount, String waterCycle, String lightDemand, String growthTemperature, String humidity, String fertilizer, String manageLevel, String otherInformation,String plantCategory) {
+        this.scientificName = scientificName;
+        this.commonName = commonName;
         this.plantPictureUrl = plantPictureUrl;
         this.plantCount = plantCount;
         this.waterCycle = waterCycle;

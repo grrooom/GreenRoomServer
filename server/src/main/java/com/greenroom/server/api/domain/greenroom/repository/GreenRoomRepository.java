@@ -2,7 +2,9 @@ package com.greenroom.server.api.domain.greenroom.repository;
 
 import com.greenroom.server.api.domain.greenroom.dto.GreenroomImageSimpleDto;
 import com.greenroom.server.api.domain.greenroom.entity.GreenRoom;
+import com.greenroom.server.api.domain.greenroom.enums.GreenRoomStatus;
 import com.greenroom.server.api.domain.user.entity.User;
+import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
@@ -26,5 +28,9 @@ public interface GreenRoomRepository extends JpaRepository<GreenRoom,Long> {
     @Query("delete from GreenRoom g where g.greenroomId in (:ids)")
     void deleteAllByGreenroomId(@Param("ids")Collection<Long> greenroomId);
 
+
+
+    @EntityGraph(attributePaths = {"plant"})
+    List<GreenRoom> findGreenRoomByUserAndGreenroomStatus(User user, GreenRoomStatus greenRoomStatus);
 
 }

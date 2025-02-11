@@ -6,8 +6,6 @@ import lombok.RequiredArgsConstructor;
 
 @Data
 public class DiaryImageSimpleDto {
-
     private Long diaryId;
-
     private String diaryPictureUrl;
 }

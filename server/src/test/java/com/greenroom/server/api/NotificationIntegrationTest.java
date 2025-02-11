@@ -135,7 +135,7 @@ public class NotificationIntegrationTest {
     private final List<FieldDescriptor> resultDescriptors = List.of(
             fieldWithPath("status").type(JsonFieldType.STRING).description("응답 상태")
             , fieldWithPath("code").type(JsonFieldType.STRING).description("상태 코드")
-            , fieldWithPath("data").type(JsonFieldType.OBJECT).optional().description("null 또는 data")
+            , fieldWithPath("data").type(JsonFieldType.OBJECT).optional().description("data")
     );
 
     private RestDocumentationResultHandler documentForFcmTokenCreation(Integer identifier){
