@@ -35,7 +35,7 @@ CREATE TABLE `grade` (
 );
 
 CREATE TABLE `adornment` (
-                             `adornment_id` bigint PRIMARY KEY,
+                             `adornment_id` bigint PRIMARY KEY AUTO_INCREMENT,
                              `item_id` bigint,
                              `greenroom_id` bigint,
                              `create_date` timestamp DEFAULT CURRENT_TIMESTAMP,
@@ -86,7 +86,8 @@ CREATE TABLE `todo_log` (
 
 CREATE TABLE `activity` (
                             `activity_id` bigint PRIMARY KEY AUTO_INCREMENT,
-                            `name` varchar(255),
+                            `activity_name` varchar(255),
+                            `description` varchar(255),
                             `create_date` timestamp DEFAULT CURRENT_TIMESTAMP,
                             `update_date` timestamp ON UPDATE CURRENT_TIMESTAMP
 );
@@ -94,8 +95,8 @@ CREATE TABLE `activity` (
 CREATE TABLE `plant` (
                          `plant_id` bigint PRIMARY KEY AUTO_INCREMENT,
                          `plant_category` varchar(255),
-                         `plant_alias` varchar(255),
-                         `distribution_name` varchar(255),
+                         `scientific_name` varchar(255),
+                         `common_name` varchar(255),
                          `plant_picture_url` varchar(255),
                          `plant_count` int,
                          `water_cycle` varchar(200),

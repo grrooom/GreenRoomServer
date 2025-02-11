@@ -6,8 +6,6 @@ import lombok.RequiredArgsConstructor;
 
 @Data
 public class GreenroomImageSimpleDto {
-
     private Long greenroomId;
-
     private String pictureUrl;
 }

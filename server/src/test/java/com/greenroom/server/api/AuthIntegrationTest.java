@@ -102,7 +102,7 @@ public class AuthIntegrationTest {
     private final List<FieldDescriptor>resultDescriptors = List.of(
             fieldWithPath("status").type(JsonFieldType.STRING).description("응답 상태")
             , fieldWithPath("code").type(JsonFieldType.STRING).description("상태 코드")
-            , fieldWithPath("data").type(JsonFieldType.OBJECT).optional().description("null 또는 data")
+            , fieldWithPath("data").type(JsonFieldType.OBJECT).optional().description("data")
     );
 
     // request body descriptor
@@ -124,7 +124,7 @@ public class AuthIntegrationTest {
     protected List<FieldDescriptor> tokenResultDescriptors = List.of(
             fieldWithPath("status").type(JsonFieldType.STRING).description("응답 상태")
             , fieldWithPath("code").type(JsonFieldType.STRING).description("상태 코드")
-            , fieldWithPath("data").type(JsonFieldType.OBJECT).optional().description("null 또는 data")
+            , fieldWithPath("data").type(JsonFieldType.OBJECT).optional().description("data")
             , fieldWithPath("data.email").type(JsonFieldType.STRING).optional().description("user email")
             , fieldWithPath("data.accessToken").type(JsonFieldType.STRING).optional().description("access token")
             , fieldWithPath("data.refreshToken").type(JsonFieldType.STRING).optional().description("refresh token")
