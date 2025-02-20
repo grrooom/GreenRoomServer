@@ -7,6 +7,7 @@ import com.amazonaws.services.s3.model.DeleteObjectsRequest;
 import com.amazonaws.services.s3.model.ObjectMetadata;
 import com.greenroom.server.api.enums.ResponseCodeEnum;
 import com.greenroom.server.api.exception.CustomException;
+import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import net.coobird.thumbnailator.Thumbnails;
@@ -21,6 +22,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
+import static com.amazonaws.util.IOUtils.toByteArray;
+
 @Component
 @Slf4j
 @RequiredArgsConstructor
@@ -32,7 +35,14 @@ public class S3ImageUploader {
     @Value("${cloud.image.path.user}")
     private String userImageDir;
 
+    @Value("${cloud.image.path.plant}")
+    private String plantImageDir;
+
     private final AmazonS3 amazonS3;
+
+    @Getter
+    @Value("${cloud.cdn.path.root}")
+    private String cdnPath;
 
     public String uploadUserProfileImage(MultipartFile multipartFile){
         return uploadImage(multipartFile,userImageDir);
@@ -137,4 +147,20 @@ public class S3ImageUploader {
         //추후 삭제 연산 실패 시 db 저장 -> 삭제 실패한 파일 삭제 재시도 (스케줄러) 도입 가능
         log.error("[error] Fail to delete image files after 3 times retry : {}",keyList);
     }
+
+    public String uploadPlantImages(InputStream inputStream, String plantName) throws IOException {
+
+        byte[] bytes = toByteArray(inputStream);
+        InputStream newInputStream = new ByteArrayInputStream(bytes);
+        long contentLength = bytes.length;
+
+        ObjectMetadata metadata = new ObjectMetadata();
+        metadata.setContentType("image/jpg");
+        metadata.setContentLength(contentLength);
+        String fileName = plantImageDir+"/"+plantName+".jpg";
+        amazonS3.putObject(bucket,fileName, newInputStream,metadata);
+
+        return fileName;
+    }
+
 }

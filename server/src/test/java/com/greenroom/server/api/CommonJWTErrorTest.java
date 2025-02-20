@@ -106,7 +106,7 @@ public class CommonJWTErrorTest {
     private RestDocumentationResultHandler documentApiForLogout(Integer identifier) {
         return document("jwt/error" + identifier
                 ,
-                preprocessRequest(prettyPrint()),   // (2)
+                preprocessRequest(prettyPrint(),modifyUris().scheme("https").host("greenroom-server.site").removePort()),   // (2)
                 preprocessResponse(prettyPrint(), getModifiedHeader()),  // (3)
                 responseFields(resultDescriptors), // responseBody 설명
                 requestHeaders(

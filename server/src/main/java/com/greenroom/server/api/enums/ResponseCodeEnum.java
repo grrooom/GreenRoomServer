@@ -39,14 +39,15 @@ public enum ResponseCodeEnum {
     INVALID_REQUEST_ARGUMENT(HttpStatus.BAD_REQUEST,"C023","요청시 request body로 전달된 argument가 존재하지 않거나 조건을 만족시키지 않음. ","명세된 request 조건에 맞는 요청 다시 전송 필요"),
     INVALID_EMAIL_VERIFICATION_TOKEN(HttpStatus.CONFLICT,"C024","부적절한 이메일 인증 토큰이 전송됨",""),
     FCM_TOKEN_NOT_FOUND(HttpStatus.NOT_FOUND,"C025","등록된 FCM Token 객체를 찾을 수 없음.","fcm token을 먼저 발급받아야 함."),
+    INVALID_REQUEST_PARAM(HttpStatus.BAD_REQUEST,"C026","부적절한 request param이 요청됨",""),
 
     //500~
     UNKNOWN_SERVER_ERROR(HttpStatus.INTERNAL_SERVER_ERROR,"D000","정의되지 않은 알 수 없는 서버 에러가 발생함.","서버에 문의"),
     FAIL_DATA_PARSING(HttpStatus.INTERNAL_SERVER_ERROR,"D001","알 수 없는 서버 문제로 데이터 parsing에 실패함.",""),
     FAIL_TO_SEND_EMAIL(HttpStatus.INTERNAL_SERVER_ERROR,"D002","알 수 없는 서버 문제로 메일 전송에 실패함.","다시 시도"),
     INVALID_REQUEST_PARAMETER(HttpStatus.INTERNAL_SERVER_ERROR ,"D003","서버 내부 문제로 부적절한 request parameter가 전달됨.","서버에 문의"),
-    FAIL_TO_UPLOAD_IMAGE(HttpStatus.INTERNAL_SERVER_ERROR,"D004","알 수 없는 문제로 이미지 업로드에 실패함.","");
-
+    FAIL_TO_UPLOAD_IMAGE(HttpStatus.INTERNAL_SERVER_ERROR,"D004","알 수 없는 문제로 이미지 업로드에 실패함.",""),
+    FAIL_TO_SEARCH_WITH_ELASTICSEARCH(HttpStatus.INTERNAL_SERVER_ERROR,"D005","elasticsearch 관련 알 수 없는 문제가 발생함.","서버에 문의");
 
     private final HttpStatus status;
     private final String code;

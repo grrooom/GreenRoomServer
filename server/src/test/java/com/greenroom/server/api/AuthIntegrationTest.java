@@ -137,7 +137,7 @@ public class AuthIntegrationTest {
     private RestDocumentationResultHandler documentApiForSignup(Integer identifier) {
         return document("api/auth/signup/" + identifier
                 , // api의 id
-                preprocessRequest(prettyPrint()),   // (2)
+                preprocessRequest(prettyPrint(),modifyUris().scheme("https").host("greenroom-server.site").removePort()),   // (2)
                 preprocessResponse(prettyPrint(), getModifiedHeader()),  // (3)
                 responseFields(tokenResultDescriptors), // responseBody 설명
                 requestFields(emailAndPasswordAndNameDescriptors),
@@ -238,7 +238,7 @@ public class AuthIntegrationTest {
     private RestDocumentationResultHandler documentApiForLogin(Integer identifier) {
         return document(
                 "api/auth/login/"+ identifier, // api의 id
-                preprocessRequest(prettyPrint()),   // (2)
+                preprocessRequest(prettyPrint(),modifyUris().scheme("https").host("greenroom-server.site").removePort()),   // (2)
                 preprocessResponse(prettyPrint(),getModifiedHeader()),
                 responseFields(tokenResultDescriptors), // responseBody 설명
                 requestFields(emailAndPasswordDescriptors),
@@ -341,7 +341,7 @@ public class AuthIntegrationTest {
     private RestDocumentationResultHandler documentApiForEmailAuth(Integer identifier){
         return document(
                 "api/auth/email/authentication/"+ identifier, // api의 id
-                preprocessRequest(prettyPrint()),   // (2)
+                preprocessRequest(prettyPrint(),modifyUris().scheme("https").host("greenroom-server.site").removePort()),   // (2)
                 preprocessResponse(prettyPrint(),getModifiedHeader()),
                 responseFields(resultDescriptors), // responseBody 설명
                 requestFields(emailVerificationDescriptors),
@@ -381,7 +381,7 @@ public class AuthIntegrationTest {
         // 문서 작성
         resultActions.andDo(document(
                 "api/auth/email/authentication/"+ 1, // api의 id
-                preprocessRequest(prettyPrint()),   // (2)
+                preprocessRequest(prettyPrint(),modifyUris().scheme("https").host("greenroom-server.site").removePort()),   // (2)
                 preprocessResponse(prettyPrint(),getModifiedHeader()),
                 requestFields(emailVerificationDescriptors),
                 resource(
@@ -505,7 +505,7 @@ public class AuthIntegrationTest {
     private RestDocumentationResultHandler documentApiForEmailToken(Integer identifier){
         return document(
                 "api/auth/email/token/authentication/"+ identifier,
-                preprocessRequest(prettyPrint()),   // (2)
+                preprocessRequest(prettyPrint(),modifyUris().scheme("https").host("greenroom-server.site").removePort()),   // (2)
                 preprocessResponse(prettyPrint(),getModifiedHeader()),
                 responseFields(resultDescriptors), // responseBody 설명
                 requestFields(emailVerificationTokenDescriptor),
@@ -560,7 +560,7 @@ public class AuthIntegrationTest {
         // 문서 작성
         resultActions.andDo(document(
                 "api/auth/email/token/authentication/"+ 1,
-                preprocessRequest(prettyPrint()),   // (2)
+                preprocessRequest(prettyPrint(),modifyUris().scheme("https").host("greenroom-server.site").removePort()),   // (2)
                 preprocessResponse(prettyPrint(),getModifiedHeader()),
                 requestFields(emailVerificationTokenDescriptor),
                 resource(
@@ -656,7 +656,7 @@ public class AuthIntegrationTest {
     private RestDocumentationResultHandler documentApiForTokenUpdate(Integer identifier){
         return document(
                 "api/auth/tokens/"+ identifier,
-                preprocessRequest(prettyPrint()),   // (2)
+                preprocessRequest(prettyPrint(),modifyUris().scheme("https").host("greenroom-server.site").removePort()),   // (2)
                 preprocessResponse(prettyPrint(),getModifiedHeader()),
                 responseFields(tokenResultDescriptors), // responseBody 설명
                 requestFields(refreshTokenDescriptor),
@@ -822,6 +822,8 @@ public class AuthIntegrationTest {
 
         // 문서 작성
         resultActions.andDo(documentApiForTokenUpdate(5));
+
+
     }
 
 

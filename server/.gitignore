@@ -50,3 +50,7 @@ openapi3.yaml
 
 ### firebase secret key
 fcm-admin.json
+
+apple-app-site-association
+assetlinks.json
+

@@ -19,6 +19,9 @@ public class Plant extends BaseTime {
 
     private String plantPictureUrl;
 
+    @Column(name="plant_picture_url_s3")
+    private String plantPictureUrlS3;
+
     private Integer plantCount;
 
     private String waterCycle;
@@ -54,6 +57,10 @@ public class Plant extends BaseTime {
 
     public void updatePlantCount(){
         plantCount +=1;
+    }
+
+    public void updateS3PlantPictureUrl(String url){
+        this.plantPictureUrlS3 = url;
     }
 
 }

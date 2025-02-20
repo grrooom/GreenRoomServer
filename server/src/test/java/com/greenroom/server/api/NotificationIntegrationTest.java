@@ -70,7 +70,6 @@ import static reactor.core.publisher.Mono.when;
 @SpringBootTest
 @ActiveProfiles("test")
 @ExtendWith({RestDocumentationExtension.class})
-//MERGE_WITH_DEFAULTS 옵션을 사용하면 기존의 리스너와 함께 동작 가능
 @TestExecutionListeners(value = TestExecutionListener.class, mergeMode = TestExecutionListeners.MergeMode.MERGE_WITH_DEFAULTS)
 public class NotificationIntegrationTest {
 
@@ -140,7 +139,7 @@ public class NotificationIntegrationTest {
 
     private RestDocumentationResultHandler documentForFcmTokenCreation(Integer identifier){
         return document("api/notification/fcmToken/"+identifier,
-                preprocessRequest(prettyPrint()),   // (2)
+                preprocessRequest(prettyPrint(),modifyUris().scheme("https").host("greenroom-server.site").removePort()),   // (2)
                 preprocessResponse(prettyPrint(), getModifiedHeader()),
                 responseFields(resultDescriptors), // responseBody 설명
                 requestFields(fcmTokenCreationDescriptor),
@@ -226,7 +225,7 @@ public class NotificationIntegrationTest {
 
     private RestDocumentationResultHandler documentForUpdateNotificationEnabled(Integer identifier){
         return document("api/notification/update/"+identifier,
-                preprocessRequest(prettyPrint()),   // (2)
+                preprocessRequest(prettyPrint(),modifyUris().scheme("https").host("greenroom-server.site").removePort()),   // (2)
                 preprocessResponse(prettyPrint(), getModifiedHeader()),
                 requestFields(notificationEnabledUpdateDescriptors),
                 requestHeaders(headerWithName(HttpHeaders.AUTHORIZATION).description("Bearer : 사용자 access Token")),
@@ -266,7 +265,7 @@ public class NotificationIntegrationTest {
 
         //문서화
         resultActions.andDo(document("api/notification/update/"+1,
-                preprocessRequest(prettyPrint()),   // (2)
+                preprocessRequest(prettyPrint(),modifyUris().scheme("https").host("greenroom-server.site").removePort()),   // (2)
                 preprocessResponse(prettyPrint(), getModifiedHeader()),
                 requestFields(notificationEnabledUpdateDescriptors),
                 requestHeaders(headerWithName(HttpHeaders.AUTHORIZATION).description("Bearer : 사용자 access Token")),
@@ -332,7 +331,7 @@ public class NotificationIntegrationTest {
 
         //문서화
         resultActions.andDo(document("api/notification/update/"+3,
-                preprocessRequest(prettyPrint()),   // (2)
+                preprocessRequest(prettyPrint(),modifyUris().scheme("https").host("greenroom-server.site").removePort()),   // (2)
                 preprocessResponse(prettyPrint(), getModifiedHeader()),
                 requestFields(fieldWithPath("notification_enabled").type(JsonFieldType.BOOLEAN).description("알림 수신 여부").optional()),
                 requestHeaders(

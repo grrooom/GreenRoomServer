@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-
 <!-- 60초마다 파일 변화를 체크하여 갱신시킨다. -->
-<configuration scan="true" scanPeriod="60 seconds">
+<configuration scan="false" scanPeriod="60 seconds">
     <conversionRule conversionWord="clr" converterClass="org.springframework.boot.logging.logback.ColorConverter" />
-
     <!-- 로그 패턴 -->
     <property name ="LOG_PATTERN" value = "%d{yyyy-MM-dd HH:mm:ss.SSS} %clr(%5level) [%thread] %cyan(%-80.80logger{79}) : %msg%n"/>
+
+    <property name ="LOG_PATTERN_FILE" value = "%d{yyyy-MM-dd HH:mm:ss.SSS} %5level [%thread] %-80.80logger{79} : %msg%n"/>
 
     <!-- 콘솔 Appender 설정 -->
     <appender name ="CONSOLE" class ="ch.qos.logback.core.ConsoleAppender">
@@ -15,7 +15,6 @@
         </encoder>
     </appender>
 
-
     <!-- 파일 Appender 설정 -->
     <appender name="FILE" class ="ch.qos.logback.core.rolling.RollingFileAppender">
         <!-- 파일 경로 설정 -->
@@ -23,23 +22,17 @@
 
         <!-- 로그 패턴 설정 -->
         <encoder class = "ch.qos.logback.classic.encoder.PatternLayoutEncoder">
-            <pattern>${LOG_PATTERN}</pattern>
+            <pattern>${LOG_PATTERN_FILE}</pattern>
         </encoder>
 
         <!-- 롤링 정책 -->
         <rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
-            <fileNamePattern>/var/log/greenroom/dev/server_log.%d{yyyy-MM-dd}.%i.log</fileNamePattern>
-            <maxFileSize>50MB</maxFileSize> <!-- 50mb 넘기면 롤링 파일 생성-->
-            <maxHistory>5</maxHistory>   <!--최대 보관 일수-->
-            <totalSizeCap>2GB</totalSizeCap> <!--파일 당 최대 보관 용량. 초과하면 삭제됨.-->
+            <fileNamePattern>/var/log/greenroom/dev/server_log_%d{yyyy_MM_dd}_%i.log</fileNamePattern>
+            <maxFileSize>1kB</maxFileSize> <!-- 50mb 넘기면 롤링 파일 생성-->
+            <maxHistory>10</maxHistory>   <!--최대 보관 일수-->
+            <totalSizeCap>5GB</totalSizeCap> <!--파일 당 최대 보관 용량. 초과하면 삭제됨.-->
         </rollingPolicy>
     </appender>
-
-<!--        + 외부 프로젝트가 아닌 내 프로젝트와 관련된 것은 DEBUG level에서 출력함.-->
-<!--        + security와 관련된 것은 DEBUG level에서 출력함.-->
-<!--        + com.zaxxer.hikari패키지와 관련된 것은 ERROR레벨일 경우만 log를 출력-->
-<!--        + console에만 log를 남기고 file에 따로 기록하지 않음 &ndash;&gt;-->
-
     <springProfile name = "dev">
         <root level = "INFO">
             <appender-ref ref="FILE"/>
@@ -69,7 +62,4 @@
         <logger name="com.zaxxer.hikari" level = "ERROR" />
         <logger name="org.apache" level = "ERROR" />
     </springProfile>
-
-
-
 </configuration>
