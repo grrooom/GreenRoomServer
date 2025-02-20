@@ -28,9 +28,9 @@
         <!-- 롤링 정책 -->
         <rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
             <fileNamePattern>/var/log/greenroom/dev/server_log_%d{yyyy_MM_dd}_%i.log</fileNamePattern>
-            <maxFileSize>1kB</maxFileSize> <!-- 50mb 넘기면 롤링 파일 생성-->
+            <maxFileSize>50MB</maxFileSize> <!-- 50mb 넘기면 롤링 파일 생성-->
             <maxHistory>10</maxHistory>   <!--최대 보관 일수-->
-            <totalSizeCap>5GB</totalSizeCap> <!--파일 당 최대 보관 용량. 초과하면 삭제됨.-->
+            <totalSizeCap>3GB</totalSizeCap> <!--파일 당 최대 보관 용량. 초과하면 삭제됨.-->
         </rollingPolicy>
     </appender>
     <springProfile name = "dev">
