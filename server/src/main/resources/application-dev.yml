@@ -21,10 +21,9 @@ spring:
       max-request-size: 20MB
       max-file-size: 20MB
   elasticsearch:
-    host: ENC(Lv4MLpsoOwiVF/l7J05HY/JEr921Twg1wqLomNQRzeo=)
+    uris: ENC(BX2daQqdGHc4gnij1preYWVeixI3QvYTcMbX8baPTlpPeBMefncMhA==)
     username: ENC(YnhWogbED6K9UWjN7DTD3w==)
     password:  ENC(KUA2cnFAL3Z0YWdc2MFW1dUInWo8u+bxE/k5CjBRT+9waIQD9FeIig==)
-    ssl: ENC(P0V9bznHLGzcLLOP/MgTJT8rMnWCPvg6dFq2I1IToUfIy6x9PXYt9sn4/d60k8wS)
   data:
     elasticsearch:
       repositories:
