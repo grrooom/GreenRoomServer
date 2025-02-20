@@ -22,7 +22,14 @@ spring:
         web-allow-others: true
       enbaled : true
       path : /h2
-
+  elasticsearch:
+    uris: http://localhost:9200
+    username: elastic
+    password: 123456
+  data:
+    elasticsearch:
+      repositories:
+        enabled: true
   servlet:
     multipart:
       max-request-size: 100MB
@@ -52,21 +59,17 @@ cloud:
         root: ENC(eBnxQq5PqbXeyZ73q30lhL40qXHlr46R5XbHnfgzZM+7NU6LQxoMevHgOP37yWp+)
   image:
     path:
-      plant: test/plant
+      plant: plant
       greenroom: test/greenroom
       user: test/user
       diary: test/diary
   cdn:
     path:
       root: ENC(VzfXK3IN7tLoueO7y0qdFvjl1CYogxmul6Dvd2uOnSq9x4Yie3FOUQk3xGbZLKLM)
-
-
 temp:
   filePath: src/main/resources/
-
 logging.level:
   org.hibernate.type: info
-
 decorator:
   datasource:
     p6spy:

@@ -95,6 +95,7 @@ Content-Type: application/json
 | 구분 |Http Status Code | Http Status  | custom error code | 비고
 | 공통 | 500 | INTERNAL_SERVER_ERROR | D000 | 서버 측에서 처리하지 못한 예외가 발생하면 모든 api 요청에 대해 공통적으로 반환됨.
 | 공통 | 400 | BAD_REQUEST | C023 | API 요청에서 요구되는 request body의 조건을 만족하지 못했을 경우 공통적으로 반환됨. (ex. email 형식 불일치, 필수 field 존재x)
+| 공통 | 400 | BAD_REQUEST | C026 | API 요청에서 요구되는 request parameter의 조건을 만족하지 못했을 경우 공통적으로 반환됨. (ex. size 옵션에 숫자가 아닌 다른 값을 전달)
 | 공통 | 404 | NOT FOUND | C001 | access token에 포함된 user 정보를 서버에서 찾지 못하는 경우 공통적으로 반환됨.
 | JWT | 401 | UNAUTHORIZED | C004 |  Access Token이 만료됨
 | JWT | 401 | UNAUTHORIZED | C006 |  Access Token을 header에서 찾을 수 없음
@@ -228,14 +229,14 @@ url 예시 : https://{cdn-url}/local/user/f1c5ce09-476f-4a17-8bbe-889cc92bee72r3
 ==== Request
 include::{snippets}/api/auth/signup/1/http-request.adoc[]
 
-==== Request Fields
+==== Request Body Fields
 include::{snippets}/api/auth/signup/1/request-fields.adoc[]
 
 
 ==== 성공 Response
 include::{snippets}/api/auth/signup/1/http-response.adoc[]
 
-==== Response Fields
+==== Response Body Fields
 include::{snippets}/api/auth/signup/1/response-fields.adoc[]
 
 
@@ -255,14 +256,14 @@ include::{snippets}/api/auth/signup/3/http-response.adoc[]
 ==== Request
 include::{snippets}/api/auth/login/1/http-request.adoc[]
 
-==== Request Fields
+==== Request Body Fields
 include::{snippets}/api/auth/login/1/request-fields.adoc[]
 
 
 ==== 성공 Response
 include::{snippets}/api/auth/login/1/http-response.adoc[]
 
-==== Response Fields
+==== Response Body Fields
 include::{snippets}/api/auth/login/1/response-fields.adoc[]
 
 ==== 실패 Response
@@ -280,14 +281,14 @@ include::{snippets}/api/auth/login/3/http-response.adoc[]
 ==== Request
 include::{snippets}/api/auth/tokens/1/http-request.adoc[]
 
-==== Request Fields
+==== Request Body Fields
 include::{snippets}/api/auth/tokens/1/request-fields.adoc[]
 
 
 ==== 성공 Response
 include::{snippets}/api/auth/tokens/1/http-response.adoc[]
 
-==== Response Fields
+==== Response Body Fields
 include::{snippets}/api/auth/tokens/1/response-fields.adoc[]
 
 
@@ -309,7 +310,7 @@ app link  : https://greenroom-server.site?token={token}
 ==== Request
 include::{snippets}/api/auth/email/authentication/1/http-request.adoc[]
 
-==== Request Fields
+==== Request Body Fields
 include::{snippets}/api/auth/email/authentication/1/request-fields.adoc[]
 
 ==== 성공 Response
@@ -335,7 +336,7 @@ JWT 토큰은 15분의 유효 시간을 가지며 가장 마지막 인증 시도
 ==== Request
 include::{snippets}/api/auth/email/token/authentication/1/http-request.adoc[]
 
-==== Request Fields
+==== Request Body Fields
 include::{snippets}/api/auth/email/token/authentication/1/request-fields.adoc[]
 
 ==== 성공 Response
@@ -362,7 +363,7 @@ include::{snippets}/api/auth/email/token/authentication/4/http-response.adoc[]
 ==== Request
 include::{snippets}/api/users/logout/1/http-request.adoc[]
 
-==== Headers
+==== Request Headers
 include::{snippets}/api/users/logout/1/request-headers.adoc[]
 
 ==== 성공 Response
@@ -378,13 +379,13 @@ include::{snippets}/api/users/logout/1/http-response.adoc[]
 ==== Request
 include::{snippets}/api/users/exitReason/1/http-request.adoc[]
 
-==== Headers
+==== Request Headers
 include::{snippets}/api/users/exitReason/1/request-headers.adoc[]
 
 ==== 성공 Response
 include::{snippets}/api/users/exitReason/1/http-response.adoc[]
 
-==== Response Fields
+==== Response Body Fields
 include::{snippets}/api/users/exitReason/1/response-fields.adoc[]
 
 ---
@@ -396,11 +397,12 @@ include::{snippets}/api/users/exitReason/1/response-fields.adoc[]
 ==== Request
 include::{snippets}/api/users/delete/1/http-request.adoc[]
 
-==== Request Fields
-include::{snippets}/api/users/delete/1/request-fields.adoc[]
-
-==== Headers
+==== Request Headers
 include::{snippets}/api/users/delete/1/request-headers.adoc[]
+
+
+==== Request Body Fields
+include::{snippets}/api/users/delete/1/request-fields.adoc[]
 
 ==== 성공 Response
 include::{snippets}/api/users/delete/1/http-response.adoc[]
@@ -413,11 +415,11 @@ fcm 토큰을 생성 및 갱신 : 서버에 저장된 fcm token이 있으면 새
 ==== Request
 include::{snippets}/api/notification/fcmToken/1/http-request.adoc[]
 
-==== Request Fields
-include::{snippets}/api/notification/fcmToken/1/request-fields.adoc[]
-
-==== Headers
+==== Request Headers
 include::{snippets}/api/notification/fcmToken/1/request-headers.adoc[]
+
+==== Request Body Fields
+include::{snippets}/api/notification/fcmToken/1/request-fields.adoc[]
 
 ==== 성공 Response
 include::{snippets}/api/notification/fcmToken/1/http-response.adoc[]
@@ -430,11 +432,11 @@ include::{snippets}/api/notification/fcmToken/1/http-response.adoc[]
 ==== Request
 include::{snippets}/api/notification/update/1/http-request.adoc[]
 
-==== Request Fields
-include::{snippets}/api/notification/update/1/request-fields.adoc[]
-
-==== Headers
+==== Request Headers
 include::{snippets}/api/notification/update/1/request-headers.adoc[]
+
+==== Request Body Fields
+include::{snippets}/api/notification/update/1/request-fields.adoc[]
 
 ==== 성공 Response
 include::{snippets}/api/notification/update/1/http-response.adoc[]
@@ -451,16 +453,16 @@ include::{snippets}/api/notification/update/4/http-response.adoc[]
 ==== Request
 include::{snippets}/api/users/name/1/http-request.adoc[]
 
-==== Request Fields
-include::{snippets}/api/users/name/1/request-fields.adoc[]
-
-==== Headers
+==== Request Headers
 include::{snippets}/api/users/name/1/request-headers.adoc[]
+
+==== Request Body Fields
+include::{snippets}/api/users/name/1/request-fields.adoc[]
 
 ==== 성공 Response
 include::{snippets}/api/users/name/1/http-response.adoc[]
 
-==== Response Field
+==== Response Body Fields
 include::{snippets}/api/users/name/1/response-fields.adoc[]
 
 
@@ -471,13 +473,13 @@ include::{snippets}/api/users/name/1/response-fields.adoc[]
 ==== Request
 include::{snippets}/api/users/info/1/http-request.adoc[]
 
-==== Headers
+==== Request Headers
 include::{snippets}/api/users/info/1/request-headers.adoc[]
 
 ==== 성공 Response
 include::{snippets}/api/users/info/1/http-response.adoc[]
 
-==== Response Field
+==== Response Body Fields
 include::{snippets}/api/users/info/1/response-fields.adoc[]
 
 === **8. user 프로필 이미지 삭제**
@@ -487,7 +489,7 @@ include::{snippets}/api/users/info/1/response-fields.adoc[]
 ==== Request
 include::{snippets}/api/users/profile-image/delete/1/http-request.adoc[]
 
-==== Headers
+==== Request Headers
 include::{snippets}/api/users/profile-image/delete/1/request-headers.adoc[]
 
 ==== 성공 Response
@@ -500,7 +502,7 @@ include::{snippets}/api/users/profile-image/delete/1/http-response.adoc[]
 ==== Request
 include::{snippets}/api/users/profile-image/post/1/curl-request.adoc[]
 
-==== Headers
+==== Request Headers
 include::{snippets}/api/users/profile-image/post/1/request-headers.adoc[]
 
 ==== Request Parts
@@ -509,7 +511,7 @@ include::{snippets}/api/users/profile-image/post/1/request-parts.adoc[]
 ==== 성공 Response
 include::{snippets}/api/users/profile-image/post/1/http-response.adoc[]
 
-==== Response Field
+==== Response Body Fields
 include::{snippets}/api/users/profile-image/post/1/response-fields.adoc[]
 
 ==== 실패 Response
@@ -526,14 +528,57 @@ include::{snippets}/api/users/profile-image/post/4/http-response.adoc[]
 
 == 그린룸 관련
 
-=== **1. 유저 그린룸 조회**
+=== **1. 인기 식물 조회**
+
+많이 키우는 식물을 반환함.
+
+==== Request
+include::{snippets}/api/plants/popular/1/http-request.adoc[]
+
+==== Request Headers
+include::{snippets}/api/plants/popular/1/request-headers.adoc[]
+
+==== Request Parameter Fields
+include::{snippets}/api/plants/popular/1/query-parameters.adoc[]
+
+==== 성공 Response
+include::{snippets}/api/plants/popular/1/http-response.adoc[]
+
+==== Response Body Fields
+include::{snippets}/api/plants/popular/1/response-fields.adoc[]
+
+
+=== **2 식물 검색**
+
+식물 이름의 키워드로 식물을 검색함.
+
+==== Request
+include::{snippets}/api/plants/search/1/http-request.adoc[]
+
+==== Request Headers
+include::{snippets}/api/plants/search/1/request-headers.adoc[]
+
+==== Request Parameter Fields
+include::{snippets}/api/plants/search/1/query-parameters.adoc[]
+
+==== 성공 Response
+include::{snippets}/api/plants/search/1/http-response.adoc[]
+
+==== Response Body Fields
+include::{snippets}/api/plants/search/1/response-fields.adoc[]
+
+==== 실패 Response
+include::{snippets}/api/plants/search/2/http-response.adoc[]
+
+
+=== **3 유저 그린룸 조회**
 
 유저가 등록한 그린룸 정보를 조회함.
 
 ==== Request
 include::{snippets}/api/greenroom/info/1/http-request.adoc[]
 
-==== Headers
+==== Request Headers
 include::{snippets}/api/greenroom/info/1/request-headers.adoc[]
 
 ==== 성공 Response 1.  등록된 식물이 없는 경우
@@ -544,7 +589,7 @@ include::{snippets}/api/greenroom/info/2/http-response.adoc[]
 
 include::{snippets}/api/greenroom/info/1/http-response.adoc[]
 
-==== Response Fields
+==== Response Body Fields
 include::{snippets}/api/greenroom/info/1/response-fields.adoc[]
 
 

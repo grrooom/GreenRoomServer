@@ -190,7 +190,7 @@ public class UserIntegrationTest {
                 .andExpect(status().isNoContent())
                 .andDo(document("api/users/logout/" + 1
                         ,
-                        preprocessRequest(prettyPrint()),   // (2)
+                        preprocessRequest(prettyPrint(),modifyUris().scheme("https").host("greenroom-server.site").removePort()),   // (2)
                         preprocessResponse(prettyPrint(), getModifiedHeader()),  // (3)
                         requestHeaders(headerWithName(HttpHeaders.AUTHORIZATION).description("Bearer : 사용자 access Token")),
                         resource(
@@ -214,7 +214,7 @@ public class UserIntegrationTest {
                 .andExpect(status().is(ResponseCodeEnum.USER_NOT_FOUND.getStatus().value())).andExpect(MockMvcResultMatchers.jsonPath("code").value(ResponseCodeEnum.USER_NOT_FOUND.getCode()))
                 .andDo(document("api/users/logout/" + 2
                         ,
-                        preprocessRequest(prettyPrint()),   // (2)
+                        preprocessRequest(prettyPrint(),modifyUris().scheme("https").host("greenroom-server.site").removePort()),   // (2)
                         preprocessResponse(prettyPrint(), getModifiedHeader()),  // (3)
                         responseFields(resultDescriptors), // responseBody 설명
                         requestHeaders(headerWithName(HttpHeaders.AUTHORIZATION).description("Bearer : 사용자 access Token")),
@@ -245,7 +245,7 @@ public class UserIntegrationTest {
         //문서화
         resultActions.andDo(
                         document("api/users/exitReason/1" ,
-                            preprocessRequest(prettyPrint()),   // (2)
+                            preprocessRequest(prettyPrint(),modifyUris().scheme("https").host("greenroom-server.site").removePort()),   // (2)
                             preprocessResponse(prettyPrint(), getModifiedHeader()),  // (3)
                             responseFields(resultDescriptorsForExitReason), // responseBody 설명
                             requestHeaders(headerWithName("Authorization").description("Bearer : 사용자 access Token")),
@@ -288,7 +288,7 @@ public class UserIntegrationTest {
 
         //문서화
         resultActions.andDo(document("api/users/delete/" + 1,
-                        preprocessRequest(prettyPrint()),   // (2)
+                        preprocessRequest(prettyPrint(),modifyUris().scheme("https").host("greenroom-server.site").removePort()),   // (2)
                         preprocessResponse(prettyPrint(), getModifiedHeader()),  // (3)
                         requestHeaders(headerWithName("Authorization").description("Bearer : 사용자 access Token")),
                         requestFields(requestDescriptorsForDeactivation),
@@ -314,7 +314,7 @@ public class UserIntegrationTest {
 
         //문서화
         resultActions.andDo(document("api/users/delete/" + 2,
-                        preprocessRequest(prettyPrint()),   // (2)
+                        preprocessRequest(prettyPrint(),modifyUris().scheme("https").host("greenroom-server.site").removePort()),   // (2)
                         preprocessResponse(prettyPrint(), getModifiedHeader()),  // (3)
                         responseFields(resultDescriptors), // responseBody 설명
                         requestHeaders(headerWithName("Authorization").description("Bearer : 사용자 access Token")),
@@ -350,7 +350,7 @@ public class UserIntegrationTest {
 
     private RestDocumentationResultHandler getDocumentForUserInfo(Integer identifier){
         return document("api/users/info/" + identifier,
-                preprocessRequest(prettyPrint()),   // (2)
+                preprocessRequest(prettyPrint(),modifyUris().scheme("https").host("greenroom-server.site").removePort()),   // (2)
                 preprocessResponse(prettyPrint(), getModifiedHeader()),  // (3)
                 responseFields(resultDescriptorsForUserInfo), // responseBody 설명
                 requestHeaders(headerWithName("Authorization").description("Bearer : 사용자 access Token")),
@@ -419,7 +419,7 @@ public class UserIntegrationTest {
 
     private RestDocumentationResultHandler getDocumentForUpdateUserNAme (Integer identifier){
         return document("api/users/name/" + identifier,
-                preprocessRequest(prettyPrint()),   // (2)
+                preprocessRequest(prettyPrint(),modifyUris().scheme("https").host("greenroom-server.site").removePort()),   // (2)
                 preprocessResponse(prettyPrint(), getModifiedHeader()),  // (3)
                 requestFields(requestDescriptorForUpdateUserName),
                 responseFields(resultDescriptorsForUpdateUserName), // responseBody 설명
@@ -493,7 +493,7 @@ public class UserIntegrationTest {
 
         //문서화
         resultActions.andDo(document("api/users/profile-image/delete/" + 1,
-                preprocessRequest(prettyPrint()),   // (2)
+                preprocessRequest(prettyPrint(),modifyUris().scheme("https").host("greenroom-server.site").removePort()),   // (2)
                 preprocessResponse(prettyPrint(), getModifiedHeader()),  // (3)
                 requestHeaders(headerWithName("Authorization").description("Bearer : 사용자 access Token")),
                 resource(
@@ -516,7 +516,7 @@ public class UserIntegrationTest {
 
         //문서화
         resultActions.andDo(document("api/users/profile-image/delete/" + 2,
-                preprocessRequest(prettyPrint()),   // (2)
+                preprocessRequest(prettyPrint(),modifyUris().scheme("https").host("greenroom-server.site").removePort()),   // (2)
                 preprocessResponse(prettyPrint(), getModifiedHeader()),  // (3)
                 responseFields(resultDescriptors), // responseBody 설명
                 requestHeaders(headerWithName("Authorization").description("Bearer : 사용자 access Token")),
@@ -574,7 +574,7 @@ public class UserIntegrationTest {
 
     private RestDocumentationResultHandler getDocumentForPostUserProfileImage(Integer identifier){
         return document("api/users/profile-image/post/" + identifier,
-                preprocessRequest(prettyPrint()),   // (2)
+                preprocessRequest(prettyPrint(),modifyUris().scheme("https").host("greenroom-server.site").removePort()),   // (2)
                 preprocessResponse(prettyPrint(), getModifiedHeader()),  // (3)
                 requestParts(partWithName("profile_image_file").description("user 프로필 이미지 파일").attributes(new Attributes.Attribute("content-type","image/*"))),
                 responseFields(resultDescriptorsForPostUserImage), // responseBody 설명

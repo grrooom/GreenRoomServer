@@ -30,6 +30,14 @@ spring:
           auth: true
           starttls:
             enable: true
+  elasticsearch:
+    uris: http://localhost:9200
+    username: elastic
+    password:  123456
+  data:
+    elasticsearch:
+      repositories:
+        enabled: true
 cloud:
   aws:
     region:
@@ -48,6 +56,7 @@ cloud:
   image:
     path:
       user: local/user
+      plant : plant
 temp:
   filePath: src/main/resources/
 logging.level:

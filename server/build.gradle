@@ -88,7 +88,11 @@ dependencies {
 
 	//thumbnail
 	implementation group: 'net.coobird', name: 'thumbnailator', version: '0.4.1'
+
+	//elastic search
+	implementation 'org.springframework.data:spring-data-elasticsearch'
 }
+
 
 
 tasks.named('bootBuildImage') {

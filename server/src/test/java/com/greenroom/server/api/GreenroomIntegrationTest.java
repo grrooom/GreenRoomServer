@@ -219,7 +219,7 @@ public class GreenroomIntegrationTest {
         //문서화
         resultActions.andDo(document("api/greenroom/info/"+1
                 ,
-                preprocessRequest(prettyPrint()),   // (2)
+                preprocessRequest(prettyPrint(),modifyUris().scheme("https").host("greenroom-server.site").removePort()),   // (2)
                 preprocessResponse(prettyPrint(), getModifiedHeader()),  // (3)
                 requestHeaders(headerWithName(HttpHeaders.AUTHORIZATION).description("Bearer : 사용자 access Token")),
                 responseFields(resultDescriptorsForGetGreenroom),
@@ -253,7 +253,7 @@ public class GreenroomIntegrationTest {
         //문서화
         resultActions.andDo(document("api/greenroom/info/"+2
                 ,
-                preprocessRequest(prettyPrint()),   // (2)
+                preprocessRequest(prettyPrint(),modifyUris().scheme("https").host("greenroom-server.site").removePort()),   // (2)
                 preprocessResponse(prettyPrint(), getModifiedHeader()),  // (3)
                 requestHeaders(headerWithName(HttpHeaders.AUTHORIZATION).description("Bearer : 사용자 access Token")),
                 responseFields(resultDescriptorsForGetGreenroom),

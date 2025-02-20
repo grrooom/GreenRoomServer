@@ -18,8 +18,17 @@ spring:
       mode : never
   servlet:
     multipart:
-      max-request-size: 100MB
-      max-file-size: 100MB
+      max-request-size: 20MB
+      max-file-size: 20MB
+  elasticsearch:
+    host: ENC(Lv4MLpsoOwiVF/l7J05HY/JEr921Twg1wqLomNQRzeo=)
+    username: ENC(YnhWogbED6K9UWjN7DTD3w==)
+    password:  ENC(KUA2cnFAL3Z0YWdc2MFW1dUInWo8u+bxE/k5CjBRT+9waIQD9FeIig==)
+    ssl: ENC(P0V9bznHLGzcLLOP/MgTJT8rMnWCPvg6dFq2I1IToUfIy6x9PXYt9sn4/d60k8wS)
+  data:
+    elasticsearch:
+      repositories:
+        enabled: true
   mail:
     host: smtp.gmail.com
     port: 587
@@ -49,12 +58,11 @@ cloud:
   image:
     path:
       user: dev/user
+      plant : plant
 temp:
   filePath: src/main/resources/
 logging.level:
-  #  org.hibernate.SQL: debug
   org.hibernate.type: info
-
 decorator:
   datasource:
     p6spy:

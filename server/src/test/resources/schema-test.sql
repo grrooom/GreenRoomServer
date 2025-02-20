@@ -98,6 +98,7 @@ CREATE TABLE `plant` (
                          `scientific_name` varchar(255),
                          `common_name` varchar(255),
                          `plant_picture_url` varchar(255),
+                         `plant_picture_url_s3` varchar(255),
                          `plant_count` int,
                          `water_cycle` varchar(200),
                          `light_demand` varchar(255),

@@ -98,6 +98,13 @@ public class UserService {
             if(StringUtils.hasValue(g.getPictureUrl())) imageDeleteList.add(g.getPictureUrl());
         });
 
+        if(greenroomIdList.isEmpty()){
+            notificationRepository.deleteByUser(user);
+            //user 객체 삭제
+            userRepository.delete(user);
+            return imageDeleteList;
+        }
+
         //greenroom 연관 adornment 객체 삭제
         adornmentRepository.deleteAllByGreenRoom(greenroomIdList);
 
