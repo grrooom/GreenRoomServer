@@ -17,7 +17,7 @@ import java.io.IOException;
 @RestController
 @RequiredArgsConstructor
 @Slf4j
-@RequestMapping("/admin")
+@RequestMapping("/api/admin")
 public class AdminController {
 
     private final AdminService adminService;
@@ -65,7 +65,7 @@ public class AdminController {
     }
 
     //rdb를 elasticsearch와 동기화
-    @PostMapping("api/admin/plant-document")
+    @PostMapping("/plant-document")
     public void updatePlantDocumentWithPlant(){
         adminService.updatePlantDocumentWithPlant();
     }
