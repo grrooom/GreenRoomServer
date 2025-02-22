@@ -7,6 +7,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @Table(name = "todo")
@@ -18,13 +19,13 @@ public class Todo extends BaseTime {
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long todoId;
 
-    private LocalDateTime firstStartDate;
+    @Column(name = "base_date", columnDefinition = "DATE")
+    private LocalDate baseDate;
 
-    private LocalDateTime lastUpdateDate;
+    @Column(name = "next_todo_date", columnDefinition = "DATE")
+    private LocalDate nextTodoDate;
 
-    private LocalDateTime nextTodoDate;
-
-    private Integer duration;
+    private Integer term;
 
     private Boolean useYn;
 
@@ -37,22 +38,13 @@ public class Todo extends BaseTime {
     private Activity activity;
 
     @Builder
-    public Todo(LocalDateTime firstStartDate,LocalDateTime lastUpdateDate ,Integer duration, Boolean useYn, GreenRoom greenRoom, Activity activity, LocalDateTime nextTodoDate) {
-        this.firstStartDate = firstStartDate;
-        this.lastUpdateDate = lastUpdateDate;
-        this.duration = duration;
+    public Todo(LocalDate baseDate, Integer term,GreenRoom greenRoom, Activity activity, LocalDate nextTodoDate) {
+        this.baseDate = baseDate;
+        this.term = term;
         this.useYn = Boolean.TRUE;
         this.greenRoom = greenRoom;
         this.activity = activity;
         this.nextTodoDate = nextTodoDate;
     }
 
-    public void updateLastUpdateDate(LocalDateTime lastUpdateDate){
-        this.lastUpdateDate = lastUpdateDate;
-    }
-    public void updateNextTodoDate(LocalDateTime nextTodoDate){
-        this.nextTodoDate = nextTodoDate;
-    }
-    public void updateUseYn(Boolean useYn){this.useYn = useYn;}
-    public void updateDuration(Integer duration){this.duration=duration;}
 }

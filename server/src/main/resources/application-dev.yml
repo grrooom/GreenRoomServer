@@ -58,6 +58,7 @@ cloud:
     path:
       user: dev/user
       plant : plant
+      greenroom : dev/greenroom
 temp:
   filePath: src/main/resources/
 logging.level:

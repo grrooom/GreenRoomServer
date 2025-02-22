@@ -94,8 +94,7 @@ Content-Type: application/json
 |===
 | 구분 |Http Status Code | Http Status  | custom error code | 비고
 | 공통 | 500 | INTERNAL_SERVER_ERROR | D000 | 서버 측에서 처리하지 못한 예외가 발생하면 모든 api 요청에 대해 공통적으로 반환됨.
-| 공통 | 400 | BAD_REQUEST | C023 | API 요청에서 요구되는 request body의 조건을 만족하지 못했을 경우 공통적으로 반환됨. (ex. email 형식 불일치, 필수 field 존재x)
-| 공통 | 400 | BAD_REQUEST | C026 | API 요청에서 요구되는 request parameter의 조건을 만족하지 못했을 경우 공통적으로 반환됨. (ex. size 옵션에 숫자가 아닌 다른 값을 전달)
+| 공통 | 400 | BAD_REQUEST | C023 | API 요청에서 요구되는 request의 모든 조건을 만족하지 못했을 경우 공통적으로 반환됨. (ex. email 형식 불일치, request parameter 누락, type 불일치)
 | 공통 | 404 | NOT FOUND | C001 | access token에 포함된 user 정보를 서버에서 찾지 못하는 경우 공통적으로 반환됨.
 | JWT | 401 | UNAUTHORIZED | C004 |  Access Token이 만료됨
 | JWT | 401 | UNAUTHORIZED | C006 |  Access Token을 header에서 찾을 수 없음
@@ -144,17 +143,17 @@ include::{snippets}/jwt/error2/http-response.adoc[]
 [cols="2,2,2,4", options="header"]
 |===
 | id | category | 구분 | name
-| 1 | shape | 형태 | Sunflower
-| 2 | shape | 형태 | Viola_Tricolor
-| 3 | shape | 형태 | Lilium
-| 4 | shape | 형태 | Narcissus
-| 5 | shape | 형태 | Tillandsia_Xerographica
-| 6 | shape | 형태 | Chamaedorea_Elegans
-| 7 | shape | 형태 | Monstera_Deliciosa
-| 8 | shape | 형태 | Portulaca_Grandiflora
-| 9 | shape | 형태 | Salvia_Rosmarinus
-| 10 | shape | 형태 | Vicks_Plant
-| 11 | shape | 형태 | Main_Character
+| 1 | shape | 형태 | Main_Character
+| 2 | shape | 형태 | Sunflower
+| 3 | shape | 형태 | Viola_Tricolor
+| 4 | shape | 형태 | Lilium
+| 5 | shape | 형태 | Narcissus
+| 6 | shape | 형태 | Tillandsia_Xerographica
+| 7 | shape | 형태 | Chamaedorea_Elegans
+| 8 | shape | 형태 | Monstera_Deliciosa
+| 9 | shape | 형태 | Portulaca_Grandiflora
+| 10 | shape | 형태 | Salvia_Rosmarinus
+| 11 | shape | 형태 | Vicks_Plant
 | 12 | shape | 형태 | EcheveriaIce_Green
 | 13 | shape | 형태 | Echinocactus_Grusonii
 | 14 | shape | 형태 | Epiphyllum_Auguliger
@@ -526,7 +525,7 @@ include::{snippets}/api/users/profile-image/post/4/http-response.adoc[]
 ++++
 
 
-== 그린룸 관련
+== 그린룸 등록
 
 === **1. 인기 식물 조회**
 
@@ -538,7 +537,7 @@ include::{snippets}/api/plants/popular/1/http-request.adoc[]
 ==== Request Headers
 include::{snippets}/api/plants/popular/1/request-headers.adoc[]
 
-==== Request Parameter Fields
+==== Request Query Parameter Fields
 include::{snippets}/api/plants/popular/1/query-parameters.adoc[]
 
 ==== 성공 Response
@@ -558,7 +557,7 @@ include::{snippets}/api/plants/search/1/http-request.adoc[]
 ==== Request Headers
 include::{snippets}/api/plants/search/1/request-headers.adoc[]
 
-==== Request Parameter Fields
+==== Request Query Parameter Fields
 include::{snippets}/api/plants/search/1/query-parameters.adoc[]
 
 ==== 성공 Response
@@ -571,7 +570,90 @@ include::{snippets}/api/plants/search/1/response-fields.adoc[]
 include::{snippets}/api/plants/search/2/http-response.adoc[]
 
 
-=== **3 유저 그린룸 조회**
+=== **3 식물 물주기 정보 조회**
+
+식물의 물주기 정보를 조회함.
+
+==== Request
+include::{snippets}/api/plants/watering-info/1/http-request.adoc[]
+
+==== Request Headers
+include::{snippets}/api/plants/watering-info/1/request-headers.adoc[]
+
+==== Request Path Parameter Fields
+include::{snippets}/api/plants/watering-info/1/path-parameters.adoc[]
+
+==== 성공 Response
+include::{snippets}/api/plants/watering-info/1/http-response.adoc[]
+
+==== Response Body Fields
+include::{snippets}/api/plants/watering-info/1/response-fields.adoc[]
+
+==== 실패 Response
+include::{snippets}/api/plants/watering-info/2/http-response.adoc[]
+
+
+
+=== **4 식물 별명 중복 확인**
+
+그린룸 등록시 식물의 별명 중복 여부를 확인함.
+
+==== Request
+include::{snippets}/api/greenroom/nickname/duplication/1/http-request.adoc[]
+
+==== Request Headers
+include::{snippets}/api/greenroom/nickname/duplication/1/request-headers.adoc[]
+
+==== Request Query Parameter Fields
+include::{snippets}/api/greenroom/nickname/duplication/1/query-parameters.adoc[]
+
+==== 성공 Response
+include::{snippets}/api/greenroom/nickname/duplication/1/http-response.adoc[]
+
+==== Response Body Fields
+include::{snippets}/api/greenroom/nickname/duplication/1/response-fields.adoc[]
+
+
+=== **4 그린룸 등록**
+
+그린룸을 새롭게 등록함
+
+==== Request
+include::{snippets}/api/greenroom/post/1/curl-request.adoc[]
+
+==== Request Headers
+include::{snippets}/api/greenroom/post/1/request-headers.adoc[]
+
+==== Request Parts
+include::{snippets}/api/greenroom/post/1/request-parts.adoc[]
+
+==== Request Parts : **data** - Detail Fields
+include::{snippets}/api/greenroom/post/1/request-part-data-fields.adoc[]
+
+==== 성공 Response
+include::{snippets}/api/greenroom/post/1/http-response.adoc[]
+
+==== Response Body Fields
+include::{snippets}/api/greenroom/post/1/response-fields.adoc[]
+
+
+==== 실패 Response
+실패 1.
+include::{snippets}/api/greenroom/post/2/http-response.adoc[]
+
+실패 2.
+include::{snippets}/api/greenroom/post/3/http-response.adoc[]
+
+실패 3.
+include::{snippets}/api/greenroom/post/4/http-response.adoc[]
+
+실패 4.
+include::{snippets}/api/greenroom/post/5/http-response.adoc[]
+
+
+== 그린룸 메인
+
+=== **1 유저 그린룸 조회**
 
 유저가 등록한 그린룸 정보를 조회함.
 

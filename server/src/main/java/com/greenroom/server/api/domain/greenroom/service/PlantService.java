@@ -5,6 +5,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.greenroom.server.api.domain.greenroom.document.PlantDocument;
 import com.greenroom.server.api.domain.greenroom.dto.PlantResponseDto;
+import com.greenroom.server.api.domain.greenroom.dto.PlantWateringInfoResponseDto;
 import com.greenroom.server.api.domain.greenroom.entity.Plant;
 import com.greenroom.server.api.domain.greenroom.repository.PlantDocumentRepository;
 import com.greenroom.server.api.domain.greenroom.repository.PlantRepository;
@@ -47,6 +48,11 @@ public class PlantService {
     @Value("${cloud.cdn.path.root}")
     private String cdnPath;
 
+
+    public Plant findPlantById(Long plantId){
+        return plantRepository.findById(plantId).orElseThrow(()-> new CustomException(ResponseCodeEnum.PLANT_NOT_FOUND));
+    }
+
     public void insertPlantDataIntoDB() throws JsonProcessingException {
 
         Map<String, ArrayList<String>> plantList = gardeningDataUtil.plantList();
@@ -80,21 +86,16 @@ public class PlantService {
         }
     }
 
-    public List<PlantResponseDto> getPlantListWithKeyword(String keyWord, String size){
+    public List<PlantResponseDto> getPlantListWithKeyword(String keyWord, Integer size){
 
         String stn = keyWord.substring(0,1);
 
-
-        try{Integer.parseInt(size);}
-        catch (NumberFormatException e){throw new CustomException(ResponseCodeEnum.INVALID_REQUEST_PARAM,"올바르지 않은 request param이 전달됨");}
-
-        int limit  = Integer.parseInt(size);
 
         try{
             return plantDocumentRepository.findPlantDocumentByCommonName(keyWord)
                     .stream()
                     .sorted(Comparator.comparingInt(r -> r.getCommonName().indexOf(stn))) // DTO 매핑 전에 정렬
-                    .limit(limit != -1 ? limit : Long.MAX_VALUE) // 필요할 때만 limit 제한 적용
+                    .limit(size != -1 ? size : Long.MAX_VALUE) // 필요할 때만 limit 제한 적용
                     .map(plantDocument -> PlantResponseDto.from(plantDocument, cdnPath)) // 정렬 후 필요한 만큼만 매핑
                     .toList();
         }
@@ -103,27 +104,26 @@ public class PlantService {
         }
     }
 
-    public List<PlantResponseDto> getPopularPlantList(String size){
-
-        try{Integer.parseInt(size);}
-        catch (NumberFormatException e){throw new CustomException(ResponseCodeEnum.INVALID_REQUEST_PARAM,"올바르지 않은 request param이 전달됨");}
-
-        int limit  = Integer.parseInt(size);
+    public List<PlantResponseDto> getPopularPlantList(Integer size){
 
         return plantRepository.findAll()
                 .stream()
                 .sorted((p1,p2)->p2.getPlantCount()-p1.getPlantCount())
-                .limit(limit != -1 ? limit : Long.MAX_VALUE) // 필요할 때만 limit 제한 적용
+                .limit(size != -1 ? size : Long.MAX_VALUE) // 필요할 때만 limit 제한 적용
                 .map(plant -> PlantResponseDto.from(plant, cdnPath)) // 정렬 후 필요한 만큼만 매핑
                 .toList();
-
     }
-
 
 
     public void updatePlantDocumentWithPlant(){
         List<PlantDocument> plantDocumentList =  plantRepository.findAll().stream().map(p-> new PlantDocument(p.getPlantId(),p.getCommonName(),p.getScientificName(),p.getPlantPictureUrlS3())).toList();
         plantDocumentRepository.saveAll(plantDocumentList);
     }
+
+    public PlantWateringInfoResponseDto getWateringInfo(Long plantId){
+        Plant plant =  findPlantById(plantId);
+        return new PlantWateringInfoResponseDto(plantId,plant.getCommonName(),plant.getWaterCycle());
+    }
+
 
 }

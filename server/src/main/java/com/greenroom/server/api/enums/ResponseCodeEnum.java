@@ -36,10 +36,11 @@ public enum ResponseCodeEnum {
     EMAIL_NOT_VERIFIED(HttpStatus.CONFLICT,"C020","인증되지 않은 email로 회원가입을 시도함","회원가입 제한 & email 인증 요구"),
     EMAIL_ADDRESS_UNAVAILABLE(HttpStatus.CONFLICT,"C021","존재하지 않는 email 주소이거나 해당 email 주소의 메일박스 등의 문제로 email을 보낼 수 없음.","email을 보낼 수 있는 유효한 email 필요."),
     ALREADY_VERIFIED_EMAIL(HttpStatus.CONFLICT,"C022","이미 인증된 email로 이메일 인증을 시도함.",""),
-    INVALID_REQUEST_ARGUMENT(HttpStatus.BAD_REQUEST,"C023","요청시 request body로 전달된 argument가 존재하지 않거나 조건을 만족시키지 않음. ","명세된 request 조건에 맞는 요청 다시 전송 필요"),
+    INVALID_REQUEST_ARGUMENT(HttpStatus.BAD_REQUEST,"C023","요청 값이 잘못되었거나 누락되었습니다.","명세된 request 조건에 맞는 요청 다시 전송 필요"),
     INVALID_EMAIL_VERIFICATION_TOKEN(HttpStatus.CONFLICT,"C024","부적절한 이메일 인증 토큰이 전송됨",""),
     FCM_TOKEN_NOT_FOUND(HttpStatus.NOT_FOUND,"C025","등록된 FCM Token 객체를 찾을 수 없음.","fcm token을 먼저 발급받아야 함."),
-    INVALID_REQUEST_PARAM(HttpStatus.BAD_REQUEST,"C026","부적절한 request param이 요청됨",""),
+    PLANT_NOT_FOUND(HttpStatus.NOT_FOUND,"C026","전달받은 식물 id에 해당하는 식물 data를 찾을 수 없음.",""),
+    ITEM_NOT_FOUND(HttpStatus.NOT_FOUND,"C027","전달받은 item id에 해당하는 item id를 찾을 수 없음.",""),
 
     //500~
     UNKNOWN_SERVER_ERROR(HttpStatus.INTERNAL_SERVER_ERROR,"D000","정의되지 않은 알 수 없는 서버 에러가 발생함.","서버에 문의"),
