@@ -74,8 +74,7 @@ import static org.springframework.restdocs.headers.HeaderDocumentation.requestHe
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.documentationConfiguration;
 import static org.springframework.restdocs.operation.preprocess.Preprocessors.*;
 import static org.springframework.restdocs.payload.PayloadDocumentation.*;
-import static org.springframework.restdocs.request.RequestDocumentation.parameterWithName;
-import static org.springframework.restdocs.request.RequestDocumentation.queryParameters;
+import static org.springframework.restdocs.request.RequestDocumentation.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static reactor.core.publisher.Mono.when;
@@ -192,6 +191,19 @@ public class PlantIntegrationTest {
             parameterWithName("size").description("응답에서 반환할 데이터의 최대 개수").optional().attributes(new Attributes.Attribute("default","전체 결과 반환"))
     );
 
+    private final List<ParameterDescriptor> pathParametersForPlantId = List.of(
+            parameterWithName("plantId").description("식물 id")
+    );
+
+    private final List<FieldDescriptor> resultDescriptorsForPlantWateringInfo = List.of(
+            fieldWithPath("status").type(JsonFieldType.STRING).description("응답 상태"),
+            fieldWithPath("code").type(JsonFieldType.STRING).description("상태 코드"),
+            fieldWithPath("data").type(JsonFieldType.OBJECT).optional().description("data"),
+            fieldWithPath("data.plantId").type(JsonFieldType.NUMBER).description("식물 id"),
+            fieldWithPath("data.plantName").type(JsonFieldType.STRING).description("식물 이름"),
+            fieldWithPath("data.wateringInfo").type(JsonFieldType.STRING).description("식물 물주기 정보")
+    );
+
 
     @Test
     void 인기_식물_조회_성공() throws Exception {
@@ -269,7 +281,7 @@ public class PlantIntegrationTest {
 
         String keyword= "몬";
 
-        doThrow(new CustomException(ResponseCodeEnum.FAIL_TO_SEARCH_WITH_ELASTICSEARCH)).when(plantMockitoService).getPlantListWithKeyword(keyword,"-1");
+        doThrow(new CustomException(ResponseCodeEnum.FAIL_TO_SEARCH_WITH_ELASTICSEARCH)).when(plantMockitoService).getPlantListWithKeyword(keyword,-1);
 
 
         //when
@@ -296,4 +308,67 @@ public class PlantIntegrationTest {
                                 .description("식물 이름의 특정 키워드로 식물을 검색함.") // api 설명
                                 .build())));
     }
+
+    @Test
+    void 식물_물주기_정보_조회_성공 () throws Exception {
+        //given
+        String token = getTokenForTest((long) (1000*8));
+
+        //when
+        ResultActions resultActions = mockMvc.perform( // api 실행
+                RestDocumentationRequestBuilders
+                        .get("/api/plants/{plantId}/watering-info",1L)
+                        .header(HttpHeaders.AUTHORIZATION, "Bearer "+token)
+        );
+
+        //then
+        resultActions.andExpect(status().isOk());
+
+        //문서화
+        resultActions.andDo(document("api/plants/watering-info/"+1,
+                preprocessRequest(prettyPrint(),modifyUris().scheme("https").host("greenroom-server.site").removePort()),   // (2)
+                preprocessResponse(prettyPrint(), getModifiedHeader()),  // (3)
+                requestHeaders(headerWithName(HttpHeaders.AUTHORIZATION).description("Bearer : 사용자 access Token")),
+                responseFields(resultDescriptorsForPlantWateringInfo),
+                pathParameters(pathParametersForPlantId),
+                resource(
+                        ResourceSnippetParameters.builder()
+                                .tag("그린룸") // 문서에서 api들이 태그로 분류됨
+                                .summary("식물 물주기 정보 조회 api") // api 이름
+                                .description("식물의 물주기 정보를 조호함.") // api 설명
+                                .build()))
+        );
+
+    }
+
+        @Test
+        void 식물_물주기_정보_조회_실패1 () throws Exception {
+            //given
+            String token = getTokenForTest((long) (1000*8));
+
+            //when
+            ResultActions resultActions = mockMvc.perform( // api 실행
+                    RestDocumentationRequestBuilders
+                            .get("/api/plants/{plantId}/watering-info",1000000L)
+                            .header(HttpHeaders.AUTHORIZATION, "Bearer "+token)
+            );
+
+            //then
+            resultActions.andExpect(status().is(ResponseCodeEnum.PLANT_NOT_FOUND.getStatus().value())).andExpect(jsonPath("code").value(ResponseCodeEnum.PLANT_NOT_FOUND.getCode()));
+
+            //문서화
+            resultActions.andDo(document("api/plants/watering-info/"+2,
+                    preprocessRequest(prettyPrint(),modifyUris().scheme("https").host("greenroom-server.site").removePort()),   // (2)
+                    preprocessResponse(prettyPrint(), getModifiedHeader()),  // (3)
+                    requestHeaders(headerWithName(HttpHeaders.AUTHORIZATION).description("Bearer : 사용자 access Token")),
+                    responseFields(resultDescriptorsForPlantWateringInfo),
+                    pathParameters(pathParametersForPlantId),
+                    resource(
+                            ResourceSnippetParameters.builder()
+                                    .tag("그린룸") // 문서에서 api들이 태그로 분류됨
+                                    .summary("식물 물주기 정보 조회 api") // api 이름
+                                    .description("식물의 물주기 정보를 조호함.") // api 설명
+                                    .build()))
+            );
+        }
 }

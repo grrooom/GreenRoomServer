@@ -23,7 +23,7 @@ public class GreenroomInfoResponseDto {
 
     public record GreenroomBasicInfoDto(Long greenroomId,String plantNickname,String plantName, String imageUrl,String memo){
         public static GreenroomBasicInfoDto from(GreenRoom greenRoom){
-            return new GreenroomBasicInfoDto(greenRoom.getGreenroomId(), greenRoom.getName(), greenRoom.getPlant().getCommonName() ,greenRoom.getPictureUrl(),greenRoom.getMemo());
+            return new GreenroomBasicInfoDto(greenRoom.getGreenroomId(), greenRoom.getName(), greenRoom.getPlant()==null?null:greenRoom.getPlant().getCommonName() , greenRoom.getPictureUrl(),greenRoom.getMemo());
         }
     }
 

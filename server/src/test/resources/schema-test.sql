@@ -68,10 +68,9 @@ CREATE TABLE `todo` (
                         `todo_id` bigint PRIMARY KEY AUTO_INCREMENT,
                         `activity_id` bigint,
                         `greenroom_id` bigint,
-                        `first_start_date` timestamp,
-                        `last_update_date` timestamp,
-                        `next_todo_date` timestamp,
-                        `duration` date,
+                        `base_date` date,
+                        `next_todo_date` date,
+                        `term` int,
                         `use_yn` bit,
                         `create_date` timestamp DEFAULT CURRENT_TIMESTAMP,
                         `update_date` timestamp ON UPDATE CURRENT_TIMESTAMP

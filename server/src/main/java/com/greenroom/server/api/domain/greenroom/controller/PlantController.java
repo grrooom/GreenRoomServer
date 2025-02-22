@@ -5,6 +5,8 @@ import com.greenroom.server.api.domain.greenroom.service.PlantService;
 import com.greenroom.server.api.utils.ApiResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.checkerframework.checker.units.qual.A;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -12,21 +14,30 @@ import java.io.IOException;
 
 @RestController
 @RequiredArgsConstructor
+@Slf4j
+@RequestMapping("api/plants/")
 public class PlantController {
 
     private final PlantService plantService;
 
     //인기 식물 조회
-    @GetMapping("api/plants/popular")
-    public ResponseEntity<ApiResponse> getPlantByKeyword(@RequestParam(value = "size",required = false,defaultValue = "-1") String size) {
+    @GetMapping("popular")
+    public ResponseEntity<ApiResponse> getPlantByKeyword(@RequestParam(value = "size",required = false,defaultValue = "-1") Integer size) {
         return ResponseEntity.ok(ApiResponse.success(plantService.getPopularPlantList(size)));
     }
 
     //키워드로 식물 검색
-    @GetMapping("api/plants/search")
+    @GetMapping("search")
     public ResponseEntity<ApiResponse> getPlantByKeyword(
             @RequestParam(value = "keyword",required = false,defaultValue = " ") String keyWord,
-            @RequestParam(value = "size",required = false,defaultValue = "-1") String size) {
+            @RequestParam(value = "size",required = false,defaultValue = "-1") Integer size) {
         return ResponseEntity.ok(ApiResponse.success(plantService.getPlantListWithKeyword(keyWord,size)));
     }
+
+    //식물 물주기 정보 받아오기
+    @GetMapping("{plant_id}/watering-info")
+    public ResponseEntity<ApiResponse> getWateringInfo(@PathVariable(value = "plant_id")Long plantId){
+        return ResponseEntity.ok(ApiResponse.success(plantService.getWateringInfo(plantId)));
+    }
+
 }

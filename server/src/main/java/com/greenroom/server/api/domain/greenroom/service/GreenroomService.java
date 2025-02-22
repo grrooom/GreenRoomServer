@@ -1,26 +1,44 @@
 package com.greenroom.server.api.domain.greenroom.service;
 
 import com.greenroom.server.api.domain.greenroom.dto.GreenroomInfoResponseDto;
+import com.greenroom.server.api.domain.greenroom.dto.GreenroomRegistrationRequestDto;
 import com.greenroom.server.api.domain.greenroom.entity.GreenRoom;
+import com.greenroom.server.api.domain.greenroom.entity.Item;
+import com.greenroom.server.api.domain.greenroom.entity.Plant;
 import com.greenroom.server.api.domain.greenroom.enums.GreenRoomStatus;
 import com.greenroom.server.api.domain.greenroom.repository.GreenRoomRepository;
 import com.greenroom.server.api.domain.user.entity.User;
+import com.greenroom.server.api.enums.ResponseCodeEnum;
+import com.greenroom.server.api.exception.CustomException;
 import com.greenroom.server.api.security.service.CustomUserDetailService;
+import com.greenroom.server.api.utils.S3ImageUploader;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.time.LocalDate;
+import java.time.format.DateTimeParseException;
 import java.util.List;
 import java.util.Map;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class GreenroomService {
 
-    private final CustomUserDetailService customUserDetailService;
+    //repository
     private final GreenRoomRepository greenRoomRepository;
 
+    //service
+    private final CustomUserDetailService customUserDetailService;
     private final TodoService todoService;
     private final AdornmentService adornmentService;
+    private final S3ImageUploader s3ImageUploader;
+    private final PlantService plantService;
+
+
     public GreenroomInfoResponseDto getGreenroomInfo(String email){
 
         User user = customUserDetailService.findUserByEmail(email); //없으면 NOT_FOUND 예외 발생
@@ -48,6 +66,48 @@ public class GreenroomService {
 
     }
 
+    public Boolean checkDuplication(String email, String nickName){
+        User user = customUserDetailService.findUserByEmail(email);
+
+        List<GreenRoom> greenRoomList =  greenRoomRepository.findGreenRoomByUserAndGreenroomStatus(user,GreenRoomStatus.ENABLED);
+
+        for(GreenRoom greenroom : greenRoomList){
+            if(greenroom.getName().equals(nickName)) return true;
+        }
+        return false;
+    }
+
+    @Transactional
+    public void createGreenroom(String email, GreenroomRegistrationRequestDto greenroomRegistrationRequestDto, MultipartFile imageFile){
+
+        LocalDate wateringBaseTime =null;
+
+        try{
+            wateringBaseTime = LocalDate.parse(greenroomRegistrationRequestDto.getWateringBaseDate());
+        } catch (DateTimeParseException e){
+            throw  new CustomException(ResponseCodeEnum.INVALID_REQUEST_ARGUMENT);
+        }
+
+        // 그린룸 등록
+        User user = customUserDetailService.findUserByEmail(email);  // 없으면 not found
+        Plant plant = greenroomRegistrationRequestDto.getPlantId()==null?null:plantService.findPlantById(greenroomRegistrationRequestDto.getPlantId());  //없으면 not found
+        String imageFileName = imageFile==null ||imageFile.isEmpty()?null:s3ImageUploader.uploadGreenroomImage(imageFile);  //FAIL_TO_UPLOAD_IMAGE , //INVALID_IMAGE_FORMAT
+        GreenRoom greenRoom =  GreenRoom.builder()
+                .name(greenroomRegistrationRequestDto.getNickname())
+                .pictureUrl(imageFileName)
+                .user(user)
+                .plant(plant)
+                .build();
+        greenRoomRepository.save(greenRoom);
+
+        // 아이템 등록
+        adornmentService.createAdornment(greenRoom, greenroomRegistrationRequestDto.getItemId());//없으면 not found
+
+        // 할 일 등록
+        todoService.createWateringTodo(greenroomRegistrationRequestDto.getWateringInterval(), greenRoom,wateringBaseTime);
+
+
+    }
 
 
 }

@@ -45,6 +45,7 @@ public class GreenRoom extends BaseTime {
         this.plant = plant;
     }
 
+
     public void updateMemo(String memo){
         this.memo = memo;
     }
