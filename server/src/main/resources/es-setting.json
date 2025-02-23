@@ -3,6 +3,13 @@
     "max_ngram_diff": 10
   },
   "analysis": {
+    "char_filter": {
+      "remove_whitespace": {
+        "type": "pattern_replace",
+        "pattern": "\\s+",
+        "replacement": ""
+      }
+    },
     "tokenizer": {
       "ngram_tokenizer": {
         "type": "ngram",
@@ -20,6 +27,7 @@
     "analyzer": {
       "custom_analyzer": {
         "type": "custom",
+        "char_filter": ["remove_whitespace"],
         "tokenizer": "ngram_tokenizer",
         "filter": [
           "unique_filter"
