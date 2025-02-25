@@ -1,16 +1,11 @@
 package com.greenroom.server.api.domain.greenroom.controller;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.greenroom.server.api.domain.greenroom.service.PlantService;
-import com.greenroom.server.api.utils.ApiResponse;
-import jakarta.validation.Valid;
+import com.greenroom.server.api.global.response.ApiResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.checkerframework.checker.units.qual.A;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import java.io.IOException;
 
 @RestController
 @RequiredArgsConstructor

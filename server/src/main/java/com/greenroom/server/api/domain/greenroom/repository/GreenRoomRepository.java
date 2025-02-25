@@ -1,6 +1,6 @@
 package com.greenroom.server.api.domain.greenroom.repository;
 
-import com.greenroom.server.api.domain.greenroom.dto.GreenroomImageSimpleDto;
+import com.greenroom.server.api.domain.greenroom.dto.in.GreenroomImageSimpleDto;
 import com.greenroom.server.api.domain.greenroom.entity.GreenRoom;
 import com.greenroom.server.api.domain.greenroom.enums.GreenRoomStatus;
 import com.greenroom.server.api.domain.user.entity.User;
@@ -13,6 +13,7 @@ import org.springframework.stereotype.Repository;
 
 import java.util.Collection;
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface GreenRoomRepository extends JpaRepository<GreenRoom,Long> {
@@ -33,4 +34,5 @@ public interface GreenRoomRepository extends JpaRepository<GreenRoom,Long> {
     @EntityGraph(attributePaths = {"plant"})
     List<GreenRoom> findGreenRoomByUserAndGreenroomStatus(User user, GreenRoomStatus greenRoomStatus);
 
+    Optional<GreenRoom> findByGreenroomIdAndGreenroomStatus(Long greenroomId, GreenRoomStatus greenRoomStatus);
 }

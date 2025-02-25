@@ -52,6 +52,8 @@ public class User extends BaseTime {
     @Enumerated(EnumType.STRING)
     private UserStatus userStatus;
 
+    private Boolean isFirstGreenroomRegistered;
+
     @Builder
     public User(String name,String email,String password,String profileUrl,Grade grade,Role role,Provider provider) {
         this.name = name;
@@ -64,6 +66,7 @@ public class User extends BaseTime {
         this.role = role;
         this.provider = provider;
         this.userStatus = UserStatus.IN_ACTION;
+        this.isFirstGreenroomRegistered = false;
     }
 
     public static User createUser(SignupRequestDto signupRequestDto, Grade grade){
@@ -101,6 +104,18 @@ public class User extends BaseTime {
 
     public void updateCreateDate(LocalDateTime createDate){
         this.createDate = createDate;
+    }
+
+    public void updateIsFirstGreenroomRegistered(Boolean isFirstGreenroomRegistered) {
+        this.isFirstGreenroomRegistered =isFirstGreenroomRegistered;
+    }
+
+    public void addTotalSeed(Integer seeds){
+        this.totalSeed+=seeds;
+    }
+
+    public void updateGrade(Grade grade){
+        this.grade = grade;
     }
 
 }

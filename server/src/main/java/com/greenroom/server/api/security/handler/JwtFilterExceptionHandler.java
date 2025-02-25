@@ -2,9 +2,9 @@ package com.greenroom.server.api.security.handler;
 
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.greenroom.server.api.enums.ResponseCodeEnum;
+import com.greenroom.server.api.global.response.enums.ResponseCodeEnum;
 import com.greenroom.server.api.security.exception.JWTCustomException;
-import com.greenroom.server.api.utils.ApiResponse;
+import com.greenroom.server.api.global.response.ApiResponse;
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.MalformedJwtException;
 import io.jsonwebtoken.UnsupportedJwtException;
@@ -16,12 +16,10 @@ import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
-import java.util.Arrays;
 
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 

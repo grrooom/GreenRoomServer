@@ -1,10 +1,8 @@
-package com.greenroom.server.api.domain.greenroom.dto;
+package com.greenroom.server.api.domain.greenroom.dto.out;
 
 import com.greenroom.server.api.domain.greenroom.entity.Activity;
 import com.greenroom.server.api.domain.greenroom.entity.GreenRoom;
 import com.greenroom.server.api.domain.greenroom.entity.Item;
-import com.greenroom.server.api.domain.greenroom.entity.Todo;
-import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 

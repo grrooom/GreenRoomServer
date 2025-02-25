@@ -2,7 +2,7 @@ package com.greenroom.server.api;
 
 import com.epages.restdocs.apispec.ResourceSnippetParameters;
 import com.greenroom.server.api.config.TestExecutionListener;
-import com.greenroom.server.api.enums.ResponseCodeEnum;
+import com.greenroom.server.api.global.response.enums.ResponseCodeEnum;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import jakarta.transaction.Transactional;

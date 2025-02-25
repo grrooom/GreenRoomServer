@@ -1,4 +1,4 @@
-package com.greenroom.server.api.domain.greenroom.dto;
+package com.greenroom.server.api.domain.greenroom.dto.in;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
