@@ -11,9 +11,12 @@ import java.util.Optional;
 @Repository
 public interface GradeRepository extends JpaRepository<Grade,Long> {
 
-    Optional<Grade> findDistinctFirstByRequiredSeedLessThanEqualOrderByRequiredSeedDesc(int requiredSeed);
-
-    Optional<Grade> findFirstByLevelGreaterThanOrderByLevelAsc(int level);
+    @Query("""
+    select g From Grade g 
+    where g.requiredSeed <= :totalSeeds
+    order by g.level desc limit 1
+    """)
+    Optional<Grade> findGradeByTotalSeeds(@Param("totalSeeds")Integer totalSeeds);
 
     @Query("""
     select g From Grade g 

@@ -3,13 +3,14 @@ package com.greenroom.server.api.domain.user.controller;
 import com.greenroom.server.api.domain.user.dto.UserExitRequestDto;
 import com.greenroom.server.api.domain.user.dto.UserNameUpdateDto;
 import com.greenroom.server.api.domain.user.dto.UserProfileImageResponseDto;
+import com.greenroom.server.api.domain.user.service.CheckInService;
+import com.greenroom.server.api.domain.user.service.GradeService;
 import com.greenroom.server.api.domain.user.service.UserService;
-import com.greenroom.server.api.enums.ResponseCodeEnum;
-import com.greenroom.server.api.utils.ApiResponse;
+import com.greenroom.server.api.global.response.enums.ResponseCodeEnum;
+import com.greenroom.server.api.global.response.ApiResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.checkerframework.checker.units.qual.A;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -24,6 +25,7 @@ import org.springframework.web.multipart.MultipartFile;
 public class UserController {
 
     private final UserService userService;
+    private final CheckInService checkInService;
 
     @DeleteMapping("")
     public ResponseEntity<ApiResponse> deactivateUser (@AuthenticationPrincipal User user, @RequestBody UserExitRequestDto userExitRequestDto){
@@ -62,6 +64,11 @@ public class UserController {
     public ResponseEntity<ApiResponse> uploadProfileImage(@AuthenticationPrincipal User user, @RequestPart MultipartFile profile_image_file){
         UserProfileImageResponseDto imageURl = userService.uploadUserProfileImage(user.getUsername(),profile_image_file);
         return ResponseEntity.status(HttpStatus.CREATED).body(ApiResponse.success(ResponseCodeEnum.CREATED,imageURl));
+    }
+
+    @PostMapping("/check-in")
+    public ResponseEntity<ApiResponse> checkIn(@AuthenticationPrincipal User user){
+        return ResponseEntity.ok(ApiResponse.success(ResponseCodeEnum.SUCCESS,checkInService.doCheckIn(user.getUsername())));
     }
 
 }

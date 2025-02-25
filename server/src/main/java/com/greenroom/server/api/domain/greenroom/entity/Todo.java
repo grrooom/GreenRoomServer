@@ -8,7 +8,6 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 
 @Table(name = "todo")
 @Entity
@@ -45,6 +44,10 @@ public class Todo extends BaseTime {
         this.greenRoom = greenRoom;
         this.activity = activity;
         this.nextTodoDate = nextTodoDate;
+    }
+
+    public void updateNextTodoDate(LocalDate date){
+        this.nextTodoDate = date;
     }
 
 }

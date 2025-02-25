@@ -10,6 +10,7 @@ CREATE TABLE `users` (
                          `role` varchar(255),
                          `provider` varchar(255),
                          `user_status` varchar(255),
+                         `is_first_greenroom_registered` bit,
                          `delete_date` timestamp,
                          `create_date` timestamp  DEFAULT CURRENT_TIMESTAMP,
                          `update_date` timestamp ON UPDATE CURRENT_TIMESTAMP
@@ -78,7 +79,8 @@ CREATE TABLE `todo` (
 
 CREATE TABLE `todo_log` (
                             `todo_log_id` bigint PRIMARY KEY AUTO_INCREMENT,
-                            `todo_id` bigint,
+                            `greenRoom_id`bigint,
+                            `activity_id` bigint,
                             `create_date` timestamp DEFAULT CURRENT_TIMESTAMP,
                             `update_date` timestamp ON UPDATE CURRENT_TIMESTAMP
 );
@@ -157,6 +159,14 @@ CREATE TABLE `user_exit_reason` (
 );
 
 
+CREATE TABLE `check_in` (
+                         `check_in_id` bigint PRIMARY KEY AUTO_INCREMENT,
+                         `user_id` bigint,
+                         `check_in_date` varchar(255),
+                         `create_date` timestamp  DEFAULT CURRENT_TIMESTAMP,
+                         `update_date` timestamp ON UPDATE CURRENT_TIMESTAMP
+);
+
 
 ALTER TABLE `greenroom` ADD FOREIGN KEY (`user_id`) REFERENCES `users` (`user_id`);
 
@@ -176,10 +186,14 @@ ALTER TABLE `adornment` ADD FOREIGN KEY (`greenroom_id`) REFERENCES `greenroom` 
 
 ALTER TABLE `suggestion` ADD FOREIGN KEY (`user_id`) REFERENCES `users` (`user_id`);
 
-ALTER TABLE `todo_log` ADD FOREIGN KEY (`todo_id`) REFERENCES `todo` (`todo_id`);
-
 ALTER TABLE `item` ADD FOREIGN KEY (`grade_id`) REFERENCES `grade` (`grade_id`);
 
 ALTER TABLE `notification` ADD FOREIGN KEY (`user_id`) REFERENCES `users` (`user_id`);
 
 ALTER TABLE `refresh_token` ADD FOREIGN KEY(`user_id`) REFERENCES `users` (`user_id`);
+
+ALTER TABLE `check_in` ADD FOREIGN KEY (`user_id`) REFERENCES `users` (`user_id`);
+
+ALTER TABLE `todo_log` ADD FOREIGN KEY (`greenroom_id`) REFERENCES `greenroom` (`greenroom_id`);
+
+ALTER TABLE `todo_log` ADD FOREIGN KEY (`activity_id`) REFERENCES `activity` (`activity_id`);

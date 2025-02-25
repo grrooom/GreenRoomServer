@@ -1,15 +1,17 @@
 package com.greenroom.server.api.domain.greenroom.service;
 
-import com.greenroom.server.api.domain.greenroom.dto.GreenroomInfoResponseDto;
-import com.greenroom.server.api.domain.greenroom.dto.GreenroomRegistrationRequestDto;
+import com.greenroom.server.api.domain.greenroom.dto.in.CompleteTodoRequestDto;
+import com.greenroom.server.api.domain.greenroom.dto.out.GreenroomInfoResponseDto;
+import com.greenroom.server.api.domain.greenroom.dto.in.GreenroomRegistrationRequestDto;
+import com.greenroom.server.api.domain.greenroom.dto.out.PointAndLevelUpResponseDto;
 import com.greenroom.server.api.domain.greenroom.entity.GreenRoom;
-import com.greenroom.server.api.domain.greenroom.entity.Item;
 import com.greenroom.server.api.domain.greenroom.entity.Plant;
 import com.greenroom.server.api.domain.greenroom.enums.GreenRoomStatus;
 import com.greenroom.server.api.domain.greenroom.repository.GreenRoomRepository;
 import com.greenroom.server.api.domain.user.entity.User;
-import com.greenroom.server.api.enums.ResponseCodeEnum;
-import com.greenroom.server.api.exception.CustomException;
+import com.greenroom.server.api.domain.user.service.GradeService;
+import com.greenroom.server.api.global.response.enums.ResponseCodeEnum;
+import com.greenroom.server.api.global.exception.CustomException;
 import com.greenroom.server.api.security.service.CustomUserDetailService;
 import com.greenroom.server.api.utils.S3ImageUploader;
 import jakarta.transaction.Transactional;
@@ -37,6 +39,11 @@ public class GreenroomService {
     private final AdornmentService adornmentService;
     private final S3ImageUploader s3ImageUploader;
     private final PlantService plantService;
+    private final GradeService gradeService;
+
+    public GreenRoom findEnabledGreenroomById(Long greenRoomId){
+        return greenRoomRepository.findByGreenroomIdAndGreenroomStatus(greenRoomId,GreenRoomStatus.ENABLED).orElseThrow(()->new CustomException(ResponseCodeEnum.GREENROOM_NOT_FOUND));
+    }
 
 
     public GreenroomInfoResponseDto getGreenroomInfo(String email){
@@ -78,7 +85,7 @@ public class GreenroomService {
     }
 
     @Transactional
-    public void createGreenroom(String email, GreenroomRegistrationRequestDto greenroomRegistrationRequestDto, MultipartFile imageFile){
+    public PointAndLevelUpResponseDto createGreenroom(String email, GreenroomRegistrationRequestDto greenroomRegistrationRequestDto, MultipartFile imageFile){
 
         LocalDate wateringBaseTime =null;
 
@@ -106,9 +113,27 @@ public class GreenroomService {
         // 할 일 등록
         todoService.createWateringTodo(greenroomRegistrationRequestDto.getWateringInterval(), greenRoom,wateringBaseTime);
 
+        //첫 등록일 경우
+        if(!user.getIsFirstGreenroomRegistered()){
+            user.updateIsFirstGreenroomRegistered(true);
+            user.addTotalSeed(2);
+            return PointAndLevelUpResponseDto.ofFirstGreenroomRegistration(user,2,gradeService.updateUserGrade(user));
+        }
 
+        //첫 식물이 아닐 경우
+        else{
+            return PointAndLevelUpResponseDto.of(user,0, PointAndLevelUpResponseDto.LevelUpStatus.of(user));
+        }
     }
 
+
+    public PointAndLevelUpResponseDto completeTodo(Long greenroomId, CompleteTodoRequestDto completeTodoRequestDto){
+
+        GreenRoom greenRoom = findEnabledGreenroomById(greenroomId); //없으면 not found
+
+        return todoService.completeTodo(greenRoom,completeTodoRequestDto.getCompletedTodo());
+
+    }
 
 }
 

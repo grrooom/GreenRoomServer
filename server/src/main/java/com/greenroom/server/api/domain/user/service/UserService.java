@@ -1,8 +1,6 @@
 package com.greenroom.server.api.domain.user.service;
 
 import com.amazonaws.util.StringUtils;
-import com.greenroom.server.api.domain.greenroom.dto.DiaryImageSimpleDto;
-import com.greenroom.server.api.domain.greenroom.dto.GreenroomImageSimpleDto;
 import com.greenroom.server.api.domain.notification.repository.NotificationRepository;
 import com.greenroom.server.api.domain.greenroom.repository.*;
 import com.greenroom.server.api.domain.user.dto.*;

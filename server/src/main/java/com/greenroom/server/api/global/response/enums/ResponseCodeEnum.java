@@ -1,4 +1,4 @@
-package com.greenroom.server.api.enums;
+package com.greenroom.server.api.global.response.enums;
 
 import lombok.Getter;
 import org.springframework.http.HttpStatus;
@@ -41,7 +41,8 @@ public enum ResponseCodeEnum {
     FCM_TOKEN_NOT_FOUND(HttpStatus.NOT_FOUND,"C025","등록된 FCM Token 객체를 찾을 수 없음.","fcm token을 먼저 발급받아야 함."),
     PLANT_NOT_FOUND(HttpStatus.NOT_FOUND,"C026","전달받은 식물 id에 해당하는 식물 data를 찾을 수 없음.",""),
     ITEM_NOT_FOUND(HttpStatus.NOT_FOUND,"C027","전달받은 item id에 해당하는 item id를 찾을 수 없음.",""),
-
+    CHECKED_IN_NOT_ALLOWED(HttpStatus.CONFLICT,"C028","출석 체크가 불가능함.",""),
+    GREENROOM_NOT_FOUND(HttpStatus.NOT_FOUND,"C029","서버에 등록된 그린룸을 찾을 수 없음.",""),
     //500~
     UNKNOWN_SERVER_ERROR(HttpStatus.INTERNAL_SERVER_ERROR,"D000","정의되지 않은 알 수 없는 서버 에러가 발생함.","서버에 문의"),
     FAIL_DATA_PARSING(HttpStatus.INTERNAL_SERVER_ERROR,"D001","알 수 없는 서버 문제로 데이터 parsing에 실패함.",""),

@@ -2,7 +2,6 @@ package com.greenroom.server.api.domain.greenroom.repository;
 
 import com.greenroom.server.api.domain.greenroom.entity.GreenRoom;
 import com.greenroom.server.api.domain.greenroom.entity.Todo;
-import com.greenroom.server.api.domain.user.entity.User;
 import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
@@ -22,5 +21,8 @@ public interface TodoRepository extends JpaRepository<Todo, Long> {
 
     @EntityGraph(attributePaths = {"activity"})
     List<Todo> findAllByGreenRoomAndUseYn(GreenRoom greenRoom, Boolean useYn);
+
+    @Query("select t from Todo t where t.greenRoom.greenroomId = :greenroomId and t.activity.activityId in (:activityIds)")
+    List<Todo> findAllByGreenRoomAndActivity(@Param("greenroomId")Long greenroomId,@Param("activityIds") List<Long> activityIds );
 
 }
