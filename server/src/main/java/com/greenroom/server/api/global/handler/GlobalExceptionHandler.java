@@ -1,8 +1,8 @@
-package com.greenroom.server.api.handler;
+package com.greenroom.server.api.global.handler;
 
-import com.greenroom.server.api.enums.ResponseCodeEnum;
-import com.greenroom.server.api.exception.CustomException;
-import com.greenroom.server.api.utils.ApiResponse;
+import com.greenroom.server.api.global.response.enums.ResponseCodeEnum;
+import com.greenroom.server.api.global.exception.CustomException;
+import com.greenroom.server.api.global.response.ApiResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;

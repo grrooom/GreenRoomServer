@@ -1,8 +1,8 @@
 package com.greenroom.server.api.security.handler;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.greenroom.server.api.enums.ResponseCodeEnum;
-import com.greenroom.server.api.utils.ApiResponse;
+import com.greenroom.server.api.global.response.enums.ResponseCodeEnum;
+import com.greenroom.server.api.global.response.ApiResponse;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;

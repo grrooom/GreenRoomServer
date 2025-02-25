@@ -1,6 +1,6 @@
-package com.greenroom.server.api.utils;
+package com.greenroom.server.api.global.response;
 
-import com.greenroom.server.api.enums.ResponseCodeEnum;
+import com.greenroom.server.api.global.response.enums.ResponseCodeEnum;
 import lombok.*;
 
 @Getter

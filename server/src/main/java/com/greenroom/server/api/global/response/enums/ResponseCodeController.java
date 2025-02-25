@@ -1,4 +1,4 @@
-package com.greenroom.server.api.enums;
+package com.greenroom.server.api.global.response.enums;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;

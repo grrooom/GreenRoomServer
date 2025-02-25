@@ -1,6 +1,6 @@
 package com.greenroom.server.api.domain.greenroom.service;
 
-import com.greenroom.server.api.domain.greenroom.dto.GreenroomInfoResponseDto;
+import com.greenroom.server.api.domain.greenroom.dto.out.GreenroomInfoResponseDto;
 import com.greenroom.server.api.domain.greenroom.entity.Adornment;
 import com.greenroom.server.api.domain.greenroom.entity.GreenRoom;
 import com.greenroom.server.api.domain.greenroom.entity.Item;

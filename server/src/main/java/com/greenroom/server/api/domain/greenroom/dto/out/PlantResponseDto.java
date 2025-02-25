@@ -1,4 +1,4 @@
-package com.greenroom.server.api.domain.greenroom.dto;
+package com.greenroom.server.api.domain.greenroom.dto.out;
 
 import com.greenroom.server.api.domain.greenroom.document.PlantDocument;
 import com.greenroom.server.api.domain.greenroom.entity.Plant;

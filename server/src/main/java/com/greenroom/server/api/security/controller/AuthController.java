@@ -1,10 +1,10 @@
 package com.greenroom.server.api.security.controller;
 
 
-import com.greenroom.server.api.enums.ResponseCodeEnum;
+import com.greenroom.server.api.global.response.enums.ResponseCodeEnum;
 import com.greenroom.server.api.security.dto.*;
 import com.greenroom.server.api.security.service.CustomUserDetailService;
-import com.greenroom.server.api.utils.ApiResponse;
+import com.greenroom.server.api.global.response.ApiResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

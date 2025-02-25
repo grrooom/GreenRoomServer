@@ -9,8 +9,8 @@ import com.greenroom.server.api.domain.user.dto.UserExitRequestDto;
 import com.greenroom.server.api.domain.user.entity.User;
 import com.greenroom.server.api.domain.user.repository.UserRepository;
 import com.greenroom.server.api.domain.user.service.UserService;
-import com.greenroom.server.api.enums.ResponseCodeEnum;
-import com.greenroom.server.api.exception.CustomException;
+import com.greenroom.server.api.global.response.enums.ResponseCodeEnum;
+import com.greenroom.server.api.global.exception.CustomException;
 import com.greenroom.server.api.security.dto.SignupRequestDto;
 import com.greenroom.server.api.security.entity.RefreshToken;
 import com.greenroom.server.api.security.repository.RefreshTokenRepository;
@@ -48,11 +48,8 @@ import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
-import org.springframework.web.multipart.MultipartFile;
 
-import java.io.FileDescriptor;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -83,7 +80,6 @@ import static reactor.core.publisher.Mono.when;
 @ActiveProfiles("test")
 @ExtendWith({RestDocumentationExtension.class})
 @TestExecutionListeners(value = TestExecutionListener.class, mergeMode = TestExecutionListeners.MergeMode.MERGE_WITH_DEFAULTS)
-
 public class UserIntegrationTest {
 
     private static final String EMAIL ="testEmail@gmail.com";
@@ -483,7 +479,8 @@ public class UserIntegrationTest {
     public void user_profile_image_삭제_성공() throws Exception {
 
         //given
-        signupForTest();
+        User user = signupForTest();
+        user.updateIsFirstGreenroomRegistered(true);
 
         //when
         ResultActions resultActions = getResultActionsForDeleteUserProfileImage();
@@ -656,5 +653,74 @@ public class UserIntegrationTest {
         //문서화
         resultActions.andDo(getDocumentForPostUserProfileImage(4));
 
+    }
+
+
+    private final List<FieldDescriptor> resultDescriptorsForLevelUp = List.of(
+            fieldWithPath("status").type(JsonFieldType.STRING).description("응답 상태"),
+            fieldWithPath("code").type(JsonFieldType.STRING).description("상태 코드"),
+            fieldWithPath("data").type(JsonFieldType.OBJECT).optional().description("data").attributes(new Attributes.Attribute("constraint","실패 응답시 null")),
+            fieldWithPath("data.earnedPoints").type(JsonFieldType.NUMBER).description("획득한 총 point"),
+            fieldWithPath("data.levelUpStatus").type(JsonFieldType.OBJECT).description("레벨업 정보"),
+            fieldWithPath("data.levelUpStatus.isLevelUp").type(JsonFieldType.BOOLEAN).description("action 수행 후 레벨업 여부"),
+            fieldWithPath("data.levelUpStatus.currentLevel").type(JsonFieldType.NUMBER).description("action 수행 후 사용자 레벨"),
+            fieldWithPath("data.levelUpDetails").type(JsonFieldType.ARRAY).optional().description("레벨업 상세 정보").attributes(new Attributes.Attribute("constraint","레벨업 상세 정보가 필요하지 않은 경우 null")),
+            fieldWithPath("data.levelUpDetails[].source").type(JsonFieldType.STRING).description("레벨업 원인 action"),
+            fieldWithPath("data.levelUpDetails[].points").type(JsonFieldType.NUMBER).description("action 수행으로 획득한 point")
+    );
+
+    private ResultActions getResultActionsForCheckIn() throws Exception {
+
+        String token = getTokenForTest((long) (15*60*1000));
+
+        return mockMvc.perform( // api 실행
+                RestDocumentationRequestBuilders
+                        .post("/api/users/check-in")
+                        .header(HttpHeaders.AUTHORIZATION, "Bearer "+token));
+    }
+
+    private RestDocumentationResultHandler getDocumentForCheckIn(Integer identifier){
+        return document("api/users/check-in/" + identifier,
+                preprocessRequest(prettyPrint(),modifyUris().scheme("https").host("greenroom-server.site").removePort()),   // (2)
+                preprocessResponse(prettyPrint(), getModifiedHeader()),  // (3)
+                responseFields(resultDescriptorsForLevelUp), // responseBody 설명
+                requestHeaders(headerWithName("Authorization").description("Bearer : 사용자 access Token")),
+                resource(
+                        ResourceSnippetParameters.builder()
+                                .tag("User-회원 관련") // 문서에서 api들이 태그로 분류됨
+                                .summary("출석체크 api") // api 이름
+                                .description("하루에 한번 출석체크를 진행함.") // api 설명
+                                .build()));
+    }
+
+    @Test
+    @Transactional
+    public void 출석체크_성공() throws Exception {
+        //given
+        User user =  signupForTest();
+        user.updateIsFirstGreenroomRegistered(true);
+
+        String token = getTokenForTest((long) (15*60*1000));
+        //when
+        ResultActions resultActions = getResultActionsForCheckIn();
+        //then
+        resultActions.andExpect(status().isOk());
+        //문서화
+        resultActions.andDo(getDocumentForCheckIn(1));
+    }
+
+    @Test
+    @Transactional
+    public void 출석체크_실패1() throws Exception {
+        //given
+        signupForTest();
+
+        String token = getTokenForTest((long) (15*60*1000));
+        //when
+        ResultActions resultActions = getResultActionsForCheckIn();
+        //then
+        resultActions.andExpect(status().is(ResponseCodeEnum.CHECKED_IN_NOT_ALLOWED.getStatus().value())).andExpect(jsonPath("code").value(ResponseCodeEnum.CHECKED_IN_NOT_ALLOWED.getCode()));
+        //문서화
+        resultActions.andDo(getDocumentForCheckIn(2));
     }
 }

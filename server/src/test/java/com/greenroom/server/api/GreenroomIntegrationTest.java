@@ -3,7 +3,8 @@ package com.greenroom.server.api;
 import com.epages.restdocs.apispec.ResourceSnippetParameters;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.greenroom.server.api.config.TestExecutionListener;
-import com.greenroom.server.api.domain.greenroom.dto.GreenroomRegistrationRequestDto;
+import com.greenroom.server.api.domain.greenroom.dto.in.CompleteTodoRequestDto;
+import com.greenroom.server.api.domain.greenroom.dto.in.GreenroomRegistrationRequestDto;
 import com.greenroom.server.api.domain.greenroom.entity.Adornment;
 import com.greenroom.server.api.domain.greenroom.entity.GreenRoom;
 import com.greenroom.server.api.domain.greenroom.entity.Plant;
@@ -13,10 +14,9 @@ import com.greenroom.server.api.domain.greenroom.service.GreenroomService;
 import com.greenroom.server.api.domain.user.entity.User;
 import com.greenroom.server.api.domain.user.repository.GradeRepository;
 import com.greenroom.server.api.domain.user.repository.UserRepository;
-import com.greenroom.server.api.enums.ResponseCodeEnum;
-import com.greenroom.server.api.exception.CustomException;
+import com.greenroom.server.api.global.response.enums.ResponseCodeEnum;
+import com.greenroom.server.api.global.exception.CustomException;
 import com.greenroom.server.api.security.dto.SignupRequestDto;
-import com.greenroom.server.api.security.repository.RefreshTokenRepository;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import jakarta.transaction.Transactional;
@@ -56,7 +56,6 @@ import org.springframework.web.context.WebApplicationContext;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -67,6 +66,7 @@ import static org.mockito.Mockito.doThrow;
 import static org.springframework.restdocs.headers.HeaderDocumentation.headerWithName;
 import static org.springframework.restdocs.headers.HeaderDocumentation.requestHeaders;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.documentationConfiguration;
+import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.post;
 import static org.springframework.restdocs.operation.preprocess.Preprocessors.*;
 import static org.springframework.restdocs.payload.PayloadDocumentation.*;
 import static org.springframework.restdocs.request.RequestDocumentation.*;
@@ -173,7 +173,7 @@ public class GreenroomIntegrationTest {
         GreenRoom greenRoom = new GreenRoom("test 그린룸",null,user,plant);
         greenRoomRepository.save(greenRoom);
 
-        Todo todo = Todo.builder().greenRoom(greenRoom).activity(activityRepository.findAll().get(0)).nextTodoDate(LocalDate.now()).build();
+        Todo todo = Todo.builder().greenRoom(greenRoom).activity(activityRepository.findAll().get(0)).nextTodoDate(LocalDate.now()).term(10).build();
         todoRepository.save(todo);
 
         adornmentRepository.save(new Adornment(itemRepository.findAll().get(0),greenRoom));
@@ -239,7 +239,18 @@ public class GreenroomIntegrationTest {
             fieldWithPath("data.customItems.background_window.itemName").type(JsonFieldType.STRING).description("창문 배경 악세서리 item 이름").optional()
     );
 
-
+    private final List<FieldDescriptor> resultDescriptorsForLevelUp = List.of(
+            fieldWithPath("status").type(JsonFieldType.STRING).description("응답 상태"),
+            fieldWithPath("code").type(JsonFieldType.STRING).description("상태 코드"),
+            fieldWithPath("data").type(JsonFieldType.OBJECT).optional().description("data").attributes(new Attributes.Attribute("constraint","실패 응답시 null")),
+            fieldWithPath("data.earnedPoints").type(JsonFieldType.NUMBER).description("action 수행으로 획득한 총 point"),
+            fieldWithPath("data.levelUpStatus").type(JsonFieldType.OBJECT).description("레벨업 정보"),
+            fieldWithPath("data.levelUpStatus.isLevelUp").type(JsonFieldType.BOOLEAN).description("action 수행 후 레벨업 여부"),
+            fieldWithPath("data.levelUpStatus.currentLevel").type(JsonFieldType.NUMBER).description("action 수행 후 사용자 레벨"),
+            fieldWithPath("data.levelUpDetails").type(JsonFieldType.ARRAY).optional().description("레벨업 했을 경우 상세 정보 - 레벨업의 원인이 되는 모든 action들을 나열함.").attributes(new Attributes.Attribute("constraint","레벨업 상세 정보가 필요하지 않은 경우 null")),
+            fieldWithPath("data.levelUpDetails[].source").type(JsonFieldType.STRING).description("레벨업 원인이 되는 개별 action"),
+            fieldWithPath("data.levelUpDetails[].points").type(JsonFieldType.NUMBER).description("개별 action 수행으로 획득한 point")
+    );
 
     private final List<FieldDescriptor> resultDescriptorsForNicknameDuplication = List.of(
             fieldWithPath("status").type(JsonFieldType.STRING).description("응답 상태"),
@@ -250,6 +261,10 @@ public class GreenroomIntegrationTest {
 
     private final List<ParameterDescriptor> queryParametersForNickname = List.of(
             parameterWithName("nickname").description("중복을 확인할 nickname")
+    );
+
+    private final List<ParameterDescriptor> pathParameterForGreenroomId = List.of(
+        parameterWithName("greenroom_id").description("그린룸 id")
     );
 
     List<RequestPartDescriptor> requestPartDescriptorsForGreenroomRegistration = List.of(
@@ -264,6 +279,11 @@ public class GreenroomIntegrationTest {
             fieldWithPath("wateringInterval").type(JsonFieldType.NUMBER).description("물 주는 주기"),
             fieldWithPath("itemId").type(JsonFieldType.NUMBER).description("식물 형태 id")
     );
+
+    List<FieldDescriptor> requestBodyDescriptorsForCompleteTodo = List.of(
+            fieldWithPath("completedTodo").type(JsonFieldType.ARRAY).description("완료 처리할 작업의 id 목록")
+    );
+
 
 
     @Transactional
@@ -368,7 +388,6 @@ public class GreenroomIntegrationTest {
     }
 
 
-
     private ResultActions getResultActionsForGreenroomRegistration(MockMultipartFile image,MockMultipartFile data) throws Exception {
 
         String token = getTokenForTest((long) (10*1000));
@@ -388,7 +407,7 @@ public class GreenroomIntegrationTest {
                 preprocessResponse(prettyPrint(), getModifiedHeader()),  // (3)
                 requestParts(requestPartDescriptorsForGreenroomRegistration),
                 requestPartFields("data",requestPartFieldDescriptorsForGreenroomRegistration),
-                responseFields(resultDescriptors), // responseBody 설명
+                responseFields(resultDescriptorsForLevelUp), // responseBody 설명
                 requestHeaders(headerWithName("Authorization").description("Bearer : 사용자 access Token")),
                 resource(
                         ResourceSnippetParameters.builder()
@@ -420,6 +439,31 @@ public class GreenroomIntegrationTest {
 
     }
 
+
+    @Test
+    @Transactional
+    public void 그린룸_생성_성공2() throws Exception {
+        //given
+
+        //test용 data 생성
+        User user = signupForTest();
+        user.updateIsFirstGreenroomRegistered(true);
+        GreenroomRegistrationRequestDto greenroomRegistrationRequestDto = new GreenroomRegistrationRequestDto(1L,"초롱이","2025-02-22",10,1L);
+        MockMultipartFile image = getTestMultiPartFile();
+        MockMultipartFile data = new MockMultipartFile("data", "", "application/json", mapper.writeValueAsString(greenroomRegistrationRequestDto).getBytes());
+
+        //when
+        ResultActions resultActions = getResultActionsForGreenroomRegistration(image,data);
+
+        //then
+        resultActions.andExpect(status().isCreated());
+
+        //문서화
+        resultActions.andDo(getDocumentForGreenroomRegistration(2));
+
+    }
+
+
     @Test
     @Transactional
     public void 그린룸_생성_실패1() throws Exception {
@@ -436,7 +480,7 @@ public class GreenroomIntegrationTest {
         resultActions.andExpect(status().is(ResponseCodeEnum.PLANT_NOT_FOUND.getStatus().value())).andExpect(jsonPath("code").value(ResponseCodeEnum.PLANT_NOT_FOUND.getCode()));
 
         //문서화
-        resultActions.andDo(getDocumentForGreenroomRegistration(2));
+        resultActions.andDo(getDocumentForGreenroomRegistration(3));
     }
 
     @Test
@@ -455,7 +499,7 @@ public class GreenroomIntegrationTest {
         resultActions.andExpect(status().is(ResponseCodeEnum.ITEM_NOT_FOUND.getStatus().value())).andExpect(jsonPath("code").value(ResponseCodeEnum.ITEM_NOT_FOUND.getCode()));
 
         //문서화
-        resultActions.andDo(getDocumentForGreenroomRegistration(3));
+        resultActions.andDo(getDocumentForGreenroomRegistration(4));
     }
 
     @Test
@@ -476,14 +520,13 @@ public class GreenroomIntegrationTest {
         resultActions.andExpect(status().is(ResponseCodeEnum.INVALID_IMAGE_FORMAT.getStatus().value())).andExpect(jsonPath("code").value(ResponseCodeEnum.INVALID_IMAGE_FORMAT.getCode()));
 
         //문서화
-        resultActions.andDo(getDocumentForGreenroomRegistration(4));
+        resultActions.andDo(getDocumentForGreenroomRegistration(5));
     }
 
     @Test
     @Transactional
     public void 그린룸_생성_실패4() throws Exception {
         //given
-
         //test 용 data
         signupForTest();
         GreenroomRegistrationRequestDto greenroomRegistrationRequestDto = new GreenroomRegistrationRequestDto(1L,"초롱이","2025-02-22",10,1L);
@@ -498,8 +541,90 @@ public class GreenroomIntegrationTest {
         resultActions.andExpect(status().is(ResponseCodeEnum.FAIL_TO_UPLOAD_IMAGE.getStatus().value())).andExpect(jsonPath("code").value(ResponseCodeEnum.FAIL_TO_UPLOAD_IMAGE.getCode()));
 
         //문서화
-        resultActions.andDo(getDocumentForGreenroomRegistration(5));
+        resultActions.andDo(getDocumentForGreenroomRegistration(6));
     }
+
+
+    @Test
+    @Transactional
+    public void 할일_완료_성공() throws Exception {
+        //given
+        User user = signupForTest();
+        GreenRoom greenRoom = createGreenRoom(user);
+        String token = getTokenForTest((long) (1000*18));
+
+        CompleteTodoRequestDto completeTodoRequestDto = new CompleteTodoRequestDto(List.of(1L));
+
+        //when
+        ResultActions resultActions = mockMvc.perform(
+                RestDocumentationRequestBuilders
+                        .post("/api/greenroom/{greenroom_id}/todo/completion",greenRoom.getGreenroomId())
+                        .header(HttpHeaders.AUTHORIZATION, "Bearer "+token)
+                        .content(mapper.writeValueAsString(completeTodoRequestDto))
+                        .contentType(MediaType.APPLICATION_JSON)
+
+        );
+
+        //then
+        resultActions.andExpect(status().isOk());
+
+        //문서화
+        resultActions.andDo(document("api/greenroom/todo/completion/"+1,
+                preprocessRequest(prettyPrint(),modifyUris().scheme("https").host("greenroom-server.site").removePort()),   // (2)
+                preprocessResponse(prettyPrint(), getModifiedHeader()),  // (3)
+                requestHeaders(headerWithName(HttpHeaders.AUTHORIZATION).description("Bearer : 사용자 access Token")),
+                requestFields(requestBodyDescriptorsForCompleteTodo),
+                responseFields(resultDescriptorsForLevelUp),
+                pathParameters(pathParameterForGreenroomId),
+                resource(
+                        ResourceSnippetParameters.builder()
+                                .tag("그린룸") // 문서에서 api들이 태그로 분류됨
+                                .summary("할 일 완료 처리 api") // api 이름
+                                .description("사용자가 키우는 식물에 대한 할 일 완료 처리 api") // api 설명
+                                .build())));
+
+    }
+
+    @Test
+    @Transactional
+    public void 할일_완료_실패() throws Exception {
+        //given
+        User user = signupForTest();
+        GreenRoom greenRoom = createGreenRoom(user);
+        String token = getTokenForTest((long) (1000*18));
+
+        CompleteTodoRequestDto completeTodoRequestDto = new CompleteTodoRequestDto(List.of(1L));
+
+
+        //when
+        ResultActions resultActions = mockMvc.perform(
+                RestDocumentationRequestBuilders
+                        .post("/api/greenroom/{greenroom_id}/todo/completion",10)
+                        .header(HttpHeaders.AUTHORIZATION, "Bearer "+token)
+                        .content(mapper.writeValueAsString(completeTodoRequestDto))
+                        .contentType(MediaType.APPLICATION_JSON)
+        );
+
+        //then
+        resultActions.andExpect(status().is(ResponseCodeEnum.GREENROOM_NOT_FOUND.getStatus().value())).andExpect(jsonPath("code").value(ResponseCodeEnum.GREENROOM_NOT_FOUND.getCode()));
+
+        //문서화
+        resultActions.andDo(document("/api/greenroom/todo/completion/"+2,
+                preprocessRequest(prettyPrint(),modifyUris().scheme("https").host("greenroom-server.site").removePort()),   // (2)
+                preprocessResponse(prettyPrint(), getModifiedHeader()),  // (3)
+                requestHeaders(headerWithName(HttpHeaders.AUTHORIZATION).description("Bearer : 사용자 access Token")),
+                responseFields(resultDescriptorsForLevelUp),
+                requestFields(requestBodyDescriptorsForCompleteTodo),
+                pathParameters(pathParameterForGreenroomId),
+                resource(
+                        ResourceSnippetParameters.builder()
+                                .tag("그린룸") // 문서에서 api들이 태그로 분류됨
+                                .summary("할 일 완료 처리 api") // api 이름
+                                .description("사용자가 키우는 식물에 대한 할 일 완료 처리 api") // api 설명
+                                .build())));
+    }
+
+
 
 
 }

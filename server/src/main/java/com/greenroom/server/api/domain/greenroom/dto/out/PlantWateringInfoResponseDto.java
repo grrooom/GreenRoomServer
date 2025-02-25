@@ -1,4 +1,4 @@
-package com.greenroom.server.api.domain.greenroom.dto;
+package com.greenroom.server.api.domain.greenroom.dto.out;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

@@ -1,13 +1,15 @@
 package com.greenroom.server.api.security.service;
 
+import com.greenroom.server.api.domain.user.entity.CheckIn;
 import com.greenroom.server.api.domain.notification.repository.NotificationRepository;
+import com.greenroom.server.api.domain.user.repository.CheckInRepository;
 import com.greenroom.server.api.domain.user.repository.GradeRepository;
 import com.greenroom.server.api.domain.user.entity.User;
 import com.greenroom.server.api.domain.user.enums.Role;
 import com.greenroom.server.api.domain.user.enums.UserStatus;
 import com.greenroom.server.api.domain.user.repository.UserRepository;
-import com.greenroom.server.api.enums.ResponseCodeEnum;
-import com.greenroom.server.api.exception.CustomException;
+import com.greenroom.server.api.global.response.enums.ResponseCodeEnum;
+import com.greenroom.server.api.global.exception.CustomException;
 import com.greenroom.server.api.security.dto.SignupRequestDto;
 import com.greenroom.server.api.security.dto.TokenDto;
 import com.greenroom.server.api.security.entity.EmailVerificationLogs;
@@ -54,8 +56,10 @@ public class CustomUserDetailService implements UserDetailsService {
     private final TokenProvider tokenProvider;
     private final MailSender mailSender;
     private final GradeRepository gradeRepository;
+    private final CheckInRepository checkInRepository;
     private final PasswordEncoder passwordEncoder;
     private final EmailVerificationLogsRepository emailVerificationLogsRepository;
+
 
     //spring application이 모두 세팅돼서 시작할 준비를 마쳤을 때, authorityMap의 값이 세팅됨
     private static final Map<Role,List<GrantedAuthority>> authorityMap = new HashMap<>();
@@ -138,6 +142,9 @@ public class CustomUserDetailService implements UserDetailsService {
 
         User user = User.createUser(new SignupRequestDto(email,password,signupRequestDto.getName()),gradeRepository.findByLevel(0).orElse(null));
         userRepository.save(user);
+
+        CheckIn checkIn = CheckIn.createCheckIn(user);
+        checkInRepository.save(checkIn);
 
         //토큰 발급
         TokenDto tokenDto = createToken(user);

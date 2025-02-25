@@ -4,14 +4,14 @@ import co.elastic.clients.elasticsearch._types.ElasticsearchException;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.greenroom.server.api.domain.greenroom.document.PlantDocument;
-import com.greenroom.server.api.domain.greenroom.dto.PlantResponseDto;
-import com.greenroom.server.api.domain.greenroom.dto.PlantWateringInfoResponseDto;
+import com.greenroom.server.api.domain.greenroom.dto.out.PlantResponseDto;
+import com.greenroom.server.api.domain.greenroom.dto.out.PlantWateringInfoResponseDto;
 import com.greenroom.server.api.domain.greenroom.entity.Plant;
 import com.greenroom.server.api.domain.greenroom.repository.PlantDocumentRepository;
 import com.greenroom.server.api.domain.greenroom.repository.PlantRepository;
 import com.greenroom.server.api.domain.greenroom.utils.GardeningDataUtil;
-import com.greenroom.server.api.enums.ResponseCodeEnum;
-import com.greenroom.server.api.exception.CustomException;
+import com.greenroom.server.api.global.response.enums.ResponseCodeEnum;
+import com.greenroom.server.api.global.exception.CustomException;
 import com.greenroom.server.api.utils.S3ImageUploader;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -19,7 +19,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.json.JSONArray;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.Resource;
-import org.springframework.data.elasticsearch.core.SearchHits;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
@@ -29,7 +28,6 @@ import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
 
 
 @RequiredArgsConstructor

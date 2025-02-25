@@ -17,12 +17,18 @@ public class TodoLog extends BaseTime {
     private Long todoLogId;
 
     @ManyToOne
-    @JoinColumn(name = "todo_id")
-    private Todo todo;
+    @JoinColumn(name = "greenroom_id")
+    private GreenRoom greenRoom;
+
+    @ManyToOne
+    @JoinColumn(name = "activity_id")
+    private Activity activity ;
+
 
     @Builder
-    public TodoLog(Todo todo) {
-        this.todo = todo;
+    public TodoLog(GreenRoom greenRoom,Activity activity) {
+        this.greenRoom = greenRoom;
+        this.activity = activity;
     }
 }
 
