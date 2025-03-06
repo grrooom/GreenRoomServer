@@ -20,15 +20,16 @@ public class AdornmentService {
 
     //service
     private final ItemService itemService;
+    private final List<String> itemCatergoryList = List.of("shape","hair_accessory","eyewear","window_stuff","shelf_stuff");
 
     public Map<String,GreenroomInfoResponseDto.ItemSimpleDto> getGreenroomAdornmentInfo(GreenRoom greenRoom){
         List<Adornment> adornmentList =  adornmentRepository.findAllByGreenRoom(greenRoom);
 
-
         Map<String, GreenroomInfoResponseDto.ItemSimpleDto> itemMap = new HashMap<>();
-        Arrays.stream(ItemType.values()).forEach(it->itemMap.put(it.name().toLowerCase(),null));
 
-        adornmentList.forEach(a-> itemMap.put(a.getItem().getItemType().name().toLowerCase(), GreenroomInfoResponseDto.ItemSimpleDto.from(a.getItem())));
+        itemCatergoryList.forEach(it->itemMap.put(it,null));
+
+        adornmentList.forEach(a-> itemMap.put(a.getItem().getItemType().equals(ItemType.SHAPE)?"shape":a.getItem().getItemDetailType().name().toLowerCase(), GreenroomInfoResponseDto.ItemSimpleDto.from(a.getItem())));
 
         return itemMap;
     }

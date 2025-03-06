@@ -9,6 +9,7 @@ import com.greenroom.server.api.global.response.ApiResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.Value;
+import org.checkerframework.checker.units.qual.A;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -41,7 +42,6 @@ public class GreenroomController {
     public ResponseEntity<ApiResponse> createGreenroom(@AuthenticationPrincipal User user, @Valid @RequestPart(value = "data") GreenroomRegistrationRequestDto greenroomRegistrationRequestDto, @RequestPart(value = "imageFile",required = false) MultipartFile imageFile){
         PointAndLevelUpResponseDto pointAndLevelUpResponseDto =  greenroomService.createGreenroom(user.getUsername(), greenroomRegistrationRequestDto,imageFile);
         return ResponseEntity.status(HttpStatus.CREATED).body(ApiResponse.success(ResponseCodeEnum.CREATED,pointAndLevelUpResponseDto));
-    }
 
 
     @PostMapping("/{greenroom_id}/todo/completion")
