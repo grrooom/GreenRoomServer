@@ -744,7 +744,6 @@ include::{snippets}/api/greenroom/todo/completion/1/http-response.adoc[]
 ==== Response Body Fields
 include::{snippets}/api/greenroom/todo/completion/1/response-fields.adoc[]
 
-
 ==== 실패 Response
 include::{snippets}/api/greenroom/todo/completion/2/http-response.adoc[]
 
