@@ -33,12 +33,6 @@ jobs:
         java-version: '17'
         distribution: 'temurin'
         
-    - name: Make data.sql
-      run: |
-        cd ./server/src/test/resources
-        touch ./data-test.sql
-        echo "${{secrets.DATA_TEST_SQL}}" | base64 --decode >  ./data-test.sql
-      
     - name: Make application-secret.yml
       run: |
         cd ./server/src/main/resources # resources 폴더로 이동
