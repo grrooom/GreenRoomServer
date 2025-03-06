@@ -17,6 +17,7 @@ import com.greenroom.server.api.utils.S3ImageUploader;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -29,6 +30,9 @@ import java.util.Map;
 @RequiredArgsConstructor
 @Slf4j
 public class GreenroomService {
+
+    @Value("${cloud.cdn.path.root}")
+    private  String cdnPath;
 
     //repository
     private final GreenRoomRepository greenRoomRepository;
@@ -60,7 +64,7 @@ public class GreenroomService {
 
         GreenRoom greenroom = greenRoomList.get(0);
         //user의 greenroom 기본 정보 조회
-        GreenroomInfoResponseDto.GreenroomBasicInfoDto  greenroomBasicInfo=  GreenroomInfoResponseDto.GreenroomBasicInfoDto.from(greenroom);
+        GreenroomInfoResponseDto.GreenroomBasicInfoDto  greenroomBasicInfo=  GreenroomInfoResponseDto.GreenroomBasicInfoDto.from(greenroom,cdnPath);
 
         //user의 greenroom todo 조회
         GreenroomInfoResponseDto.GreenroomTodoInfoDto greenroomTodoInfo =  todoService.getGreenroomTodoInfo(greenroom);
