@@ -138,60 +138,79 @@ include::{snippets}/jwt/error2/http-response.adoc[]
 
 ==== Item
 
+**item category 목록**
+[cols="4,2,4,2", options="header"]
+|===
+| category | categoryId | subCategory | subCategoryId
+| 형태 | 1 | 기본 | 1
+| 형태 | 1 | 관엽식물| 2
+| 형태 | 1 | 덩굴식물 | 3
+| 형태 | 1 | 다육이,선인장 | 4
+| 형태 | 1 | 허브 | 5
+| 형태 | 1 | 구근식물 | 6
+| 형태 | 1 | 한해살이풀| 7
+| 형태 | 1 | 괴근식물 | 8
+| 형태 | 1 | 착생식물 | 9
+| 악세서리 | 2 | 헤어핀 | 10
+| 악세서리 | 2 | 안경 | 11
+| 배경 | 3 | 창문 소품 | 12
+| 배경 | 3 | 선반 소품 | 13
+|===
+
 **item 목록**
 
-[cols="2,2,2,4", options="header"]
+[cols="2,2,2,2,2,4", options="header"]
 |===
-| id | category | 구분 | name
-| 1 | shape | 형태 | Main_Character
-| 2 | shape | 형태 | Sunflower
-| 3 | shape | 형태 | Viola_Tricolor
-| 4 | shape | 형태 | Lilium
-| 5 | shape | 형태 | Narcissus
-| 6 | shape | 형태 | Tillandsia_Xerographica
-| 7 | shape | 형태 | Chamaedorea_Elegans
-| 8 | shape | 형태 | Monstera_Deliciosa
-| 9 | shape | 형태 | Portulaca_Grandiflora
-| 10 | shape | 형태 | Salvia_Rosmarinus
-| 11 | shape | 형태 | Vicks_Plant
-| 12 | shape | 형태 | EcheveriaIce_Green
-| 13 | shape | 형태 | Echinocactus_Grusonii
-| 14 | shape | 형태 | Epiphyllum_Auguliger
-| 15 | shape | 형태 | Sansevieria
-| 16 | shape | 형태 | Sansevieria_Stuckyi
-| 17 | shape | 형태 | Stephania_Kaweesaki
-| 18 | shape | 형태 | Hoya_Kerrii
-| 19 | shape | 형태 | Ipomoea_Nil
-| 20 | shape | 형태 | Scindapsus_Treubii
-| 21 | eyewear | 안경 | Hip_Sunglasses
-| 22 | eyewear | 안경 | Glasses
-| 23 | eyewear | 안경 | Sunglasses
-| 24 | eyewear | 안경 | Heart_Sunglasses
-| 25 | hair_accessory | 헤어핀 | FriedEgg
-| 26 | hair_accessory | 헤어핀 | Ribbon
-| 27 | hair_accessory | 헤어핀 | Flower_Hairpin
-| 28 | hair_accessory | 헤어핀 | Beret
-| 29 | hair_accessory | 헤어핀 | Big_Ribbon
-| 30 | hair_accessory | 헤어핀 | Straw_Hat
-| 31 | hair_accessory | 헤어핀 | Birthday_Hat
-| 32 | hair_accessory | 헤어핀 | Star_Hairpin
-| 33 | background_window | 창문 소품(왼쪽) | Fruit_Potted_Plant
-| 34 | background_window | 창문 소품(왼쪽) | Frame
-| 35 | background_window | 창문 소품(왼쪽) | Fleshy_Plant_Pot
-| 36 | background_window | 창문 소품(왼쪽) | Watering_Can
-| 37 | background_window | 창문 소품(왼쪽) | Trowel
-| 38 | background_window | 창문 소품(왼쪽) | Stuckyi_Pot
-| 39 | background_window | 창문 소품(왼쪽) | Tea_Pot
-| 40 | background_shelf | 선반 소품(오른쪽) | Flowering_Plant_Vase
-| 41 | background_shelf | 선반 소품(오른쪽) | FourLeaf_Flower_Vase
-| 42 | background_shelf | 선반 소품(오른쪽) | Fishbowl
-| 43 | background_shelf | 선반 소품(오른쪽) | Lamp
-| 44 | background_shelf | 선반 소품(오른쪽) | Aquatic_Plant_Pot
-| 45 | background_shelf | 선반 소품(오른쪽) | Round_Flower_Vase
-| 46 | background_shelf | 선반 소품(오른쪽) | Pile_Of_Books
-| 47 | background_shelf | 선반 소품(오른쪽) | Pencil_Holder
-| 48 | background_shelf | 선반 소품(오른쪽) | Teacup
-| 49 | background_shelf | 선반 소품(오른쪽) | Lily_Of_The_Valley_Vase
+| item id | category | categoryId | subcategory | subcategoryId | name
+| 1 | 형태 | 1 | 기본 | 1 | Main_Character
+| 2 | 형태 | 1 | 한해살이풀 | 7 | Sunflower
+| 3 | 형태 | 1 | 한해살이풀 | 7 | Viola_Tricolor
+| 4 | 형태 | 1 | 구근식물 | 6 | Lilium
+| 5 | 형태 | 1 | 구근식물 | 6 | Narcissus
+| 6 | 형태 | 1 | 착생식물 | 9 | Tillandsia_Xerographica
+| 7 | 형태 | 1 | 관엽식물 | 2 | Chamaedorea_Elegans
+| 8 | 형태 | 1 | 관엽식물 | 2 | Monstera_Deliciosa
+| 9 | 형태 | 1 | 관엽식물 | 2 | Portulaca_Grandiflora
+| 10 | 형태 | 1 | 허브 | 5 | Salvia_Rosmarinus
+| 11 | 형태 | 1 | 허브 | 5 | Vicks_Plant
+| 12 | 형태 | 1 | 다육이,선인장 | 4 | EcheveriaIce_Green
+| 13 | 형태 | 1 | 다육이,선인장 | 4 | Echinocactus_Grusonii
+| 14 | 형태 | 1 | 다육이,선인장 | 4 | Epiphyllum_Auguliger
+| 15 | 형태 | 1 | 다육이,선인장 | 4 | Sansevieria
+| 16 | 형태 | 1 | 다육이,선인장 | 4 | Sansevieria_Stuckyi
+| 17 | 형태 | 1 | 괴근식물 | 8 | Stephania_Kaweesaki
+| 18 | 형태 | 1 | 덩굴식물 | 3 | Hoya_Kerrii
+| 19 | 형태 | 1 | 덩굴식물 | 3 | Ipomoea_Nil
+| 20 | 형태 | 1 | 덩굴식물 | 3 | Scindapsus_Treubii
+| 21 | 악세서리 | 2 | 안경 | 11 | Hip_Sunglasses
+| 22 | 악세서리 | 2 | 안경 | 11 | Glasses
+| 23 | 악세서리 | 2 | 안경 | 11 | Sunglasses
+| 24 | 악세서리 | 2 | 안경 | 11 | Heart_Sunglasses
+| 25 | 악세서리 | 2 | 헤어핀 | 10 | FriedEgg
+| 26 | 악세서리 | 2 | 헤어핀 | 10 | Ribbon
+| 27 | 악세서리 | 2 | 헤어핀 | 10 | Flower_Hairpin
+| 28 | 악세서리 | 2 | 헤어핀 | 10 | Beret
+| 29 | 악세서리 | 2 | 헤어핀 | 10 | Big_Ribbon
+| 30 | 악세서리 | 2 | 헤어핀 | 10 | Straw_Hat
+| 31 | 악세서리 | 2 | 헤어핀 | 10 | Birthday_Hat
+| 32 | 악세서리 | 2 | 헤어핀 | 10 | Star_Hairpin
+| 33 | 배경 | 3 | 창문 소품 | 12 | Fruit_Potted_Plant
+| 34 | 배경 | 3 | 창문 소품 | 12 | Frame
+| 35 | 배경 | 3 | 창문 소품 | 12 | Fleshy_Plant_Pot
+| 36 | 배경 | 3 | 창문 소품 | 12 | Watering_Can
+| 37 | 배경 | 3 | 창문 소품 | 12 | Trowel
+| 38 | 배경 | 3 | 창문 소품 | 12 | Stuckyi_Pot
+| 39 | 배경 | 3 | 창문 소품 | 12 | Tea_Pot
+| 40 | 배경 | 3 | 선반 소품 | 13 | Flowering_Plant_Vase
+| 41 | 배경 | 3 | 선반 소품 | 13 | FourLeaf_Flower_Vase
+| 42 | 배경 | 3 | 선반 소품 | 13 | Fishbowl
+| 43 | 배경 | 3 | 선반 소품 | 13 | Lamp
+| 44 | 배경 | 3 | 선반 소품 | 13 | Aquatic_Plant_Pot
+| 45 | 배경 | 3 | 선반 소품 | 13 | Round_Flower_Vase
+| 46 | 배경 | 3 | 선반 소품 | 13 | Pile_Of_Books
+| 47 | 배경 | 3 | 선반 소품 | 13 | Pencil_Holder
+| 48 | 배경 | 3 | 선반 소품 | 13 | Teacup
+| 49 | 배경 | 3 | 선반 소품 | 13 | Lily_Of_The_Valley_Vase
 |===
 
 ++++
@@ -689,11 +708,11 @@ include::{snippets}/api/greenroom/info/1/http-request.adoc[]
 ==== Request Headers
 include::{snippets}/api/greenroom/info/1/request-headers.adoc[]
 
-==== 성공 Response 1.  등록된 식물이 없는 경우
+==== 성공 Response 1.  등록된 그린룸이 없는 경우
 
 include::{snippets}/api/greenroom/info/2/http-response.adoc[]
 
-==== 성공 Response 2. 등록된 식물이 있는 경우
+==== 성공 Response 2. 등록된 그린룸이 있는 경우
 
 include::{snippets}/api/greenroom/info/1/http-response.adoc[]
 
@@ -725,10 +744,29 @@ include::{snippets}/api/greenroom/todo/completion/1/http-response.adoc[]
 ==== Response Body Fields
 include::{snippets}/api/greenroom/todo/completion/1/response-fields.adoc[]
 
-
 ==== 실패 Response
 include::{snippets}/api/greenroom/todo/completion/2/http-response.adoc[]
 
+=== **3. 꾸미기 아이템 조회**
+
+item 목록을 조회함.
+
+==== Request
+include::{snippets}/api/items/1/http-request.adoc[]
+
+==== Request Headers
+include::{snippets}/api/items/1/request-headers.adoc[]
+
+==== Request Query Parameter Fields
+
+include::{snippets}/api/items/1/query-parameters.adoc[]
+
+==== 성공 Response
+
+include::{snippets}/api/items/1/http-response.adoc[]
+
+==== Response Body Fields
+include::{snippets}/api/items/1/response-fields.adoc[]
 
 
 

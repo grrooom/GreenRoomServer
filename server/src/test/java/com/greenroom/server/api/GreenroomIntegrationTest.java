@@ -222,21 +222,21 @@ public class GreenroomIntegrationTest {
             fieldWithPath("data.todo.todoList[].description").type(JsonFieldType.STRING).description("한국어 설명").optional(),
             fieldWithPath("data.todo.numberOfTodo").type(JsonFieldType.NUMBER).description("할 일 총 개수"),
             fieldWithPath("data.customItems").type(JsonFieldType.OBJECT).description("사용자가 등록한 그린룸 custom item"),
-            fieldWithPath("data.customItems.hair_accessory").type(JsonFieldType.OBJECT).description("헤어핀 악세서리").attributes(new Attributes.Attribute("constraint","등록된 item이 없으면 null")).optional(),
-            fieldWithPath("data.customItems.hair_accessory.itemId").type(JsonFieldType.NUMBER).description("헤어핀 악세서리 item id").optional(),
-            fieldWithPath("data.customItems.hair_accessory.itemName").type(JsonFieldType.STRING).description("헤어핀 악세서리 item 이름").optional(),
             fieldWithPath("data.customItems.shape").type(JsonFieldType.OBJECT).description("식물 형태").attributes(new Attributes.Attribute("constraint","등록된 item이 없으면 null")).optional(),
             fieldWithPath("data.customItems.shape.itemId").type(JsonFieldType.NUMBER).description("식물 형태 item id").optional(),
             fieldWithPath("data.customItems.shape.itemName").type(JsonFieldType.STRING).description("식물 형태 item 이름").optional(),
+            fieldWithPath("data.customItems.hair_accessory").type(JsonFieldType.OBJECT).description("헤어핀 악세서리").attributes(new Attributes.Attribute("constraint","등록된 item이 없으면 null")).optional(),
+            fieldWithPath("data.customItems.hair_accessory.itemId").type(JsonFieldType.NUMBER).description("헤어핀 악세서리 item id").optional(),
+            fieldWithPath("data.customItems.hair_accessory.itemName").type(JsonFieldType.STRING).description("헤어핀 악세서리 item 이름").optional(),
             fieldWithPath("data.customItems.eyewear").type(JsonFieldType.OBJECT).description("안경 악세서리").attributes(new Attributes.Attribute("constraint","등록된 item이 없으면 null")).optional(),
             fieldWithPath("data.customItems.eyewear.itemId").type(JsonFieldType.NUMBER).description("안경 악세서리 item id").optional(),
             fieldWithPath("data.customItems.eyewear.itemName").type(JsonFieldType.STRING).description("안경 악세서리 item 이름").optional(),
-            fieldWithPath("data.customItems.background_shelf").type(JsonFieldType.OBJECT).description("선반 배경 악세서리").attributes(new Attributes.Attribute("constraint","등록된 item이 없으면 null")).optional(),
-            fieldWithPath("data.customItems.background_shelf.itemId").type(JsonFieldType.NUMBER).description("선반 배경 악세서리 item id").optional(),
-            fieldWithPath("data.customItems.background_shelf.itemName").type(JsonFieldType.STRING).description("선반 배경 악세서리 item 이름").optional(),
-            fieldWithPath("data.customItems.background_window").type(JsonFieldType.OBJECT).description("창문 배경 악세서리").attributes(new Attributes.Attribute("constraint","등록된 item이 없으면 null")).optional(),
-            fieldWithPath("data.customItems.background_window.itemId").type(JsonFieldType.NUMBER).description("창문 배경 악세서리 item id").optional(),
-            fieldWithPath("data.customItems.background_window.itemName").type(JsonFieldType.STRING).description("창문 배경 악세서리 item 이름").optional()
+            fieldWithPath("data.customItems.shelf_stuff").type(JsonFieldType.OBJECT).description("선반 소품").attributes(new Attributes.Attribute("constraint","등록된 item이 없으면 null")).optional(),
+            fieldWithPath("data.customItems.shelf_stuff.itemId").type(JsonFieldType.NUMBER).description("선반 소품 item id").optional(),
+            fieldWithPath("data.customItems.shelf_stuff.itemName").type(JsonFieldType.STRING).description("선반 소품 item 이름").optional(),
+            fieldWithPath("data.customItems.window_stuff").type(JsonFieldType.OBJECT).description("창문 소품").attributes(new Attributes.Attribute("constraint","등록된 item이 없으면 null")).optional(),
+            fieldWithPath("data.customItems.window_stuff.itemId").type(JsonFieldType.NUMBER).description("창문 소품 item id").optional(),
+            fieldWithPath("data.customItems.window_stuff.itemName").type(JsonFieldType.STRING).description("창문 소품 item 이름").optional()
     );
 
     private final List<FieldDescriptor> resultDescriptorsForLevelUp = List.of(

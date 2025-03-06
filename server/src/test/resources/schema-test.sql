@@ -58,6 +58,7 @@ CREATE TABLE `greenroom` (
 CREATE TABLE `item` (
                         `item_id` bigint PRIMARY KEY AUTO_INCREMENT,
                         `item_type` varchar(255),
+                        `item_detail_type` varchar(255),
                         `grade_id` bigint,
                         `item_name` varchar(255),
                         `image_url` varchar(255),

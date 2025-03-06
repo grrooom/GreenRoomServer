@@ -8,7 +8,7 @@ import com.greenroom.server.api.global.response.enums.ResponseCodeEnum;
 import com.greenroom.server.api.global.response.ApiResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import lombok.Value;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -41,6 +41,7 @@ public class GreenroomController {
     public ResponseEntity<ApiResponse> createGreenroom(@AuthenticationPrincipal User user, @Valid @RequestPart(value = "data") GreenroomRegistrationRequestDto greenroomRegistrationRequestDto, @RequestPart(value = "imageFile",required = false) MultipartFile imageFile){
         PointAndLevelUpResponseDto pointAndLevelUpResponseDto =  greenroomService.createGreenroom(user.getUsername(), greenroomRegistrationRequestDto,imageFile);
         return ResponseEntity.status(HttpStatus.CREATED).body(ApiResponse.success(ResponseCodeEnum.CREATED,pointAndLevelUpResponseDto));
+
     }
 
 
@@ -48,7 +49,4 @@ public class GreenroomController {
     public ResponseEntity<ApiResponse> completeTodo(@PathVariable(value = "greenroom_id")Long greenroomId, @RequestBody @Valid CompleteTodoRequestDto completeTodoRequestDto){
         return ResponseEntity.ok(ApiResponse.success(ResponseCodeEnum.SUCCESS,greenroomService.completeTodo(greenroomId,completeTodoRequestDto)));
     }
-
-
-
 }
