@@ -40,9 +40,6 @@ out/
 ### secret ###
 application-secret.yml
 
-### db ###
-data-test.sql
-
 ### api ###
 openapi3.yaml
 **/resources/static/docs/index.html

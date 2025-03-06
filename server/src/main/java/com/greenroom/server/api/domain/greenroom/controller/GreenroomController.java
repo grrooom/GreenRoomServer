@@ -9,6 +9,7 @@ import com.greenroom.server.api.global.response.ApiResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.Value;
+import org.checkerframework.checker.units.qual.A;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -48,7 +49,6 @@ public class GreenroomController {
     public ResponseEntity<ApiResponse> completeTodo(@PathVariable(value = "greenroom_id")Long greenroomId, @RequestBody @Valid CompleteTodoRequestDto completeTodoRequestDto){
         return ResponseEntity.ok(ApiResponse.success(ResponseCodeEnum.SUCCESS,greenroomService.completeTodo(greenroomId,completeTodoRequestDto)));
     }
-
 
 
 }
