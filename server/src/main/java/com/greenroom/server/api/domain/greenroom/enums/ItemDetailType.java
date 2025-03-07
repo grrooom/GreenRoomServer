@@ -21,8 +21,8 @@ public enum ItemDetailType {
     EYEWEAR("안경",11),
 
     // 배경 소품
-    WINDOW_STUFF("창문 소품",12),
-    SHELF_STUFF("선반 소품",13);
+    WINDOW("창문 소품",12),
+    SHELF("선반 소품",13);
 
     private final String description;
     private final Integer id;

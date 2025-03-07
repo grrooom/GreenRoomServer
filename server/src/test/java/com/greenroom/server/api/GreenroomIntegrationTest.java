@@ -4,6 +4,7 @@ import com.epages.restdocs.apispec.ResourceSnippetParameters;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.greenroom.server.api.config.TestExecutionListener;
 import com.greenroom.server.api.domain.greenroom.dto.in.CompleteTodoRequestDto;
+import com.greenroom.server.api.domain.greenroom.dto.in.GreenroomDecorationDTO;
 import com.greenroom.server.api.domain.greenroom.dto.in.GreenroomRegistrationRequestDto;
 import com.greenroom.server.api.domain.greenroom.entity.Adornment;
 import com.greenroom.server.api.domain.greenroom.entity.GreenRoom;
@@ -176,7 +177,7 @@ public class GreenroomIntegrationTest {
         Todo todo = Todo.builder().greenRoom(greenRoom).activity(activityRepository.findAll().get(0)).nextTodoDate(LocalDate.now()).term(10).build();
         todoRepository.save(todo);
 
-        adornmentRepository.save(new Adornment(itemRepository.findAll().get(0),greenRoom));
+        adornmentRepository.save(Adornment.createAdornment(itemRepository.findAll().get(0),greenRoom));
 
 
         return greenRoom;
@@ -222,21 +223,21 @@ public class GreenroomIntegrationTest {
             fieldWithPath("data.todo.todoList[].description").type(JsonFieldType.STRING).description("한국어 설명").optional(),
             fieldWithPath("data.todo.numberOfTodo").type(JsonFieldType.NUMBER).description("할 일 총 개수"),
             fieldWithPath("data.customItems").type(JsonFieldType.OBJECT).description("사용자가 등록한 그린룸 custom item"),
-            fieldWithPath("data.customItems.shape").type(JsonFieldType.OBJECT).description("식물 형태").attributes(new Attributes.Attribute("constraint","등록된 item이 없으면 null")).optional(),
+            fieldWithPath("data.customItems.shape").type(JsonFieldType.OBJECT).description("식물 형태"),
             fieldWithPath("data.customItems.shape.itemId").type(JsonFieldType.NUMBER).description("식물 형태 item id").optional(),
             fieldWithPath("data.customItems.shape.itemName").type(JsonFieldType.STRING).description("식물 형태 item 이름").optional(),
-            fieldWithPath("data.customItems.hair_accessory").type(JsonFieldType.OBJECT).description("헤어핀 악세서리").attributes(new Attributes.Attribute("constraint","등록된 item이 없으면 null")).optional(),
-            fieldWithPath("data.customItems.hair_accessory.itemId").type(JsonFieldType.NUMBER).description("헤어핀 악세서리 item id").optional(),
-            fieldWithPath("data.customItems.hair_accessory.itemName").type(JsonFieldType.STRING).description("헤어핀 악세서리 item 이름").optional(),
+            fieldWithPath("data.customItems.hairAccessory").type(JsonFieldType.OBJECT).description("헤어핀 악세서리").attributes(new Attributes.Attribute("constraint","등록된 item이 없으면 null")).optional(),
+            fieldWithPath("data.customItems.hairAccessory.itemId").type(JsonFieldType.NUMBER).description("헤어핀 악세서리 item id").optional(),
+            fieldWithPath("data.customItems.hairAccessory.itemName").type(JsonFieldType.STRING).description("헤어핀 악세서리 item 이름").optional(),
             fieldWithPath("data.customItems.eyewear").type(JsonFieldType.OBJECT).description("안경 악세서리").attributes(new Attributes.Attribute("constraint","등록된 item이 없으면 null")).optional(),
             fieldWithPath("data.customItems.eyewear.itemId").type(JsonFieldType.NUMBER).description("안경 악세서리 item id").optional(),
             fieldWithPath("data.customItems.eyewear.itemName").type(JsonFieldType.STRING).description("안경 악세서리 item 이름").optional(),
-            fieldWithPath("data.customItems.shelf_stuff").type(JsonFieldType.OBJECT).description("선반 소품").attributes(new Attributes.Attribute("constraint","등록된 item이 없으면 null")).optional(),
-            fieldWithPath("data.customItems.shelf_stuff.itemId").type(JsonFieldType.NUMBER).description("선반 소품 item id").optional(),
-            fieldWithPath("data.customItems.shelf_stuff.itemName").type(JsonFieldType.STRING).description("선반 소품 item 이름").optional(),
-            fieldWithPath("data.customItems.window_stuff").type(JsonFieldType.OBJECT).description("창문 소품").attributes(new Attributes.Attribute("constraint","등록된 item이 없으면 null")).optional(),
-            fieldWithPath("data.customItems.window_stuff.itemId").type(JsonFieldType.NUMBER).description("창문 소품 item id").optional(),
-            fieldWithPath("data.customItems.window_stuff.itemName").type(JsonFieldType.STRING).description("창문 소품 item 이름").optional()
+            fieldWithPath("data.customItems.shelf").type(JsonFieldType.OBJECT).description("선반 소품").attributes(new Attributes.Attribute("constraint","등록된 item이 없으면 null")).optional(),
+            fieldWithPath("data.customItems.shelf.itemId").type(JsonFieldType.NUMBER).description("선반 소품 item id").optional(),
+            fieldWithPath("data.customItems.shelf.itemName").type(JsonFieldType.STRING).description("선반 소품 item 이름").optional(),
+            fieldWithPath("data.customItems.window").type(JsonFieldType.OBJECT).description("창문 소품").attributes(new Attributes.Attribute("constraint","등록된 item이 없으면 null")).optional(),
+            fieldWithPath("data.customItems.window.itemId").type(JsonFieldType.NUMBER).description("창문 소품 item id").optional(),
+            fieldWithPath("data.customItems.window.itemName").type(JsonFieldType.STRING).description("창문 소품 item 이름").optional()
     );
 
     private final List<FieldDescriptor> resultDescriptorsForLevelUp = List.of(
@@ -284,6 +285,35 @@ public class GreenroomIntegrationTest {
             fieldWithPath("completedTodo").type(JsonFieldType.ARRAY).description("완료 처리할 작업의 id 목록")
     );
 
+
+    List<FieldDescriptor> requestBodyDescriptorsForAdornment = List.of(
+            fieldWithPath("shape").type(JsonFieldType.NUMBER).description("식물 형태 item id"),
+            fieldWithPath("eyewear").type(JsonFieldType.NUMBER).description("안경 악세서리 item id").optional().attributes(new Attributes.Attribute("constraint","사용하지 않는 경우 null 또는 request body에서 필드 제외")),
+            fieldWithPath("hairAccessory").type(JsonFieldType.NUMBER).description("헤어핀 악세서리 item id").optional().attributes(new Attributes.Attribute("constraint","사용하지 않는 경우 null 또는 request body에서 필드 제외")),
+            fieldWithPath("shelf").type(JsonFieldType.NUMBER).description("선반 소품 item id").optional().attributes(new Attributes.Attribute("constraint","사용하지 않는 경우 null 또는 request body에서 필드 제외")),
+            fieldWithPath("window").type(JsonFieldType.NUMBER).description("창문 소품 item id").optional().attributes(new Attributes.Attribute("constraint","사용하지 않는 경우 null 또는 request body에서 필드 제외"))
+    );
+
+    List<FieldDescriptor> resultDescriptorsForAdornment = List.of(
+            fieldWithPath("status").type(JsonFieldType.STRING).description("응답 상태"),
+            fieldWithPath("code").type(JsonFieldType.STRING).description("상태 코드"),
+            fieldWithPath("data").type(JsonFieldType.OBJECT).optional().description("data").attributes(new Attributes.Attribute("constraint","등록된 식물이 없으면 null")),
+            fieldWithPath("data.shape").type(JsonFieldType.OBJECT).description("식물 형태"),
+            fieldWithPath("data.shape.itemId").type(JsonFieldType.NUMBER).description("식물 형태 item id").optional(),
+            fieldWithPath("data.shape.itemName").type(JsonFieldType.STRING).description("식물 형태 item 이름").optional(),
+            fieldWithPath("data.hairAccessory").type(JsonFieldType.OBJECT).description("헤어핀 악세서리").attributes(new Attributes.Attribute("constraint","등록된 item이 없으면 null")).optional(),
+            fieldWithPath("data.hairAccessory.itemId").type(JsonFieldType.NUMBER).description("헤어핀 악세서리 item id").optional(),
+            fieldWithPath("data.hairAccessory.itemName").type(JsonFieldType.STRING).description("헤어핀 악세서리 item 이름").optional(),
+            fieldWithPath("data.eyewear").type(JsonFieldType.OBJECT).description("안경 악세서리").attributes(new Attributes.Attribute("constraint","등록된 item이 없으면 null")).optional(),
+            fieldWithPath("data.eyewear.itemId").type(JsonFieldType.NUMBER).description("안경 악세서리 item id").optional(),
+            fieldWithPath("data.eyewear.itemName").type(JsonFieldType.STRING).description("안경 악세서리 item 이름").optional(),
+            fieldWithPath("data.shelf").type(JsonFieldType.OBJECT).description("선반 소품").attributes(new Attributes.Attribute("constraint","등록된 item이 없으면 null")).optional(),
+            fieldWithPath("data.shelf.itemId").type(JsonFieldType.NUMBER).description("선반 소품 item id").optional(),
+            fieldWithPath("data.shelf.itemName").type(JsonFieldType.STRING).description("선반 소품 item 이름").optional(),
+            fieldWithPath("data.window").type(JsonFieldType.OBJECT).description("창문 소품").attributes(new Attributes.Attribute("constraint","등록된 item이 없으면 null")).optional(),
+            fieldWithPath("data.window.itemId").type(JsonFieldType.NUMBER).description("창문 소품 item id").optional(),
+            fieldWithPath("data.window.itemName").type(JsonFieldType.STRING).description("창문 소품 item 이름").optional()
+    );
 
 
     @Transactional
@@ -622,6 +652,110 @@ public class GreenroomIntegrationTest {
                                 .summary("할 일 완료 처리 api") // api 이름
                                 .description("사용자가 키우는 식물에 대한 할 일 완료 처리 api") // api 설명
                                 .build())));
+    }
+
+    private ResultActions getResultActionsForAdornment(GreenroomDecorationDTO greenroomDecorationDTO,Long greenroomId) throws Exception {
+
+        String token = getTokenForTest((long) (10*1000));
+        return mockMvc.perform( // api 실행
+                RestDocumentationRequestBuilders
+                        .post("/api/greenroom/{greenroom_id}/items",greenroomId)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(mapper.writeValueAsString(greenroomDecorationDTO))
+                        .header(HttpHeaders.AUTHORIZATION, "Bearer "+token));
+    }
+
+    private RestDocumentationResultHandler getDocumentForAdornment(Integer identifier){
+        return document("api/greenroom/items/"+identifier,
+                preprocessRequest(prettyPrint(),modifyUris().scheme("https").host("greenroom-server.site").removePort()),   // (2)
+                preprocessResponse(prettyPrint(), getModifiedHeader()),  // (3)
+                requestFields(requestBodyDescriptorsForAdornment),
+                responseFields(resultDescriptorsForAdornment), // responseBody 설명
+                requestHeaders(headerWithName("Authorization").description("Bearer : 사용자 access Token")),
+                resource(
+                        ResourceSnippetParameters.builder()
+                                .tag("그린룸") // 문서에서 api들이 태그로 분류됨
+                                .summary("그린룸 꾸미기 api") // api 이름
+                                .description("그린룸 item을 등록함.") // api 설명
+                                .build()));
+    }
+
+
+
+    @Test
+    @Transactional
+    public void 그린룸_꾸미기_성공() throws Exception {
+        //given
+        User user = signupForTest();
+        GreenRoom greenRoom = createGreenRoom(user);
+        GreenroomDecorationDTO greenroomDecorationDTO = new GreenroomDecorationDTO(1L,25L,24L,35L,null);
+
+        //when
+        ResultActions resultActions = getResultActionsForAdornment(greenroomDecorationDTO,greenRoom.getGreenroomId());
+
+        //then
+        resultActions.andExpect(status().isOk());
+
+        //문서화
+        resultActions.andDo(getDocumentForAdornment(1));
+
+    }
+
+    @Test
+    @Transactional
+    public void 그린룸_꾸미기_실패1() throws Exception {
+        //given
+        User user = signupForTest();
+        GreenRoom greenRoom =  createGreenRoom(user);
+        GreenroomDecorationDTO greenroomDecorationDTO = new GreenroomDecorationDTO(1L,25L,24L,100L,null);
+
+        //when
+        ResultActions resultActions = getResultActionsForAdornment(greenroomDecorationDTO,greenRoom.getGreenroomId());
+
+        //then
+        resultActions.andExpect(status().is(ResponseCodeEnum.ITEM_NOT_FOUND.getStatus().value())).andExpect(jsonPath("code").value(ResponseCodeEnum.ITEM_NOT_FOUND.getCode()));
+
+        //문서화
+        resultActions.andDo(getDocumentForAdornment(2));
+
+    }
+
+
+    @Test
+    @Transactional
+    public void 그린룸_꾸미기_실패2() throws Exception {
+        //given
+        User user = signupForTest();
+        GreenroomDecorationDTO greenroomDecorationDTO = new GreenroomDecorationDTO(1L,23L,24L,35L,null);
+
+        //when
+        ResultActions resultActions = getResultActionsForAdornment(greenroomDecorationDTO,100L);
+
+        //then
+        resultActions.andExpect(status().is(ResponseCodeEnum.GREENROOM_NOT_FOUND.getStatus().value())).andExpect(jsonPath("code").value(ResponseCodeEnum.GREENROOM_NOT_FOUND.getCode()));
+
+        //문서화
+        resultActions.andDo(getDocumentForAdornment(3));
+
+    }
+
+    @Test
+    @Transactional
+    public void 그린룸_꾸미기_실패3() throws Exception {
+        //given
+        User user = signupForTest();
+        GreenRoom greenRoom =  createGreenRoom(user);
+        GreenroomDecorationDTO greenroomDecorationDTO = new GreenroomDecorationDTO(1L,23L,24L,35L,null);
+
+        //when
+        ResultActions resultActions = getResultActionsForAdornment(greenroomDecorationDTO,greenRoom.getGreenroomId());
+
+        //then
+        resultActions.andExpect(status().is(ResponseCodeEnum.INVALID_REQUEST_ARGUMENT.getStatus().value())).andExpect(jsonPath("code").value(ResponseCodeEnum.INVALID_REQUEST_ARGUMENT.getCode()));
+
+        //문서화
+        resultActions.andDo(getDocumentForAdornment(4));
+
     }
 
 

@@ -26,9 +26,13 @@ public class Adornment extends BaseTime {
     private GreenRoom greenRoom;
 
     @Builder
-    public Adornment (Item item, GreenRoom greenRoom){
+    private Adornment (Item item, GreenRoom greenRoom){
         this.item = item;
         this.greenRoom = greenRoom;
+    }
+
+    public static Adornment createAdornment(Item item, GreenRoom greenRoom){
+        return Adornment.builder().item(item).greenRoom(greenRoom).build();
     }
 
     public void updateItem(Item item){

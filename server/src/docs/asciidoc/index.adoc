@@ -159,58 +159,58 @@ include::{snippets}/jwt/error2/http-response.adoc[]
 
 **item 목록**
 
-[cols="2,2,2,2,2,4", options="header"]
+[cols="2,4,2,2,2,2", options="header"]
 |===
-| item id | category | categoryId | subcategory | subcategoryId | name
-| 1 | 형태 | 1 | 기본 | 1 | Main_Character
-| 2 | 형태 | 1 | 한해살이풀 | 7 | Sunflower
-| 3 | 형태 | 1 | 한해살이풀 | 7 | Viola_Tricolor
-| 4 | 형태 | 1 | 구근식물 | 6 | Lilium
-| 5 | 형태 | 1 | 구근식물 | 6 | Narcissus
-| 6 | 형태 | 1 | 착생식물 | 9 | Tillandsia_Xerographica
-| 7 | 형태 | 1 | 관엽식물 | 2 | Chamaedorea_Elegans
-| 8 | 형태 | 1 | 관엽식물 | 2 | Monstera_Deliciosa
-| 9 | 형태 | 1 | 관엽식물 | 2 | Portulaca_Grandiflora
-| 10 | 형태 | 1 | 허브 | 5 | Salvia_Rosmarinus
-| 11 | 형태 | 1 | 허브 | 5 | Vicks_Plant
-| 12 | 형태 | 1 | 다육이,선인장 | 4 | EcheveriaIce_Green
-| 13 | 형태 | 1 | 다육이,선인장 | 4 | Echinocactus_Grusonii
-| 14 | 형태 | 1 | 다육이,선인장 | 4 | Epiphyllum_Auguliger
-| 15 | 형태 | 1 | 다육이,선인장 | 4 | Sansevieria
-| 16 | 형태 | 1 | 다육이,선인장 | 4 | Sansevieria_Stuckyi
-| 17 | 형태 | 1 | 괴근식물 | 8 | Stephania_Kaweesaki
-| 18 | 형태 | 1 | 덩굴식물 | 3 | Hoya_Kerrii
-| 19 | 형태 | 1 | 덩굴식물 | 3 | Ipomoea_Nil
-| 20 | 형태 | 1 | 덩굴식물 | 3 | Scindapsus_Treubii
-| 21 | 악세서리 | 2 | 안경 | 11 | Hip_Sunglasses
-| 22 | 악세서리 | 2 | 안경 | 11 | Glasses
-| 23 | 악세서리 | 2 | 안경 | 11 | Sunglasses
-| 24 | 악세서리 | 2 | 안경 | 11 | Heart_Sunglasses
-| 25 | 악세서리 | 2 | 헤어핀 | 10 | FriedEgg
-| 26 | 악세서리 | 2 | 헤어핀 | 10 | Ribbon
-| 27 | 악세서리 | 2 | 헤어핀 | 10 | Flower_Hairpin
-| 28 | 악세서리 | 2 | 헤어핀 | 10 | Beret
-| 29 | 악세서리 | 2 | 헤어핀 | 10 | Big_Ribbon
-| 30 | 악세서리 | 2 | 헤어핀 | 10 | Straw_Hat
-| 31 | 악세서리 | 2 | 헤어핀 | 10 | Birthday_Hat
-| 32 | 악세서리 | 2 | 헤어핀 | 10 | Star_Hairpin
-| 33 | 배경 | 3 | 창문 소품 | 12 | Fruit_Potted_Plant
-| 34 | 배경 | 3 | 창문 소품 | 12 | Frame
-| 35 | 배경 | 3 | 창문 소품 | 12 | Fleshy_Plant_Pot
-| 36 | 배경 | 3 | 창문 소품 | 12 | Watering_Can
-| 37 | 배경 | 3 | 창문 소품 | 12 | Trowel
-| 38 | 배경 | 3 | 창문 소품 | 12 | Stuckyi_Pot
-| 39 | 배경 | 3 | 창문 소품 | 12 | Tea_Pot
-| 40 | 배경 | 3 | 선반 소품 | 13 | Flowering_Plant_Vase
-| 41 | 배경 | 3 | 선반 소품 | 13 | FourLeaf_Flower_Vase
-| 42 | 배경 | 3 | 선반 소품 | 13 | Fishbowl
-| 43 | 배경 | 3 | 선반 소품 | 13 | Lamp
-| 44 | 배경 | 3 | 선반 소품 | 13 | Aquatic_Plant_Pot
-| 45 | 배경 | 3 | 선반 소품 | 13 | Round_Flower_Vase
-| 46 | 배경 | 3 | 선반 소품 | 13 | Pile_Of_Books
-| 47 | 배경 | 3 | 선반 소품 | 13 | Pencil_Holder
-| 48 | 배경 | 3 | 선반 소품 | 13 | Teacup
-| 49 | 배경 | 3 | 선반 소품 | 13 | Lily_Of_The_Valley_Vase
+| item id | name | category | category id | subcategory | subcategory id
+| 1 | Main_Character | 형태 | 1 | 기본 | 1
+| 2 | Sunflower | 형태 | 1 | 한해살이풀 | 7
+| 3 | Viola_Tricolor | 형태 | 1 | 한해살이풀 | 7
+| 4 | Lilium | 형태 | 1 | 구근식물 | 6
+| 5 | Narcissus | 형태 | 1 | 구근식물 | 6
+| 6 | Tillandsia_Xerographica | 형태 | 1 | 착생식물 | 9
+| 7 | Chamaedorea_Elegans | 형태 | 1 | 관엽식물 | 2
+| 8 | Monstera_Deliciosa | 형태 | 1 | 관엽식물 | 2
+| 9 | Portulaca_Grandiflora | 형태 | 1 | 관엽식물 | 2
+| 10 | Salvia_Rosmarinus | 형태 | 1 | 허브 | 5
+| 11 | Vicks_Plant | 형태 | 1 | 허브 | 5
+| 12 | EcheveriaIce_Green | 형태 | 1 | 다육이,선인장 | 4
+| 13 | Echinocactus_Grusonii | 형태 | 1 | 다육이,선인장 | 4
+| 14 | Epiphyllum_Auguliger | 형태 | 1 | 다육이,선인장 | 4
+| 15 | Sansevieria | 형태 | 1 | 다육이,선인장 | 4
+| 16 | Sansevieria_Stuckyi | 형태 | 1 | 다육이,선인장 | 4
+| 17 | Stephania_Kaweesaki | 형태 | 1 | 괴근식물 | 8
+| 18 | Hoya_Kerrii | 형태 | 1 | 덩굴식물 | 3
+| 19 | Ipomoea_Nil | 형태 | 1 | 덩굴식물 | 3
+| 20 | Scindapsus_Treubii | 형태 | 1 | 덩굴식물 | 3
+| 21 | Hip_Sunglasses | 악세서리 | 2 | 안경 | 11
+| 22 | Glasses | 악세서리 | 2 | 안경 | 11
+| 23 | Sunglasses | 악세서리 | 2 | 안경 | 11
+| 24 | Heart_Sunglasses | 악세서리 | 2 | 안경 | 11
+| 25 | FriedEgg | 악세서리 | 2 | 헤어핀 | 10
+| 26 | Ribbon | 악세서리 | 2 | 헤어핀 | 10
+| 27 | Flower_Hairpin | 악세서리 | 2 | 헤어핀 | 10
+| 28 | Beret | 악세서리 | 2 | 헤어핀 | 10
+| 29 | Big_Ribbon | 악세서리 | 2 | 헤어핀 | 10
+| 30 | Straw_Hat | 악세서리 | 2 | 헤어핀 | 10
+| 31 | Birthday_Hat | 악세서리 | 2 | 헤어핀 | 10
+| 32 | Star_Hairpin | 악세서리 | 2 | 헤어핀 | 10
+| 33 | Fruit_Potted_Plant | 배경 | 3 | 창문 소품 | 12
+| 34 | Frame | 배경 | 3 | 창문 소품 | 12
+| 35 | Fleshy_Plant_Pot | 배경 | 3 | 창문 소품 | 12
+| 36 | Watering_Can | 배경 | 3 | 창문 소품 | 12
+| 37 | Trowel | 배경 | 3 | 창문 소품 | 12
+| 38 | Stuckyi_Pot | 배경 | 3 | 창문 소품 | 12
+| 39 | Tea_Pot | 배경 | 3 | 창문 소품 | 12
+| 40 | Flowering_Plant_Vase | 배경 | 3 | 선반 소품 | 13
+| 41 | FourLeaf_Flower_Vase | 배경 | 3 | 선반 소품 | 13
+| 42 | Fishbowl | 배경 | 3 | 선반 소품 | 13
+| 43 | Lamp | 배경 | 3 | 선반 소품 | 13
+| 44 | Aquatic_Plant_Pot | 배경 | 3 | 선반 소품 | 13
+| 45 | Round_Flower_Vase | 배경 | 3 | 선반 소품 | 13
+| 46 | Pile_Of_Books | 배경 | 3 | 선반 소품 | 13
+| 47 | Pencil_Holder | 배경 | 3 | 선반 소품 | 13
+| 48 | Teacup | 배경 | 3 | 선반 소품 | 13
+| 49 | Lily_Of_The_Valley_Vase | 배경 | 3 | 선반 소품 | 13
 |===
 
 ++++
@@ -768,5 +768,28 @@ include::{snippets}/api/items/1/http-response.adoc[]
 ==== Response Body Fields
 include::{snippets}/api/items/1/response-fields.adoc[]
 
+=== **4. 그린룸 꾸미기**
+
+==== Request
+include::{snippets}/api/greenroom/items/1/http-request.adoc[]
+
+==== Request Headers
+include::{snippets}/api/greenroom/items/1/request-headers.adoc[]
+
+==== Request Body Fields
+include::{snippets}/api/greenroom/items/1/request-fields.adoc[]
+
+==== 성공 Response
+
+include::{snippets}/api/greenroom/items/1/http-response.adoc[]
+
+==== Response Body Fields
+include::{snippets}/api/greenroom/items/1/response-fields.adoc[]
 
 
+==== 실패 Response
+실패 1.
+include::{snippets}/api/greenroom/items/2/http-response.adoc[]
+
+실패 2.
+include::{snippets}/api/greenroom/items/3/http-response.adoc[]
