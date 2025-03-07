@@ -1,6 +1,7 @@
 package com.greenroom.server.api.domain.greenroom.service;
 
 import com.greenroom.server.api.domain.greenroom.dto.in.CompleteTodoRequestDto;
+import com.greenroom.server.api.domain.greenroom.dto.in.GreenroomDecorationDTO;
 import com.greenroom.server.api.domain.greenroom.dto.out.GreenroomInfoResponseDto;
 import com.greenroom.server.api.domain.greenroom.dto.in.GreenroomRegistrationRequestDto;
 import com.greenroom.server.api.domain.greenroom.dto.out.PointAndLevelUpResponseDto;
@@ -136,6 +137,13 @@ public class GreenroomService {
         GreenRoom greenRoom = findEnabledGreenroomById(greenroomId); //없으면 not found
 
         return todoService.completeTodo(greenRoom,completeTodoRequestDto.getCompletedTodo());
+
+    }
+
+    public Map<String,GreenroomInfoResponseDto.ItemSimpleDto> updateGreenroomAdornment(Long greenroomId, GreenroomDecorationDTO greenroomDecorationDTO){
+        GreenRoom greenRoom = findEnabledGreenroomById(greenroomId); // 없으면 not found
+
+        return adornmentService.updateAdornment(greenRoom,greenroomDecorationDTO);
 
     }
 

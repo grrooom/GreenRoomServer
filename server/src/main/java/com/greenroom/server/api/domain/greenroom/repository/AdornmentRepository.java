@@ -17,10 +17,12 @@ public interface AdornmentRepository extends JpaRepository<Adornment, Long> {
 
     @Modifying
     @Query("delete from Adornment a where a.greenRoom.greenroomId in (:ids)")
-    void deleteAllByGreenRoom(@Param("ids")Collection<Long> greenRoom);
+    void deleteAllByGreenRoomIn(@Param("ids")Collection<Long> greenRoom);
 
 
     @EntityGraph(attributePaths = {"item"})
     List<Adornment> findAllByGreenRoom(GreenRoom greenRoom);
+
+    void deleteAllByGreenRoom(GreenRoom greenRoom);
 
 }

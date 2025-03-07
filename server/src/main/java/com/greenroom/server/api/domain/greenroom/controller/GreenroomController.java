@@ -1,6 +1,8 @@
 package com.greenroom.server.api.domain.greenroom.controller;
 
+import com.amazonaws.Response;
 import com.greenroom.server.api.domain.greenroom.dto.in.CompleteTodoRequestDto;
+import com.greenroom.server.api.domain.greenroom.dto.in.GreenroomDecorationDTO;
 import com.greenroom.server.api.domain.greenroom.dto.in.GreenroomRegistrationRequestDto;
 import com.greenroom.server.api.domain.greenroom.dto.out.PointAndLevelUpResponseDto;
 import com.greenroom.server.api.domain.greenroom.service.GreenroomService;
@@ -49,4 +51,10 @@ public class GreenroomController {
     public ResponseEntity<ApiResponse> completeTodo(@PathVariable(value = "greenroom_id")Long greenroomId, @RequestBody @Valid CompleteTodoRequestDto completeTodoRequestDto){
         return ResponseEntity.ok(ApiResponse.success(ResponseCodeEnum.SUCCESS,greenroomService.completeTodo(greenroomId,completeTodoRequestDto)));
     }
+
+    @PostMapping("/{greenroom_id}/items")
+    public ResponseEntity<ApiResponse> decoratePlant(@Valid@RequestBody GreenroomDecorationDTO greenroomDecorationDTO, @PathVariable(value = "greenroom_id") Long greenroomID){
+        return ResponseEntity.ok(ApiResponse.success(ResponseCodeEnum.SUCCESS,greenroomService.updateGreenroomAdornment(greenroomID,greenroomDecorationDTO)));
+    }
+
 }

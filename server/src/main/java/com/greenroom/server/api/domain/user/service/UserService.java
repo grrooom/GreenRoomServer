@@ -104,7 +104,7 @@ public class UserService {
         }
 
         //greenroom 연관 adornment 객체 삭제
-        adornmentRepository.deleteAllByGreenRoom(greenroomIdList);
+        adornmentRepository.deleteAllByGreenRoomIn(greenroomIdList);
 
         //greenroom 연관 diary 객체 삭제  + diary 객체 image 파일 삭제 대상에 포함.
         List<Long> deletedDiaryIdList = new ArrayList<>();
