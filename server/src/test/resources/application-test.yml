@@ -30,6 +30,10 @@ spring:
     elasticsearch:
       repositories:
         enabled: true
+  cache:
+    redis:
+      host: localhost
+      port: ENC(JIA+C9IrhzbgYQbizGnnmw==)
   servlet:
     multipart:
       max-request-size: 100MB

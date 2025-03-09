@@ -15,8 +15,9 @@ public interface UserRepository extends JpaRepository<User, Long> {
     @EntityGraph(attributePaths = {"grade"})
     Optional<User> findByEmail(String email);
 
+    @EntityGraph(attributePaths = {"grade"})
     Optional<User> findUserByEmailAndUserStatus(String email, UserStatus userStatus);
 
     List<User> findAllByUserStatusAndDeleteDateBefore(UserStatus userStatus, LocalDateTime updateDate);
-    Boolean existsByEmail(String email);
+
 }

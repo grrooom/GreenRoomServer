@@ -1,18 +1,17 @@
 package com.greenroom.server.api.domain.greenroom.entity;
 
+import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import com.greenroom.server.api.domain.common.entity.BaseTime;
 import com.greenroom.server.api.domain.greenroom.enums.ItemDetailType;
 import com.greenroom.server.api.domain.greenroom.enums.ItemType;
 import com.greenroom.server.api.domain.user.entity.Grade;
 import jakarta.persistence.*;
-import lombok.AccessLevel;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 @Table(name = "item")
 @Entity
 @Getter
+@AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Item extends BaseTime {
 

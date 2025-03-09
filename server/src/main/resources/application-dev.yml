@@ -28,6 +28,10 @@ spring:
     elasticsearch:
       repositories:
         enabled: true
+  cache:
+    redis:
+      host: ENC(Al1pxd7HCDLTU9kUy9AReg==)
+      port: ENC(j3Vu597hs7d4/L/I9xrObw==)
   mail:
     host: smtp.gmail.com
     port: 587

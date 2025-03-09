@@ -77,8 +77,10 @@ dependencies {
 //	//local용 db
 	runtimeOnly 'org.mariadb.jdbc:mariadb-java-client'
 
-	//at&rt blacklist 관리
+	//redis
 	implementation 'org.springframework.boot:spring-boot-starter-data-redis'
+	implementation 'org.springframework.boot:spring-boot-starter-cache'
+	implementation 'com.fasterxml.jackson.datatype:jackson-datatype-jsr310:2.13.3'
 
 	//smtp 메일 전송
 	implementation 'org.springframework.boot:spring-boot-starter-mail'

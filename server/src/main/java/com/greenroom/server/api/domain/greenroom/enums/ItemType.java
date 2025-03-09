@@ -1,5 +1,6 @@
 package com.greenroom.server.api.domain.greenroom.enums;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Getter;
 
 @Getter

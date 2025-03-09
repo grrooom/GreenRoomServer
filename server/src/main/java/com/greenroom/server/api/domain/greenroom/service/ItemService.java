@@ -12,6 +12,7 @@ import com.greenroom.server.api.security.service.CustomUserDetailService;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -27,6 +28,7 @@ public class ItemService {
 
     //service
     private final CustomUserDetailService customUserDetailService;
+    private final ItemCachedService itemCachedService;
 
     public Item findItemById(Long itemId){
         return itemRepository.findById(itemId).orElseThrow(()->new CustomException(ResponseCodeEnum.ITEM_NOT_FOUND));
@@ -37,12 +39,9 @@ public class ItemService {
         User user = customUserDetailService.findUserByEmail(userEmail);
 
         int userLevel = user.getGrade().getLevel();
-
-        return  itemRepository.findAll()
+        return itemCachedService.getItems(category,subCategory)
+                .getItems()
                 .stream()
-                .filter(item -> category==null  || Objects.equals(item.getItemType().getId(), category))
-                .filter(item -> subCategory==null|| Objects.equals(item.getItemDetailType().getId(), subCategory))
                 .map(item-> ItemResponseDTO.of(item, item.getGrade().getLevel()<=userLevel)).toList();
     }
-
 }
