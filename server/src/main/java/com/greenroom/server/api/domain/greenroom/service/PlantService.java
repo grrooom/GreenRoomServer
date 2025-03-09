@@ -18,6 +18,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.json.JSONArray;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.core.io.Resource;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
@@ -101,7 +102,7 @@ public class PlantService {
             throw new CustomException(ResponseCodeEnum.FAIL_TO_SEARCH_WITH_ELASTICSEARCH,e.getMessage());
         }
     }
-
+    @Cacheable(cacheNames = {"plants"},key = "#size",cacheManager = "basicCacheManager")
     public List<PlantResponseDto> getPopularPlantList(Integer size){
 
         return plantRepository.findAll()
@@ -111,7 +112,6 @@ public class PlantService {
                 .map(plant -> PlantResponseDto.from(plant, cdnPath)) // 정렬 후 필요한 만큼만 매핑
                 .toList();
     }
-
 
     public void updatePlantDocumentWithPlant(){
         List<PlantDocument> plantDocumentList =  plantRepository.findAll().stream().map(p-> new PlantDocument(p.getPlantId(),p.getCommonName(),p.getScientificName(),p.getPlantPictureUrlS3())).toList();

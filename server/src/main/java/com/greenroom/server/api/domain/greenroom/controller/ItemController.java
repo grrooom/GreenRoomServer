@@ -20,7 +20,7 @@ public class ItemController {
     private final ItemService itemService;
 
     @GetMapping()
-    public ResponseEntity<ApiResponse> getItems(@AuthenticationPrincipal User user, @RequestParam(value = "category",required = false) Integer category, @RequestParam(value = "subcategory",required = false) Integer subCategory) {
+    public ResponseEntity<ApiResponse> getItems(@AuthenticationPrincipal User user, @RequestParam(value = "category",required = false,defaultValue = "-1") Integer category, @RequestParam(value = "subcategory",required = false,defaultValue = "-1") Integer subCategory) {
         return ResponseEntity.ok(ApiResponse.success(ResponseCodeEnum.SUCCESS,itemService.getItems(user.getUsername(),category,subCategory)));
     }
 
