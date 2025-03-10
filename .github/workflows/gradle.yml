@@ -61,6 +61,9 @@ jobs:
         touch ./assetlinks.json
         echo "${{ secrets.ANDROID_FCM_JSON}}" | base64 --decode > ./assetlinks.json
         
+    - name: Install redis-cli
+      run: sudo apt-get update && sudo apt-get install -y redis-tools
+        
     - name: Wait for Redis to be Ready
       run: |
         echo "Waiting for Redis to start on port 6381..."
