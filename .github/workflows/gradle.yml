@@ -9,6 +9,11 @@ jobs:
     permissions:
       contents: read
     services:
+      redis:
+        image: redis:latest
+        ports:
+          - 6381:6379  
+        options: --name redis
       elasticsearch:
         image: docker.elastic.co/elasticsearch/elasticsearch:8.3.2
         env: 
@@ -55,6 +60,15 @@ jobs:
         echo "${{ secrets.IOS_FCM_JSON}}" | base64 --decode > ./apple-app-site-association
         touch ./assetlinks.json
         echo "${{ secrets.ANDROID_FCM_JSON}}" | base64 --decode > ./assetlinks.json
+        
+    - name: Wait for Redis to be Ready
+      run: |
+        echo "Waiting for Redis to start on port 6381..."
+        until redis-cli -h localhost -p 6381 ping | grep PONG; do
+          echo "Redis is not ready yet. Retrying..."
+          sleep 1
+        done
+        echo "✅ Redis is running on port 6381!"
         
     - name: Setup Gradle
       uses: gradle/actions/setup-gradle@af1da67850ed9a4cedd57bfd976089dd991e2582 # v4.0.0
