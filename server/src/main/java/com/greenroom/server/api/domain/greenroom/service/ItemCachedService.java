@@ -19,20 +19,14 @@ public class ItemCachedService {
 
     //repository
     private final ItemRepository itemRepository;
+
     @Cacheable(cacheNames = {"items"},key = "#category+'_'+#subCategory",cacheManager = "itemCacheManager")
-    public Items getItems(Integer category, Integer subCategory){
-        return new Items(itemRepository.findAll()
+    public List<Item> getItems(Integer category, Integer subCategory){
+        return(itemRepository.findAll()
                 .stream()
                 .filter(item -> category==-1  || Objects.equals(item.getItemType().getId(), category))
                 .filter(item -> subCategory==-1|| Objects.equals(item.getItemDetailType().getId(), subCategory))
                 .toList());
     }
-    @Getter
-    @NoArgsConstructor
-    public static class Items{
-        private List<Item> items = new ArrayList<>();
-        public Items(List<Item> items){
-            this.items = items;
-        }
-    }
+
 }

@@ -1,6 +1,7 @@
-package com.greenroom.server.api.domain.admin;
+package com.greenroom.server.api.domain.admin.controller;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.greenroom.server.api.domain.admin.service.AdminService;
 import com.greenroom.server.api.domain.notification.dto.FcmTokenRequestDto;
 import com.greenroom.server.api.domain.notification.service.NotificationService;
 import com.greenroom.server.api.global.response.ApiResponse;
@@ -31,10 +32,16 @@ public class AdminController {
     //특정 user 삭제 -> user 관련 전부 삭제
     @DeleteMapping("/data/user")
     public ResponseEntity<ApiResponse> deleteUsers(@RequestParam(value = "email") String email){
-        log.info(email);
         adminService.deleteSpecificUser(email);
         return ResponseEntity.status(HttpStatus.NO_CONTENT).body(null);
     }
+
+    @DeleteMapping("/data/greenroom")
+    public ResponseEntity<ApiResponse> deleteGreenroom(@RequestParam(value = "email") String email){
+        adminService.deleteGreenroomsByUser(email);
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).body(null);
+    }
+
 
     //-> 푸시 알림 전송 테스트
     @PostMapping("/notification")

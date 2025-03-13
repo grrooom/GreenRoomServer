@@ -21,7 +21,7 @@ public interface GreenRoomRepository extends JpaRepository<GreenRoom,Long> {
     List<GreenRoom> findAllByUser(User user);
 
     @Modifying
-    @Query("select g.greenroomId,g.pictureUrl from GreenRoom g where g.user = :user")
+    @Query("select new com.greenroom.server.api.domain.greenroom.dto.in.GreenroomImageSimpleDto(g.greenroomId,g.pictureUrl) from GreenRoom g where g.user = :user")
     List<GreenroomImageSimpleDto> findAllGreenRoomImageByUser(@Param("user")User user);
 
 

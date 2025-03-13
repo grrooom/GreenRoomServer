@@ -1,4 +1,4 @@
-package com.greenroom.server.api.domain.admin;
+package com.greenroom.server.api.domain.admin.service;
 
 
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -55,6 +55,11 @@ public class AdminService {
         userService.deleteAllWithUser(user);
     }
 
+    @Transactional
+    public void deleteGreenroomsByUser(String email){
+        User user = customUserDetailService.findUserByEmail(email);
+        userService.deleteAllGreenroomWithUser(user);
+    }
 
     public void insertPlantDataIntoDB() throws JsonProcessingException {
         plantService.insertPlantDataIntoDB();

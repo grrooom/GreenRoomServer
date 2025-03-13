@@ -40,8 +40,8 @@ public class ItemService {
 
         int userLevel = user.getGrade().getLevel();
         return itemCachedService.getItems(category,subCategory)
-                .getItems()
                 .stream()
                 .map(item-> ItemResponseDTO.of(item, item.getGrade().getLevel()<=userLevel)).toList();
+
     }
 }
