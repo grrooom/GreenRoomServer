@@ -4,10 +4,6 @@ spring:
   profiles:
     active: local
     include: secret
-#  jpa:
-#    hibernate:
-#      naming:
-#        physical-strategy: com.greenroom.server.api.utils.JpaCustomPhysicalNamingStrategy
   servlet:
     multipart:
       max-file-size: 5MB

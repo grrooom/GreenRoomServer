@@ -13,14 +13,12 @@ import java.util.List;
 
 @Repository
 public interface DiaryRepository extends JpaRepository<Diary,Long> {
-    //void deleteAllByGreenRoomIn(Collection<GreenRoom> greenRoom);
-
 
     @Modifying
     @Query("delete from Diary d where d.greenRoom.greenroomId in (:ids)")
     void deleteAllByGreenRoom(@Param("ids")Collection<Long> greenRoom);
 
-    @Query("select d.diaryId,d.diaryPictureUrl from Diary d where d.greenRoom.greenroomId in (:ids)")
-    List<DiaryImageSimpleDto> findAllByGreenRoomIn(Collection<Long> greenRoom);
+    @Query("select new com.greenroom.server.api.domain.greenroom.dto.in.DiaryImageSimpleDto(d.diaryId,d.diaryPictureUrl) from Diary d where d.greenRoom.greenroomId in (:ids)")
+    List<DiaryImageSimpleDto> findAllByGreenRoomIn(@Param(("ids"))Collection<Long> greenRoom);
 
 }

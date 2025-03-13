@@ -85,10 +85,29 @@ public class UserService {
 
         List<String> imageDeleteList = new ArrayList<>();
 
-        //user 이미지 삭제 대상에 포함
-        if(StringUtils.hasValue(user.getProfileUrl())) imageDeleteList.add(user.getProfileUrl());
-
         //user 관련 greenroom 조회 & greenroom 이미지 삭제 대상에 포함
+        imageDeleteList.addAll(deleteAllGreenroomWithUser(user));
+
+        imageDeleteList.addAll(deleteUserData(user));
+
+        return imageDeleteList;
+    }
+
+    public List<String> deleteUserData(User user){
+        //alarm 삭제
+        notificationRepository.deleteByUser(user);
+        //user 객체 삭제
+        userRepository.delete(user);
+
+        if(StringUtils.hasValue(user.getProfileUrl()))  return List.of(user.getProfileUrl());
+        else return List.of();
+    }
+
+    @Transactional
+    public List<String> deleteAllGreenroomWithUser(User user){
+
+        List<String> imageDeleteList = new ArrayList<>();
+
         List<Long> greenroomIdList = new ArrayList<>();
 
         greenRoomRepository.findAllGreenRoomImageByUser(user).forEach(g->{
@@ -97,9 +116,6 @@ public class UserService {
         });
 
         if(greenroomIdList.isEmpty()){
-            notificationRepository.deleteByUser(user);
-            //user 객체 삭제
-            userRepository.delete(user);
             return imageDeleteList;
         }
 
@@ -121,13 +137,10 @@ public class UserService {
 
         // greenroom 삭제
         greenRoomRepository.deleteAllByGreenroomId(greenroomIdList);
-        //alarm 삭제
-        notificationRepository.deleteByUser(user);
-        //user 객체 삭제
-        userRepository.delete(user);
 
         return imageDeleteList;
     }
+
 
     @Transactional
     @Scheduled(cron = "0 0 3 * * ?")
