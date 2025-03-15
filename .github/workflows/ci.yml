@@ -67,12 +67,6 @@ jobs:
           echo "${{ secrets.IOS_FCM_JSON }}" | base64 --decode > $STATIC_DIR/apple-app-site-association
           echo "${{ secrets.ANDROID_FCM_JSON }}" | base64 --decode > $STATIC_DIR/assetlinks.json
 
-      # merge 후 다시 test 진행
-      - name: Run tests (generate snippets)
-        run: |
-          cd server
-          ./gradlew clean test
-
       # RestDocs / Swagger 문서 생성
       - name: Generate API Docs (Swagger)
         run: |
