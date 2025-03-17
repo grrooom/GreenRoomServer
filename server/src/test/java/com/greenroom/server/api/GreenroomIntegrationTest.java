@@ -7,6 +7,7 @@ import com.greenroom.server.api.config.TestExecutionListener;
 import com.greenroom.server.api.domain.greenroom.dto.in.CompleteTodoRequestDto;
 import com.greenroom.server.api.domain.greenroom.dto.in.GreenroomDecorationRequestDto;
 import com.greenroom.server.api.domain.greenroom.dto.in.GreenroomRegistrationRequestDto;
+import com.greenroom.server.api.domain.greenroom.dto.in.MemoRequestDto;
 import com.greenroom.server.api.domain.greenroom.entity.Adornment;
 import com.greenroom.server.api.domain.greenroom.entity.GreenRoom;
 import com.greenroom.server.api.domain.greenroom.entity.Plant;
@@ -32,6 +33,7 @@ import org.springframework.boot.test.autoconfigure.restdocs.AutoConfigureRestDoc
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.restdocs.RestDocumentationContextProvider;
@@ -298,6 +300,15 @@ public class GreenroomIntegrationTest {
             fieldWithPath("shelf").type(JsonFieldType.NUMBER).description("선반 소품 item id").optional().attributes(new Attributes.Attribute("constraint","사용하지 않는 경우 null 또는 request body에서 필드 제외")),
             fieldWithPath("window").type(JsonFieldType.NUMBER).description("창문 소품 item id").optional().attributes(new Attributes.Attribute("constraint","사용하지 않는 경우 null 또는 request body에서 필드 제외"))
     );
+
+    List<FieldDescriptor> requestBodyDescriptorsForGreenroomMemo =List.of(
+            fieldWithPath("memo").type(JsonFieldType.STRING).description("메모").optional().attributes(new Attributes.Attribute("constraint",
+                    """
+                            30자 제한 +
+                            메모를 등록하지 않을 경우 +
+                            1. null +
+                            2. 공백("") +
+                            3. request body에서 필드 제외""")));
 
     List<FieldDescriptor> resultDescriptorsForAdornment = List.of(
             fieldWithPath("status").type(JsonFieldType.STRING).description("응답 상태"),
@@ -856,5 +867,117 @@ public class GreenroomIntegrationTest {
 
         //문서화
         resultActions.andDo(getDocumentForGreenroomDetails(2));
+    }
+
+    @Test
+    @Transactional
+    public void 그린룸_삭제() throws Exception{
+        //given
+        User user = signupForTest();
+        GreenRoom greenRoom = createGreenRoom(user);
+
+        //when
+        String token = getTokenForTest((long) (10*1000));
+        ResultActions resultActions =  mockMvc.perform( // api 실행
+                RestDocumentationRequestBuilders
+                        .delete("/api/greenroom/{greenroom_id}",greenRoom.getGreenroomId())
+                        .header(HttpHeaders.AUTHORIZATION, "Bearer "+token));
+
+        //then
+        resultActions.andExpect(status().is(HttpStatus.NO_CONTENT.value()));
+
+        //문서화
+        resultActions.andDo(document("api/greenroom/delete/"+1,
+                preprocessRequest(prettyPrint(),modifyUris().scheme("https").host("greenroom-server.site").removePort()),   // (2)
+                preprocessResponse(prettyPrint(), getModifiedHeader()),  // (3)
+                requestHeaders(headerWithName("Authorization").description("Bearer : 사용자 access Token")),
+                pathParameters(pathParameterForGreenroomId),
+                resource(
+                        ResourceSnippetParameters.builder()
+                                .tag("그린룸") // 문서에서 api들이 태그로 분류됨
+                                .summary("그린룸 삭제 api") // api 이름
+                                .description("특정 그린룸을 삭제함") // api 설명
+                                .build()))
+
+        );
+    }
+
+    private ResultActions getResultActionsForGreenroomMemo(Long greenroomId, MemoRequestDto memoRequestDto) throws Exception {
+
+        String token = getTokenForTest((long) (10*1000));
+        return mockMvc.perform( // api 실행
+                RestDocumentationRequestBuilders
+                        .post("/api/greenroom/{greenroom_id}/memo",greenroomId)
+                        .content(mapper.writeValueAsString(memoRequestDto))
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .header(HttpHeaders.AUTHORIZATION, "Bearer "+token));
+    }
+
+    private RestDocumentationResultHandler getDocumentForGreenroomMemo(Integer identifier){
+        return document("api/greenroom/memo/"+identifier,
+                preprocessRequest(prettyPrint(),modifyUris().scheme("https").host("greenroom-server.site").removePort()),   // (2)
+                preprocessResponse(prettyPrint(), getModifiedHeader()),  // (3)
+                requestHeaders(headerWithName("Authorization").description("Bearer : 사용자 access Token")),
+                pathParameters(pathParameterForGreenroomId),
+                requestFields(requestBodyDescriptorsForGreenroomMemo),
+                resource(
+                        ResourceSnippetParameters.builder()
+                                .tag("그린룸") // 문서에서 api들이 태그로 분류됨
+                                .summary("그린룸 메모 등록 api") // api 이름
+                                .description("그린룸 메모를 등록/변경함.") // api 설명
+                                .build()));
+    }
+
+
+    @Test
+    @Transactional
+    public void 그린룸_메모등록_성공() throws Exception {
+        //given
+        MemoRequestDto memoRequestDto = new MemoRequestDto("나 메모 아니다");
+        User user = signupForTest();
+        GreenRoom greenRoom = createGreenRoom(user);
+
+        //when
+        ResultActions resultActions = getResultActionsForGreenroomMemo(greenRoom.getGreenroomId(),memoRequestDto);
+
+        //then
+        resultActions.andExpect(status().is(HttpStatus.NO_CONTENT.value()));
+
+        //문서화
+        resultActions.andDo(getDocumentForGreenroomMemo(1));
+    }
+
+    @Test
+    @Transactional
+    public void 그린룸_메모등록_실패1() throws Exception {
+        //given
+        MemoRequestDto memoRequestDto = new MemoRequestDto("나 메모 아니다");
+
+        //when
+        ResultActions resultActions = getResultActionsForGreenroomMemo(100L,memoRequestDto);
+
+        //then
+        resultActions.andExpect(status().is(ResponseCodeEnum.GREENROOM_NOT_FOUND.getStatus().value())).andExpect(jsonPath("code").value(ResponseCodeEnum.GREENROOM_NOT_FOUND.getCode()));
+
+        //문서화
+        resultActions.andDo(getDocumentForGreenroomMemo(2));
+    }
+
+    @Test
+    @Transactional
+    public void 그린룸_메모등록_실패2() throws Exception {
+        //given
+        MemoRequestDto memoRequestDto = new MemoRequestDto("메모 아니다.메모 아니다.메모 아니다.메모 아니다.메모 아니다.메모 아니다.메모 아니다.메모 아니다.메모 아니다.");
+        User user = signupForTest();
+        GreenRoom greenRoom = createGreenRoom(user);
+
+        //when
+        ResultActions resultActions = getResultActionsForGreenroomMemo(greenRoom.getGreenroomId(),memoRequestDto);
+
+        //then
+        resultActions.andExpect(status().is(ResponseCodeEnum.TOO_LONG_STRING.getStatus().value())).andExpect(jsonPath("code").value(ResponseCodeEnum.TOO_LONG_STRING.getCode()));
+
+        //문서화
+        resultActions.andDo(getDocumentForGreenroomMemo(3));
     }
 }

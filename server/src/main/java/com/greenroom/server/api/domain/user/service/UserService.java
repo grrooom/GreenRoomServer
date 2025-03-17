@@ -1,6 +1,8 @@
 package com.greenroom.server.api.domain.user.service;
 
 import com.amazonaws.util.StringUtils;
+import com.greenroom.server.api.domain.greenroom.entity.GreenRoom;
+import com.greenroom.server.api.domain.greenroom.service.*;
 import com.greenroom.server.api.domain.notification.repository.NotificationRepository;
 import com.greenroom.server.api.domain.greenroom.repository.*;
 import com.greenroom.server.api.domain.user.dto.*;
@@ -35,10 +37,6 @@ public class UserService {
     private final UserRepository userRepository;
     private final EmailVerificationLogsRepository emailVerificationLogsRepository;
     private final RefreshTokenRepository refreshTokenRepository;
-    private final TodoLogRepository todoLogRepository;
-    private final TodoRepository todoRepository;
-    private final DiaryRepository diaryRepository;
-    private final AdornmentRepository adornmentRepository;
     private final GreenRoomRepository greenRoomRepository;
     private final NotificationRepository notificationRepository;
     private final GradeRepository gradeRepository;
@@ -47,6 +45,7 @@ public class UserService {
     private final CustomUserDetailService customUserDetailService;
     private final UserExitReasonService userExitReasonService;
     private final S3ImageUploader s3ImageUploader;
+    private final GreenroomService greenroomService;
 
     @Value("${cloud.cdn.path.root}")
     private String cdnRoot;
@@ -106,39 +105,9 @@ public class UserService {
     @Transactional
     public List<String> deleteAllGreenroomWithUser(User user){
 
-        List<String> imageDeleteList = new ArrayList<>();
+        List<Long> greenroomIdList = greenRoomRepository.findAllByUser(user).stream().map(GreenRoom::getGreenroomId).toList();
 
-        List<Long> greenroomIdList = new ArrayList<>();
-
-        greenRoomRepository.findAllGreenRoomImageByUser(user).forEach(g->{
-            greenroomIdList.add(g.getGreenroomId());
-            if(StringUtils.hasValue(g.getPictureUrl())) imageDeleteList.add(g.getPictureUrl());
-        });
-
-        if(greenroomIdList.isEmpty()){
-            return imageDeleteList;
-        }
-
-        //greenroom 연관 adornment 객체 삭제
-        adornmentRepository.deleteAllByGreenRoomIn(greenroomIdList);
-
-        //greenroom 연관 diary 객체 삭제  + diary 객체 image 파일 삭제 대상에 포함.
-        List<Long> deletedDiaryIdList = new ArrayList<>();
-
-        diaryRepository.findAllByGreenRoomIn(greenroomIdList).forEach(d-> {
-            deletedDiaryIdList.add(d.getDiaryId());
-            if(StringUtils.hasValue(d.getDiaryPictureUrl())) imageDeleteList.add(d.getDiaryPictureUrl());
-        });
-        diaryRepository.deleteAllByIdInBatch(deletedDiaryIdList);
-
-        // greenroom 연관된 todo_log, todo 삭제
-        todoLogRepository.deleteAllByGreenRoom(greenroomIdList);
-        todoRepository.deleteAllByGreenRoom(greenroomIdList);
-
-        // greenroom 삭제
-        greenRoomRepository.deleteAllByGreenroomId(greenroomIdList);
-
-        return imageDeleteList;
+        return greenroomService.deleteGreenroom(greenroomIdList);
     }
 
 

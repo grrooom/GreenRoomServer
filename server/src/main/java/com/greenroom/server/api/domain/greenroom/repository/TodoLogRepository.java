@@ -15,4 +15,7 @@ public interface TodoLogRepository extends JpaRepository<TodoLog,Long> {
     @Modifying
     void deleteAllByGreenRoom(@Param("ids")Collection<Long> todo_greenRoom);
 
+    @Query("delete from TodoLog tl where tl.greenRoom.greenroomId =(:id)")
+    @Modifying
+    void deleteAllByGreenRoomGreenroomId(@Param("id")Long greenroomId);
 }

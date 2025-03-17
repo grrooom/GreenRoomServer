@@ -23,6 +23,6 @@ public interface AdornmentRepository extends JpaRepository<Adornment, Long> {
     @EntityGraph(attributePaths = {"item"})
     List<Adornment> findAllByGreenRoom(GreenRoom greenRoom);
 
-    void deleteAllByGreenRoom(GreenRoom greenRoom);
+    void deleteAllByGreenRoomGreenroomId(Long greenroomId);
 
 }

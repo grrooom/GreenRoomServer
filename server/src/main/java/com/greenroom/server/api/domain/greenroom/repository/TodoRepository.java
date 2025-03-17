@@ -25,4 +25,5 @@ public interface TodoRepository extends JpaRepository<Todo, Long> {
     @Query("select t from Todo t where t.greenRoom.greenroomId = :greenroomId and t.activity.activityId in (:activityIds)")
     List<Todo> findAllByGreenRoomAndActivity(@Param("greenroomId")Long greenroomId,@Param("activityIds") List<Long> activityIds );
 
+    void deleteAllByGreenRoomGreenroomId(Long greenroomId);
 }

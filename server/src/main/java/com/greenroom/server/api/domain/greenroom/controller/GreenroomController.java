@@ -1,8 +1,10 @@
 package com.greenroom.server.api.domain.greenroom.controller;
 
+import com.google.protobuf.Api;
 import com.greenroom.server.api.domain.greenroom.dto.in.CompleteTodoRequestDto;
 import com.greenroom.server.api.domain.greenroom.dto.in.GreenroomDecorationRequestDto;
 import com.greenroom.server.api.domain.greenroom.dto.in.GreenroomRegistrationRequestDto;
+import com.greenroom.server.api.domain.greenroom.dto.in.MemoRequestDto;
 import com.greenroom.server.api.domain.greenroom.dto.out.PointAndLevelUpResponseDto;
 import com.greenroom.server.api.domain.greenroom.service.GreenroomService;
 import com.greenroom.server.api.global.response.enums.ResponseCodeEnum;
@@ -10,12 +12,15 @@ import com.greenroom.server.api.global.response.ApiResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 
+import org.checkerframework.checker.units.qual.A;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("api/greenroom")
@@ -59,6 +64,18 @@ public class GreenroomController {
     @GetMapping("/{greenroom_id}/details")
     public ResponseEntity<ApiResponse> getGreenroomDetails(@PathVariable(value = "greenroom_id") Long greenroomId){
         return ResponseEntity.ok(ApiResponse.success(ResponseCodeEnum.SUCCESS,greenroomService.getGreenroomDetails(greenroomId)));
+    }
+
+    @DeleteMapping("/{greenroom_id}")
+    public ResponseEntity<ApiResponse> deleteGreenroom(@PathVariable(value = "greenroom_id") Long greenroomId){
+        greenroomService.deleteAllGreenroomAndDeleteAllImages(List.of(greenroomId));
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).body(null);
+    }
+
+    @PostMapping("{greenroom_id}/memo")
+    public ResponseEntity<ApiResponse> postMemo(@PathVariable(value = "greenroom_id") Long greenroomId, @RequestBody MemoRequestDto memoRequestDto){
+        greenroomService.postMemo(greenroomId,memoRequestDto);
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).body(null);
     }
 
 }

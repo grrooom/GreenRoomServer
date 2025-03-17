@@ -2,6 +2,7 @@ package com.greenroom.server.api.domain.greenroom.repository;
 
 import com.greenroom.server.api.domain.greenroom.dto.in.DiaryImageSimpleDto;
 import com.greenroom.server.api.domain.greenroom.entity.Diary;
+import com.greenroom.server.api.domain.greenroom.entity.GreenRoom;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
@@ -20,5 +21,9 @@ public interface DiaryRepository extends JpaRepository<Diary,Long> {
 
     @Query("select new com.greenroom.server.api.domain.greenroom.dto.in.DiaryImageSimpleDto(d.diaryId,d.diaryPictureUrl) from Diary d where d.greenRoom.greenroomId in (:ids)")
     List<DiaryImageSimpleDto> findAllByGreenRoomIn(@Param(("ids"))Collection<Long> greenRoom);
+
+    List<Diary> findAllByGreenRoomGreenroomId(Long greenroomId);
+
+    void deleteAllByGreenRoom(GreenRoom greenRoom);
 
 }
