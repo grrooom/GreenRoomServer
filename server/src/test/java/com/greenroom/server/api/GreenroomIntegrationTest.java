@@ -2,9 +2,10 @@ package com.greenroom.server.api;
 
 import com.epages.restdocs.apispec.ResourceSnippetParameters;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.greenroom.server.api.config.TestExecutionListener;
 import com.greenroom.server.api.domain.greenroom.dto.in.CompleteTodoRequestDto;
-import com.greenroom.server.api.domain.greenroom.dto.in.GreenroomDecorationDTO;
+import com.greenroom.server.api.domain.greenroom.dto.in.GreenroomDecorationRequestDto;
 import com.greenroom.server.api.domain.greenroom.dto.in.GreenroomRegistrationRequestDto;
 import com.greenroom.server.api.domain.greenroom.entity.Adornment;
 import com.greenroom.server.api.domain.greenroom.entity.GreenRoom;
@@ -57,6 +58,7 @@ import org.springframework.web.context.WebApplicationContext;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -125,8 +127,10 @@ public class GreenroomIntegrationTest {
 
     private final ObjectMapper mapper = new ObjectMapper();
 
+
     @BeforeEach
     void setup(WebApplicationContext context , RestDocumentationContextProvider restDocumentation) {
+        mapper.registerModule(new JavaTimeModule());
         this.mockMvc = MockMvcBuilders
                 .webAppContextSetup(context)
                 .apply(SecurityMockMvcConfigurers.springSecurity()) //Security 필터 적용
@@ -168,13 +172,14 @@ public class GreenroomIntegrationTest {
 
     public GreenRoom createGreenRoom(User user){
 
-        Plant plant = Plant.builder().commonName("해바라기").build();
-        plantRepository.save(plant);
+        Plant plant = plantRepository.findById(20L).get();
+        //plantRepository.save(plant);
 
-        GreenRoom greenRoom = new GreenRoom("test 그린룸",null,user,plant);
+        GreenRoom greenRoom = GreenRoom.of("test 그린룸",null,user,plant);
+
         greenRoomRepository.save(greenRoom);
 
-        Todo todo = Todo.builder().greenRoom(greenRoom).activity(activityRepository.findAll().get(0)).nextTodoDate(LocalDate.now()).term(10).build();
+        Todo todo = Todo.builder().greenRoom(greenRoom).activity(activityRepository.findAll().get(0)).nextTodoDate(LocalDate.now().plusDays(1)).term(10).build();
         todoRepository.save(todo);
 
         adornmentRepository.save(Adornment.createAdornment(itemRepository.findAll().get(0),greenRoom));
@@ -315,7 +320,45 @@ public class GreenroomIntegrationTest {
             fieldWithPath("data.window.itemName").type(JsonFieldType.STRING).description("창문 소품 item 이름").optional()
     );
 
-
+    List<FieldDescriptor> resultDescriptorsForGreenroomDetails= List.of(
+            fieldWithPath("status").type(JsonFieldType.STRING).description("응답 상태"),
+            fieldWithPath("code").type(JsonFieldType.STRING).description("상태 코드"),
+            fieldWithPath("data").type(JsonFieldType.OBJECT).optional().description("data").optional().attributes(new Attributes.Attribute("constraint","등록된 식물이 없으면 null")),
+            fieldWithPath("data.basicInfo").type(JsonFieldType.OBJECT).optional().description("그린룸 기본 정보"),
+            fieldWithPath("data.basicInfo.greenroomId").type(JsonFieldType.NUMBER).description("그린룸 고유 id"),
+            fieldWithPath("data.basicInfo.nickName").type(JsonFieldType.STRING).description("그린룸 이름"),
+            fieldWithPath("data.basicInfo.plantName").type(JsonFieldType.STRING).description("식물 이름"),
+            fieldWithPath("data.basicInfo.duration").type(JsonFieldType.NUMBER).description("함께한 기간"),
+            fieldWithPath("data.basicInfo.memo").type(JsonFieldType.STRING).description("메모").optional().attributes(new Attributes.Attribute("constraint","등록된 memo가 없으면 null")),
+            fieldWithPath("data.basicInfo.imageUrl").type(JsonFieldType.STRING).description("그린룸 이미지 url").optional().attributes(new Attributes.Attribute("constraint","등록된 이미지가 없으면 null")),
+            fieldWithPath("data.decoration").type(JsonFieldType.OBJECT).description("그린룸 꾸미기 item"),
+            fieldWithPath("data.decoration.shape").type(JsonFieldType.OBJECT).description("형태"),
+            fieldWithPath("data.decoration.shape.itemId").type(JsonFieldType.NUMBER).description("item 고유 id"),
+            fieldWithPath("data.decoration.shape.itemName").type(JsonFieldType.STRING).description("item 이름"),
+            fieldWithPath("data.decoration.eyewear").type(JsonFieldType.OBJECT).optional().description("안경 item").attributes(new Attributes.Attribute("constraint","등록된 item이 없으면 null")),
+            fieldWithPath("data.decoration.eyewear.itemId").type(JsonFieldType.NUMBER).optional().description("item 고유 id"),
+            fieldWithPath("data.decoration.eyewear.itemName").type(JsonFieldType.STRING).optional().description("item 이름"),
+            fieldWithPath("data.decoration.hairAccessory").type(JsonFieldType.OBJECT).optional().description("헤어핀 item").attributes(new Attributes.Attribute("constraint","등록된 item이 없으면 null")),
+            fieldWithPath("data.decoration.hairAccessory.itemId").type(JsonFieldType.NUMBER).optional().description("item 고유 id"),
+            fieldWithPath("data.decoration.hairAccessory.itemName").type(JsonFieldType.STRING).optional().description("item 이름"),
+            fieldWithPath("data.managementInfo").type(JsonFieldType.ARRAY).description("사용자가 등록한 그린룸 관리 정보 목록").attributes(new Attributes.Attribute("constraint","등록된 관리 정보가 없으면 빈 배열 반환")),
+            fieldWithPath("data.managementInfo[].activityId").type(JsonFieldType.NUMBER).description("할 일 고유 id"),
+            fieldWithPath("data.managementInfo[].activityName").type(JsonFieldType.STRING).description("할 일 이름"),
+            fieldWithPath("data.managementInfo[].term").type(JsonFieldType.NUMBER).description("할 일 주기"),
+            fieldWithPath("data.managementInfo[].remainingDays").type(JsonFieldType.NUMBER).description("다음 수행일까지 남은 기간"),
+            fieldWithPath("data.plantInfo").type(JsonFieldType.OBJECT).description("식물 기본 정보"),
+            fieldWithPath("data.plantInfo.plantId").type(JsonFieldType.NUMBER).description("식물 id"),
+            fieldWithPath("data.plantInfo.name").type(JsonFieldType.STRING).description("식물 이름"),
+            fieldWithPath("data.plantInfo.scientificName").type(JsonFieldType.STRING).description("식물 학명"),
+            fieldWithPath("data.plantInfo.description").type(JsonFieldType.STRING).description("식물에 대한 설명"),
+            fieldWithPath("data.plantManagementInfo").type(JsonFieldType.OBJECT).description("식물 키우는 법"),
+            fieldWithPath("data.plantManagementInfo.managementLevel").type(JsonFieldType.STRING).description("관리 레벨 정보"),
+            fieldWithPath("data.plantManagementInfo.temperature").type(JsonFieldType.STRING).description("온도 정보"),
+            fieldWithPath("data.plantManagementInfo.sunlight").type(JsonFieldType.STRING).description("햇빛 정보"),
+            fieldWithPath("data.plantManagementInfo.watering").type(JsonFieldType.STRING).description("물주기 정보"),
+            fieldWithPath("data.plantManagementInfo.humidity").type(JsonFieldType.STRING).description("습도 정보"),
+            fieldWithPath("data.plantManagementInfo.fertilizer").type(JsonFieldType.STRING).description("비료 정보")
+            );
     @Transactional
     @Test
     public void 그린룸_정보_조회_성공1() throws Exception {
@@ -454,7 +497,7 @@ public class GreenroomIntegrationTest {
 
         //test용 data 생성
         signupForTest();
-        GreenroomRegistrationRequestDto greenroomRegistrationRequestDto = new GreenroomRegistrationRequestDto(1L,"초롱이","2025-02-22",10,1L);
+        GreenroomRegistrationRequestDto greenroomRegistrationRequestDto = new GreenroomRegistrationRequestDto(1L,"초롱이","2025-02-25",10,1L);
         MockMultipartFile image = getTestMultiPartFile();
         MockMultipartFile data = new MockMultipartFile("data", "", "application/json", mapper.writeValueAsString(greenroomRegistrationRequestDto).getBytes());
 
@@ -478,7 +521,7 @@ public class GreenroomIntegrationTest {
         //test용 data 생성
         User user = signupForTest();
         user.updateIsFirstGreenroomRegistered(true);
-        GreenroomRegistrationRequestDto greenroomRegistrationRequestDto = new GreenroomRegistrationRequestDto(1L,"초롱이","2025-02-22",10,1L);
+        GreenroomRegistrationRequestDto greenroomRegistrationRequestDto = new GreenroomRegistrationRequestDto(1L,"초롱이","2025-02-25",10,1L);
         MockMultipartFile image = getTestMultiPartFile();
         MockMultipartFile data = new MockMultipartFile("data", "", "application/json", mapper.writeValueAsString(greenroomRegistrationRequestDto).getBytes());
 
@@ -499,7 +542,7 @@ public class GreenroomIntegrationTest {
     public void 그린룸_생성_실패1() throws Exception {
         //given
         signupForTest();
-        GreenroomRegistrationRequestDto greenroomRegistrationRequestDto = new GreenroomRegistrationRequestDto(100000000L,"초롱이","2025-02-22",10,1L);
+        GreenroomRegistrationRequestDto greenroomRegistrationRequestDto = new GreenroomRegistrationRequestDto(100000000L,"초롱이","2025-02-25",10,1L);
         MockMultipartFile image = getTestMultiPartFile();
         MockMultipartFile data = new MockMultipartFile("data", "", "application/json", mapper.writeValueAsString(greenroomRegistrationRequestDto).getBytes());
 
@@ -518,7 +561,7 @@ public class GreenroomIntegrationTest {
     public void 그린룸_생성_실패2() throws Exception {
         //given
         signupForTest();
-        GreenroomRegistrationRequestDto greenroomRegistrationRequestDto = new GreenroomRegistrationRequestDto(1L,"초롱이","2025-02-22",10,1000000000L);
+        GreenroomRegistrationRequestDto greenroomRegistrationRequestDto = new GreenroomRegistrationRequestDto(1L,"초롱이","2025-02-25",10,1000000000L);
         MockMultipartFile image = getTestMultiPartFile();
         MockMultipartFile data = new MockMultipartFile("data", "", "application/json", mapper.writeValueAsString(greenroomRegistrationRequestDto).getBytes());
 
@@ -539,7 +582,7 @@ public class GreenroomIntegrationTest {
 
         //test 용 data
         signupForTest();
-        GreenroomRegistrationRequestDto greenroomRegistrationRequestDto = new GreenroomRegistrationRequestDto(1L,"초롱이","2025-02-22",10,1L);
+        GreenroomRegistrationRequestDto greenroomRegistrationRequestDto = new GreenroomRegistrationRequestDto(1L,"초롱이","2025-02-25",10,1L);
         MockMultipartFile image = getInvalidTestMultiPartFile();
         MockMultipartFile data = new MockMultipartFile("data", "", "application/json", mapper.writeValueAsString(greenroomRegistrationRequestDto).getBytes());
 
@@ -559,7 +602,7 @@ public class GreenroomIntegrationTest {
         //given
         //test 용 data
         signupForTest();
-        GreenroomRegistrationRequestDto greenroomRegistrationRequestDto = new GreenroomRegistrationRequestDto(1L,"초롱이","2025-02-22",10,1L);
+        GreenroomRegistrationRequestDto greenroomRegistrationRequestDto = new GreenroomRegistrationRequestDto(1L,"초롱이","2025-02-25",10,1L);
         MockMultipartFile image = getTestMultiPartFile();
         MockMultipartFile data = new MockMultipartFile("data", "", "application/json", mapper.writeValueAsString(greenroomRegistrationRequestDto).getBytes());
 
@@ -654,14 +697,14 @@ public class GreenroomIntegrationTest {
                                 .build())));
     }
 
-    private ResultActions getResultActionsForAdornment(GreenroomDecorationDTO greenroomDecorationDTO,Long greenroomId) throws Exception {
+    private ResultActions getResultActionsForAdornment(GreenroomDecorationRequestDto greenroomDecorationRequestDto, Long greenroomId) throws Exception {
 
         String token = getTokenForTest((long) (10*1000));
         return mockMvc.perform( // api 실행
                 RestDocumentationRequestBuilders
                         .post("/api/greenroom/{greenroom_id}/items",greenroomId)
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(mapper.writeValueAsString(greenroomDecorationDTO))
+                        .content(mapper.writeValueAsString(greenroomDecorationRequestDto))
                         .header(HttpHeaders.AUTHORIZATION, "Bearer "+token));
     }
 
@@ -688,10 +731,10 @@ public class GreenroomIntegrationTest {
         //given
         User user = signupForTest();
         GreenRoom greenRoom = createGreenRoom(user);
-        GreenroomDecorationDTO greenroomDecorationDTO = new GreenroomDecorationDTO(1L,25L,24L,35L,null);
+        GreenroomDecorationRequestDto greenroomDecorationRequestDto = new GreenroomDecorationRequestDto(1L,25L,24L,35L,null);
 
         //when
-        ResultActions resultActions = getResultActionsForAdornment(greenroomDecorationDTO,greenRoom.getGreenroomId());
+        ResultActions resultActions = getResultActionsForAdornment(greenroomDecorationRequestDto,greenRoom.getGreenroomId());
 
         //then
         resultActions.andExpect(status().isOk());
@@ -707,10 +750,10 @@ public class GreenroomIntegrationTest {
         //given
         User user = signupForTest();
         GreenRoom greenRoom =  createGreenRoom(user);
-        GreenroomDecorationDTO greenroomDecorationDTO = new GreenroomDecorationDTO(1L,25L,24L,100L,null);
+        GreenroomDecorationRequestDto greenroomDecorationRequestDto = new GreenroomDecorationRequestDto(1L,25L,24L,100L,null);
 
         //when
-        ResultActions resultActions = getResultActionsForAdornment(greenroomDecorationDTO,greenRoom.getGreenroomId());
+        ResultActions resultActions = getResultActionsForAdornment(greenroomDecorationRequestDto,greenRoom.getGreenroomId());
 
         //then
         resultActions.andExpect(status().is(ResponseCodeEnum.ITEM_NOT_FOUND.getStatus().value())).andExpect(jsonPath("code").value(ResponseCodeEnum.ITEM_NOT_FOUND.getCode()));
@@ -726,10 +769,10 @@ public class GreenroomIntegrationTest {
     public void 그린룸_꾸미기_실패2() throws Exception {
         //given
         User user = signupForTest();
-        GreenroomDecorationDTO greenroomDecorationDTO = new GreenroomDecorationDTO(1L,23L,24L,35L,null);
+        GreenroomDecorationRequestDto greenroomDecorationRequestDto = new GreenroomDecorationRequestDto(1L,23L,24L,35L,null);
 
         //when
-        ResultActions resultActions = getResultActionsForAdornment(greenroomDecorationDTO,100L);
+        ResultActions resultActions = getResultActionsForAdornment(greenroomDecorationRequestDto,100L);
 
         //then
         resultActions.andExpect(status().is(ResponseCodeEnum.GREENROOM_NOT_FOUND.getStatus().value())).andExpect(jsonPath("code").value(ResponseCodeEnum.GREENROOM_NOT_FOUND.getCode()));
@@ -745,10 +788,10 @@ public class GreenroomIntegrationTest {
         //given
         User user = signupForTest();
         GreenRoom greenRoom =  createGreenRoom(user);
-        GreenroomDecorationDTO greenroomDecorationDTO = new GreenroomDecorationDTO(1L,23L,24L,35L,null);
+        GreenroomDecorationRequestDto greenroomDecorationRequestDto = new GreenroomDecorationRequestDto(1L,23L,24L,35L,null);
 
         //when
-        ResultActions resultActions = getResultActionsForAdornment(greenroomDecorationDTO,greenRoom.getGreenroomId());
+        ResultActions resultActions = getResultActionsForAdornment(greenroomDecorationRequestDto,greenRoom.getGreenroomId());
 
         //then
         resultActions.andExpect(status().is(ResponseCodeEnum.INVALID_REQUEST_ARGUMENT.getStatus().value())).andExpect(jsonPath("code").value(ResponseCodeEnum.INVALID_REQUEST_ARGUMENT.getCode()));
@@ -758,7 +801,60 @@ public class GreenroomIntegrationTest {
 
     }
 
+    private ResultActions getResultActionsForGreenroomDetails(Long greenroomId) throws Exception {
 
+        String token = getTokenForTest((long) (10*1000));
+        return mockMvc.perform( // api 실행
+                RestDocumentationRequestBuilders
+                        .get("/api/greenroom/{greenroom_id}/details",greenroomId)
+                        .header(HttpHeaders.AUTHORIZATION, "Bearer "+token));
+    }
 
+    private RestDocumentationResultHandler getDocumentForGreenroomDetails(Integer identifier){
+        return document("api/greenroom/details/"+identifier,
+                preprocessRequest(prettyPrint(),modifyUris().scheme("https").host("greenroom-server.site").removePort()),   // (2)
+                preprocessResponse(prettyPrint(), getModifiedHeader()),  // (3)
+                responseFields(resultDescriptorsForGreenroomDetails), // responseBody 설명
+                requestHeaders(headerWithName("Authorization").description("Bearer : 사용자 access Token")),
+                pathParameters(pathParameterForGreenroomId),
+                resource(
+                        ResourceSnippetParameters.builder()
+                                .tag("그린룸") // 문서에서 api들이 태그로 분류됨
+                                .summary("그린룸 상세 정보 조회 api") // api 이름
+                                .description("그린룸의 상세 정보를 조회함.") // api 설명
+                                .build()));
+    }
 
+    @Test
+    @Transactional
+    public void 그린룸_상세정보조회_성공() throws Exception {
+        //given
+        User user = signupForTest();
+        GreenRoom greenRoom =  createGreenRoom(user);
+        greenRoom.updateCreationDate(LocalDateTime.now().minusDays(3));
+
+        //when
+        ResultActions resultActions = getResultActionsForGreenroomDetails(greenRoom.getGreenroomId());
+
+        //then
+        resultActions.andExpect(status().isOk());
+
+        //문서화
+        resultActions.andDo(getDocumentForGreenroomDetails(1));
+    }
+
+    @Test
+    @Transactional
+    public void 그린룸_상세정보조회_실패() throws Exception {
+        //given
+
+        //when
+        ResultActions resultActions = getResultActionsForGreenroomDetails(100L);
+
+        //then
+        resultActions.andExpect(status().is(ResponseCodeEnum.GREENROOM_NOT_FOUND.getStatus().value())).andExpect(jsonPath("code").value(ResponseCodeEnum.GREENROOM_NOT_FOUND.getCode()));
+
+        //문서화
+        resultActions.andDo(getDocumentForGreenroomDetails(2));
+    }
 }

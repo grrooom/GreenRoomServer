@@ -1,24 +1,14 @@
 package com.greenroom.server.api.domain.greenroom.dto.out;
 
 import com.greenroom.server.api.domain.user.entity.User;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
 
 import java.util.List;
 
-@Data
-@AllArgsConstructor
-@Builder
-@NoArgsConstructor
-public class PointAndLevelUpResponseDto {
+public record PointAndLevelUpResponseDto (
 
-    private Integer earnedPoints;
-
-    private LevelUpStatus levelUpStatus;
-
-    private List<LevelUpDetail> levelUpDetails;
+    Integer earnedPoints,
+    LevelUpStatus levelUpStatus,
+    List<LevelUpDetail> levelUpDetails){
 
     public record LevelUpDetail(String source, Integer points){}
 
@@ -29,20 +19,12 @@ public class PointAndLevelUpResponseDto {
     }
 
     public static PointAndLevelUpResponseDto of(User user, Integer point, LevelUpStatus levelUpStatus){
-        return PointAndLevelUpResponseDto.builder()
-                .earnedPoints(point)
-                .levelUpStatus(levelUpStatus)
-                .levelUpDetails(null)
-                .build();
+        return new PointAndLevelUpResponseDto(point,levelUpStatus,null);
     }
 
     public static PointAndLevelUpResponseDto ofFirstGreenroomRegistration(User user, Integer point, LevelUpStatus levelUpStatus){
-        return PointAndLevelUpResponseDto.builder()
-                .earnedPoints(point)
-                .levelUpStatus(levelUpStatus)
-                .levelUpDetails(List.of(
-                                new LevelUpDetail("첫 방문",1),
-                                new LevelUpDetail("식물 등록",1)))
-                .build();
+        return new PointAndLevelUpResponseDto(point,(levelUpStatus),
+                List.of(new LevelUpDetail("첫 방문",1),
+                        new LevelUpDetail("식물 등록",1)));
     }
 }

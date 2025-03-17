@@ -1,6 +1,6 @@
 package com.greenroom.server.api.domain.greenroom.service;
 
-import com.greenroom.server.api.domain.greenroom.dto.out.ItemResponseDTO;
+import com.greenroom.server.api.domain.greenroom.dto.out.ItemResponseDto;
 import com.greenroom.server.api.domain.greenroom.entity.Item;
 import com.greenroom.server.api.domain.greenroom.repository.ItemRepository;
 
@@ -12,11 +12,9 @@ import com.greenroom.server.api.security.service.CustomUserDetailService;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Objects;
 
 @Service
 @Slf4j
@@ -34,14 +32,14 @@ public class ItemService {
         return itemRepository.findById(itemId).orElseThrow(()->new CustomException(ResponseCodeEnum.ITEM_NOT_FOUND));
     }
 
-    public List<ItemResponseDTO> getItems(String userEmail ,Integer category, Integer subCategory){
+    public List<ItemResponseDto> getItems(String userEmail , Integer category, Integer subCategory){
 
         User user = customUserDetailService.findUserByEmail(userEmail);
 
         int userLevel = user.getGrade().getLevel();
         return itemCachedService.getItems(category,subCategory)
                 .stream()
-                .map(item-> ItemResponseDTO.of(item, item.getGrade().getLevel()<=userLevel)).toList();
+                .map(item-> ItemResponseDto.of(item, item.getGrade().getLevel()<=userLevel)).toList();
 
     }
 }

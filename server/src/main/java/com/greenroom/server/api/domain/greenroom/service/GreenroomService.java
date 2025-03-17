@@ -1,10 +1,9 @@
 package com.greenroom.server.api.domain.greenroom.service;
 
 import com.greenroom.server.api.domain.greenroom.dto.in.CompleteTodoRequestDto;
-import com.greenroom.server.api.domain.greenroom.dto.in.GreenroomDecorationDTO;
-import com.greenroom.server.api.domain.greenroom.dto.out.GreenroomInfoResponseDto;
+import com.greenroom.server.api.domain.greenroom.dto.in.GreenroomDecorationRequestDto;
+import com.greenroom.server.api.domain.greenroom.dto.out.*;
 import com.greenroom.server.api.domain.greenroom.dto.in.GreenroomRegistrationRequestDto;
-import com.greenroom.server.api.domain.greenroom.dto.out.PointAndLevelUpResponseDto;
 import com.greenroom.server.api.domain.greenroom.entity.GreenRoom;
 import com.greenroom.server.api.domain.greenroom.entity.Plant;
 import com.greenroom.server.api.domain.greenroom.enums.GreenRoomStatus;
@@ -32,9 +31,6 @@ import java.util.Map;
 @Slf4j
 public class GreenroomService {
 
-    @Value("${cloud.cdn.path.root}")
-    private  String cdnPath;
-
     //repository
     private final GreenRoomRepository greenRoomRepository;
 
@@ -46,6 +42,9 @@ public class GreenroomService {
     private final PlantService plantService;
     private final GradeService gradeService;
 
+    //util
+    private final GreenroomResponseAssembler greenroomResponseAssembler;
+
     public GreenRoom findEnabledGreenroomById(Long greenRoomId){
         return greenRoomRepository.findByGreenroomIdAndGreenroomStatus(greenRoomId,GreenRoomStatus.ENABLED).orElseThrow(()->new CustomException(ResponseCodeEnum.GREENROOM_NOT_FOUND));
     }
@@ -55,26 +54,11 @@ public class GreenroomService {
 
         User user = customUserDetailService.findUserByEmail(email); //없으면 NOT_FOUND 예외 발생
 
-        //user의 greenroom 조회
         List<GreenRoom> greenRoomList =  greenRoomRepository.findGreenRoomByUserAndGreenroomStatus(user, GreenRoomStatus.ENABLED);
 
-        //등록된 식물이 없으면 null 반환
-        if(greenRoomList.isEmpty()){
-            return null;
-        }
+        if(greenRoomList.isEmpty()){return null;}
 
-        GreenRoom greenroom = greenRoomList.get(0);
-        //user의 greenroom 기본 정보 조회
-        GreenroomInfoResponseDto.GreenroomBasicInfoDto  greenroomBasicInfo=  GreenroomInfoResponseDto.GreenroomBasicInfoDto.from(greenroom,cdnPath);
-
-        //user의 greenroom todo 조회
-        GreenroomInfoResponseDto.GreenroomTodoInfoDto greenroomTodoInfo =  todoService.getGreenroomTodoInfo(greenroom);
-
-        //greenroom item 조회
-        Map<String, GreenroomInfoResponseDto.ItemSimpleDto> greenroomItemInfo = adornmentService.getGreenroomAdornmentInfo(greenroom);
-
-        return new GreenroomInfoResponseDto(greenroomBasicInfo,greenroomTodoInfo,greenroomItemInfo);
-
+        return greenroomResponseAssembler.toGreenroomInfo(greenRoomList.get(0));
 
     }
 
@@ -91,25 +75,17 @@ public class GreenroomService {
 
     @Transactional
     public PointAndLevelUpResponseDto createGreenroom(String email, GreenroomRegistrationRequestDto greenroomRegistrationRequestDto, MultipartFile imageFile){
-
-        LocalDate wateringBaseTime =null;
-
+        LocalDate wateringBaseTime;
         try{
-            wateringBaseTime = LocalDate.parse(greenroomRegistrationRequestDto.getWateringBaseDate());
-        } catch (DateTimeParseException e){
-            throw  new CustomException(ResponseCodeEnum.INVALID_REQUEST_ARGUMENT);
+            wateringBaseTime =LocalDate.parse(greenroomRegistrationRequestDto.getWateringBaseDate());
         }
+        catch (DateTimeParseException e){throw new CustomException(ResponseCodeEnum.INVALID_REQUEST_ARGUMENT);}
 
         // 그린룸 등록
         User user = customUserDetailService.findUserByEmail(email);  // 없으면 not found
         Plant plant = greenroomRegistrationRequestDto.getPlantId()==null?null:plantService.findPlantById(greenroomRegistrationRequestDto.getPlantId());  //없으면 not found
         String imageFileName = imageFile==null ||imageFile.isEmpty()?null:s3ImageUploader.uploadGreenroomImage(imageFile);  //FAIL_TO_UPLOAD_IMAGE , //INVALID_IMAGE_FORMAT
-        GreenRoom greenRoom =  GreenRoom.builder()
-                .name(greenroomRegistrationRequestDto.getNickname())
-                .pictureUrl(imageFileName)
-                .user(user)
-                .plant(plant)
-                .build();
+        GreenRoom greenRoom =  GreenRoom.of(greenroomRegistrationRequestDto.getNickname(),imageFileName,user,plant);
         greenRoomRepository.save(greenRoom);
 
         // 아이템 등록
@@ -124,7 +100,6 @@ public class GreenroomService {
             user.addTotalSeed(2);
             return PointAndLevelUpResponseDto.ofFirstGreenroomRegistration(user,2,gradeService.updateUserGrade(user));
         }
-
         //첫 식물이 아닐 경우
         else{
             return PointAndLevelUpResponseDto.of(user,0, PointAndLevelUpResponseDto.LevelUpStatus.of(user));
@@ -140,11 +115,19 @@ public class GreenroomService {
 
     }
 
-    public Map<String,GreenroomInfoResponseDto.ItemSimpleDto> updateGreenroomAdornment(Long greenroomId, GreenroomDecorationDTO greenroomDecorationDTO){
+    public Map<String,ItemSimpleDto> updateGreenroomAdornment(Long greenroomId, GreenroomDecorationRequestDto greenroomDecorationRequestDto){
+
         GreenRoom greenRoom = findEnabledGreenroomById(greenroomId); // 없으면 not found
 
-        return adornmentService.updateAdornment(greenRoom,greenroomDecorationDTO);
+        return adornmentService.updateAdornment(greenRoom, greenroomDecorationRequestDto);
 
+    }
+
+    public GreenroomDetailResponseDto getGreenroomDetails(Long greenroomId){
+
+        GreenRoom greenRoom = findEnabledGreenroomById(greenroomId); // 없으면 not found exception 발생
+
+        return greenroomResponseAssembler.toDetailResponse(greenRoom);
     }
 
 }

@@ -1,7 +1,9 @@
 package com.greenroom.server.api.domain.greenroom.service;
 
-import com.greenroom.server.api.domain.greenroom.dto.in.GreenroomDecorationDTO;
+import com.greenroom.server.api.domain.greenroom.dto.in.GreenroomDecorationRequestDto;
+import com.greenroom.server.api.domain.greenroom.dto.out.GreenroomDetailResponseDto;
 import com.greenroom.server.api.domain.greenroom.dto.out.GreenroomInfoResponseDto;
+import com.greenroom.server.api.domain.greenroom.dto.out.ItemSimpleDto;
 import com.greenroom.server.api.domain.greenroom.entity.Adornment;
 import com.greenroom.server.api.domain.greenroom.entity.GreenRoom;
 import com.greenroom.server.api.domain.greenroom.entity.Item;
@@ -34,18 +36,28 @@ public class AdornmentService {
                 .replaceFirst("^.", Character.toLowerCase(snakeUpper.charAt(0)) + "");
     }
 
-    private final List<String> itemCatergoryList = List.of("shape","hairAccessory","eyewear","window","shelf");
+    public Map<String, ItemSimpleDto> getGreenroomFullAdornmentInfo(GreenRoom greenRoom){
 
-    public Map<String,GreenroomInfoResponseDto.ItemSimpleDto> getGreenroomAdornmentInfo(GreenRoom greenRoom){
+        return getGreenroomAdornmentInfo(greenRoom,List.of("shape","hairAccessory","eyewear","window","shelf"));
+    }
+
+    public Map<String, ItemSimpleDto> getGreenroomSimpleAdornmentInfo(GreenRoom greenRoom){
+
+        return getGreenroomAdornmentInfo(greenRoom,List.of("shape","hairAccessory","eyewear"));
+    }
+
+    public Map<String,ItemSimpleDto> getGreenroomAdornmentInfo(GreenRoom greenRoom, List<String> itemCategoryList){
+
         List<Adornment> adornmentList =  adornmentRepository.findAllByGreenRoom(greenRoom);
 
-        Map<String, GreenroomInfoResponseDto.ItemSimpleDto> itemMap = new HashMap<>();
+        Map<String, ItemSimpleDto> itemMap = new HashMap<>();
 
-        itemCatergoryList.forEach(it->itemMap.put(it,null));
+        itemCategoryList.forEach(it->itemMap.put(it,null));
 
-        adornmentList.forEach(a-> itemMap.put(a.getItem().getItemType().equals(ItemType.SHAPE)?"shape": snakeToCamel(a.getItem().getItemDetailType().name().toLowerCase()), GreenroomInfoResponseDto.ItemSimpleDto.from(a.getItem())));
+        adornmentList.forEach(a-> itemMap.put(a.getItem().getItemType().equals(ItemType.SHAPE)?"shape": snakeToCamel(a.getItem().getItemDetailType().name().toLowerCase()), ItemSimpleDto.from(a.getItem())));
 
         return itemMap;
+
     }
 
     @Transactional
@@ -57,14 +69,14 @@ public class AdornmentService {
 
 
     @Transactional
-    public Map<String, GreenroomInfoResponseDto.ItemSimpleDto> updateAdornment(
-            GreenRoom greenRoom, GreenroomDecorationDTO greenroomDecorationDTO) {
+    public Map<String, ItemSimpleDto> updateAdornment(
+            GreenRoom greenRoom, GreenroomDecorationRequestDto greenroomDecorationRequestDto) {
 
         // 기존 장식 삭제
         adornmentRepository.deleteAllByGreenRoom(greenRoom);
 
         // 아이템 ID 리스트 추출
-        List<Long> itemIdList = extractItemIds(greenroomDecorationDTO);
+        List<Long> itemIdList = extractItemIds(greenroomDecorationRequestDto);
 
         // 아이템 리스트 조회
         List<Item> itemList = getItemList(itemIdList);
@@ -77,7 +89,7 @@ public class AdornmentService {
         adornmentRepository.saveAll(adornmentList);
 
         // 업데이트된 정보 반환
-        return getGreenroomAdornmentInfo(greenRoom);
+        return getGreenroomFullAdornmentInfo(greenRoom);
     }
 
     // 아이템 조회 메서드
@@ -119,7 +131,7 @@ public class AdornmentService {
     }
 
     // 아이템 ID 리스트를 추출하는 메소드
-    private List<Long> extractItemIds(GreenroomDecorationDTO dto) {
+    private List<Long> extractItemIds(GreenroomDecorationRequestDto dto) {
         return Stream.of(
                         dto.getShape(),
                         dto.getEyewear(),
