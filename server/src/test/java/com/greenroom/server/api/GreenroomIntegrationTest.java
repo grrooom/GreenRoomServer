@@ -4,10 +4,7 @@ import com.epages.restdocs.apispec.ResourceSnippetParameters;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.greenroom.server.api.config.TestExecutionListener;
-import com.greenroom.server.api.domain.greenroom.dto.in.CompleteTodoRequestDto;
-import com.greenroom.server.api.domain.greenroom.dto.in.GreenroomDecorationRequestDto;
-import com.greenroom.server.api.domain.greenroom.dto.in.GreenroomRegistrationRequestDto;
-import com.greenroom.server.api.domain.greenroom.dto.in.MemoRequestDto;
+import com.greenroom.server.api.domain.greenroom.dto.in.*;
 import com.greenroom.server.api.domain.greenroom.entity.Adornment;
 import com.greenroom.server.api.domain.greenroom.entity.GreenRoom;
 import com.greenroom.server.api.domain.greenroom.entity.Plant;
@@ -281,7 +278,11 @@ public class GreenroomIntegrationTest {
     );
 
     List<FieldDescriptor> requestPartFieldDescriptorsForGreenroomRegistration = List.of(
-            fieldWithPath("plantId").type(JsonFieldType.NUMBER).description("식물 종류 id").optional(),
+            fieldWithPath("plantId").type(JsonFieldType.NUMBER).description("식물 종류 id").optional().attributes(new Attributes.Attribute("constraint",
+                    """
+                            식물을 등록하지 않을 경우 +
+                            1. null +
+                            2. request body에서 필드 제외""")),
             fieldWithPath("nickname").type(JsonFieldType.STRING).description("식물 별명"),
             fieldWithPath("wateringBaseDate").type(JsonFieldType.STRING).description("물주기 기준 날짜").attributes(new Attributes.Attribute("constraint","YYYY-MM-DD")),
             fieldWithPath("wateringInterval").type(JsonFieldType.NUMBER).description("물 주는 주기"),
@@ -295,10 +296,26 @@ public class GreenroomIntegrationTest {
 
     List<FieldDescriptor> requestBodyDescriptorsForAdornment = List.of(
             fieldWithPath("shape").type(JsonFieldType.NUMBER).description("식물 형태 item id"),
-            fieldWithPath("eyewear").type(JsonFieldType.NUMBER).description("안경 악세서리 item id").optional().attributes(new Attributes.Attribute("constraint","사용하지 않는 경우 null 또는 request body에서 필드 제외")),
-            fieldWithPath("hairAccessory").type(JsonFieldType.NUMBER).description("헤어핀 악세서리 item id").optional().attributes(new Attributes.Attribute("constraint","사용하지 않는 경우 null 또는 request body에서 필드 제외")),
-            fieldWithPath("shelf").type(JsonFieldType.NUMBER).description("선반 소품 item id").optional().attributes(new Attributes.Attribute("constraint","사용하지 않는 경우 null 또는 request body에서 필드 제외")),
-            fieldWithPath("window").type(JsonFieldType.NUMBER).description("창문 소품 item id").optional().attributes(new Attributes.Attribute("constraint","사용하지 않는 경우 null 또는 request body에서 필드 제외"))
+            fieldWithPath("eyewear").type(JsonFieldType.NUMBER).description("안경 악세서리 item id").optional().attributes(new Attributes.Attribute("constraint",
+                    """
+                            item을 사용하지 않는 경우 +
+                            1. null +
+                            2. request body에서 필드 제외""")),
+            fieldWithPath("hairAccessory").type(JsonFieldType.NUMBER).description("헤어핀 악세서리 item id").optional().attributes(new Attributes.Attribute("constraint",
+                    """
+                            item을 사용하지 않는 경우 +
+                            1. null +
+                            2. request body에서 필드 제외""")),
+            fieldWithPath("shelf").type(JsonFieldType.NUMBER).description("선반 소품 item id").optional().attributes(new Attributes.Attribute("constraint",
+                    """
+                            item을 사용하지 않는 경우 +
+                            1. null +
+                            2. request body에서 필드 제외""")),
+            fieldWithPath("window").type(JsonFieldType.NUMBER).description("창문 소품 item id").optional().attributes(new Attributes.Attribute("constraint",
+                    """
+                            item을 사용하지 않는 경우 +
+                            1. null +
+                            2. request body에서 필드 제외"""))
     );
 
     List<FieldDescriptor> requestBodyDescriptorsForGreenroomMemo =List.of(
@@ -308,7 +325,14 @@ public class GreenroomIntegrationTest {
                             메모를 등록하지 않을 경우 +
                             1. null +
                             2. 공백("") +
-                            3. request body에서 필드 제외""")));
+                            2. request body에서 필드 제외""")));
+
+    List<FieldDescriptor> requestBodyDescriptorsForGreenroomPlant =List.of(
+            fieldWithPath("plantId").type(JsonFieldType.NUMBER).description("등록하고자 하는 식물의 고유 id").optional().attributes(new Attributes.Attribute("constraint",
+                    """
+                            식물을 등록하지 않을 경우 +
+                            1. null +
+                            2. request body에서 필드 제외""")));
 
     List<FieldDescriptor> resultDescriptorsForAdornment = List.of(
             fieldWithPath("status").type(JsonFieldType.STRING).description("응답 상태"),
@@ -334,11 +358,11 @@ public class GreenroomIntegrationTest {
     List<FieldDescriptor> resultDescriptorsForGreenroomDetails= List.of(
             fieldWithPath("status").type(JsonFieldType.STRING).description("응답 상태"),
             fieldWithPath("code").type(JsonFieldType.STRING).description("상태 코드"),
-            fieldWithPath("data").type(JsonFieldType.OBJECT).optional().description("data").optional().attributes(new Attributes.Attribute("constraint","등록된 식물이 없으면 null")),
+            fieldWithPath("data").type(JsonFieldType.OBJECT).optional().description("data").optional(),
             fieldWithPath("data.basicInfo").type(JsonFieldType.OBJECT).optional().description("그린룸 기본 정보"),
             fieldWithPath("data.basicInfo.greenroomId").type(JsonFieldType.NUMBER).description("그린룸 고유 id"),
             fieldWithPath("data.basicInfo.nickName").type(JsonFieldType.STRING).description("그린룸 이름"),
-            fieldWithPath("data.basicInfo.plantName").type(JsonFieldType.STRING).description("식물 이름"),
+            fieldWithPath("data.basicInfo.plantName").type(JsonFieldType.STRING).description("식물 이름").optional().attributes(new Attributes.Attribute("constraint","등록된 식물이 없으면 null")),
             fieldWithPath("data.basicInfo.duration").type(JsonFieldType.NUMBER).description("함께한 기간"),
             fieldWithPath("data.basicInfo.memo").type(JsonFieldType.STRING).description("메모").optional().attributes(new Attributes.Attribute("constraint","등록된 memo가 없으면 null")),
             fieldWithPath("data.basicInfo.imageUrl").type(JsonFieldType.STRING).description("그린룸 이미지 url").optional().attributes(new Attributes.Attribute("constraint","등록된 이미지가 없으면 null")),
@@ -357,18 +381,18 @@ public class GreenroomIntegrationTest {
             fieldWithPath("data.managementInfo[].activityName").type(JsonFieldType.STRING).description("할 일 이름"),
             fieldWithPath("data.managementInfo[].term").type(JsonFieldType.NUMBER).description("할 일 주기"),
             fieldWithPath("data.managementInfo[].remainingDays").type(JsonFieldType.NUMBER).description("다음 수행일까지 남은 기간"),
-            fieldWithPath("data.plantInfo").type(JsonFieldType.OBJECT).description("식물 기본 정보"),
-            fieldWithPath("data.plantInfo.plantId").type(JsonFieldType.NUMBER).description("식물 id"),
-            fieldWithPath("data.plantInfo.name").type(JsonFieldType.STRING).description("식물 이름"),
-            fieldWithPath("data.plantInfo.scientificName").type(JsonFieldType.STRING).description("식물 학명"),
-            fieldWithPath("data.plantInfo.description").type(JsonFieldType.STRING).description("식물에 대한 설명"),
-            fieldWithPath("data.plantManagementInfo").type(JsonFieldType.OBJECT).description("식물 키우는 법"),
-            fieldWithPath("data.plantManagementInfo.managementLevel").type(JsonFieldType.STRING).description("관리 레벨 정보"),
-            fieldWithPath("data.plantManagementInfo.temperature").type(JsonFieldType.STRING).description("온도 정보"),
-            fieldWithPath("data.plantManagementInfo.sunlight").type(JsonFieldType.STRING).description("햇빛 정보"),
-            fieldWithPath("data.plantManagementInfo.watering").type(JsonFieldType.STRING).description("물주기 정보"),
-            fieldWithPath("data.plantManagementInfo.humidity").type(JsonFieldType.STRING).description("습도 정보"),
-            fieldWithPath("data.plantManagementInfo.fertilizer").type(JsonFieldType.STRING).description("비료 정보")
+            fieldWithPath("data.plantInfo").type(JsonFieldType.OBJECT).description("식물 기본 정보").optional().attributes(new Attributes.Attribute("constraint","등록된 식물이 없으면 null")),
+            fieldWithPath("data.plantInfo.plantId").type(JsonFieldType.NUMBER).description("식물 id").optional(),
+            fieldWithPath("data.plantInfo.name").type(JsonFieldType.STRING).description("식물 이름").optional(),
+            fieldWithPath("data.plantInfo.scientificName").type(JsonFieldType.STRING).description("식물 학명").optional(),
+            fieldWithPath("data.plantInfo.description").type(JsonFieldType.STRING).description("식물에 대한 설명").optional(),
+            fieldWithPath("data.plantManagementInfo").type(JsonFieldType.OBJECT).description("식물 키우는 법").optional().attributes(new Attributes.Attribute("constraint","등록된 식물이 없으면 null")),
+            fieldWithPath("data.plantManagementInfo.managementLevel").type(JsonFieldType.STRING).description("관리 레벨 정보").optional(),
+            fieldWithPath("data.plantManagementInfo.temperature").type(JsonFieldType.STRING).description("온도 정보").optional(),
+            fieldWithPath("data.plantManagementInfo.sunlight").type(JsonFieldType.STRING).description("햇빛 정보").optional(),
+            fieldWithPath("data.plantManagementInfo.watering").type(JsonFieldType.STRING).description("물주기 정보").optional(),
+            fieldWithPath("data.plantManagementInfo.humidity").type(JsonFieldType.STRING).description("습도 정보").optional(),
+            fieldWithPath("data.plantManagementInfo.fertilizer").type(JsonFieldType.STRING).description("비료 정보").optional()
             );
     @Transactional
     @Test
@@ -713,7 +737,7 @@ public class GreenroomIntegrationTest {
         String token = getTokenForTest((long) (10*1000));
         return mockMvc.perform( // api 실행
                 RestDocumentationRequestBuilders
-                        .post("/api/greenroom/{greenroom_id}/items",greenroomId)
+                        .patch("/api/greenroom/{greenroom_id}/items",greenroomId)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(mapper.writeValueAsString(greenroomDecorationRequestDto))
                         .header(HttpHeaders.AUTHORIZATION, "Bearer "+token));
@@ -907,7 +931,7 @@ public class GreenroomIntegrationTest {
         String token = getTokenForTest((long) (10*1000));
         return mockMvc.perform( // api 실행
                 RestDocumentationRequestBuilders
-                        .post("/api/greenroom/{greenroom_id}/memo",greenroomId)
+                        .patch("/api/greenroom/{greenroom_id}/memo",greenroomId)
                         .content(mapper.writeValueAsString(memoRequestDto))
                         .contentType(MediaType.APPLICATION_JSON)
                         .header(HttpHeaders.AUTHORIZATION, "Bearer "+token));
@@ -980,4 +1004,87 @@ public class GreenroomIntegrationTest {
         //문서화
         resultActions.andDo(getDocumentForGreenroomMemo(3));
     }
+
+    private ResultActions getResultActionsForGreenroomPlant(Long greenroomId, GreenroomPlantRequestDto greenroomPlantRequestDto) throws Exception {
+
+        String token = getTokenForTest((long) (10*1000));
+        return mockMvc.perform( // api 실행
+                RestDocumentationRequestBuilders
+                        .patch("/api/greenroom/{greenroom_id}/plant",greenroomId)
+                        .content(mapper.writeValueAsString(greenroomPlantRequestDto))
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .header(HttpHeaders.AUTHORIZATION, "Bearer "+token));
+    }
+
+    private RestDocumentationResultHandler getDocumentForGreenroomPlant(Integer identifier){
+        return document("api/greenroom/plant/"+identifier,
+                preprocessRequest(prettyPrint(),modifyUris().scheme("https").host("greenroom-server.site").removePort()),   // (2)
+                preprocessResponse(prettyPrint(), getModifiedHeader()),  // (3)
+                requestHeaders(headerWithName("Authorization").description("Bearer : 사용자 access Token")),
+                pathParameters(pathParameterForGreenroomId),
+                requestFields(requestBodyDescriptorsForGreenroomPlant),
+                responseFields(resultDescriptorsForGreenroomDetails),
+                resource(
+                        ResourceSnippetParameters.builder()
+                                .tag("그린룸") // 문서에서 api들이 태그로 분류됨
+                                .summary("그린룸 메모 등록 api") // api 이름
+                                .description("그린룸 메모를 등록/변경함.") // api 설명
+                                .build()));
+    }
+
+    @Test
+    @Transactional
+    public void 그린룸_식물등록_성공() throws Exception {
+        //given
+        GreenroomPlantRequestDto greenroomPlantRequestDto = new GreenroomPlantRequestDto(1L);
+        User user = signupForTest();
+        GreenRoom greenRoom = createGreenRoom(user);
+        greenRoom.updateCreationDate(LocalDateTime.now().minusDays(2));
+
+        //when
+        ResultActions resultActions = getResultActionsForGreenroomPlant(greenRoom.getGreenroomId(),greenroomPlantRequestDto);
+
+        //then
+        resultActions.andExpect(status().isOk());
+
+        //문서화
+        resultActions.andDo(getDocumentForGreenroomPlant(1));
+    }
+
+    @Test
+    @Transactional
+    public void 그린룸_식물등록_실패1() throws Exception {
+        //given
+        GreenroomPlantRequestDto greenroomPlantRequestDto = new GreenroomPlantRequestDto(1L);
+
+        //when
+        ResultActions resultActions = getResultActionsForGreenroomPlant(100L,greenroomPlantRequestDto);
+
+        //then
+        resultActions.andExpect(status().is(ResponseCodeEnum.GREENROOM_NOT_FOUND.getStatus().value())).andExpect(jsonPath("code").value(ResponseCodeEnum.GREENROOM_NOT_FOUND.getCode()));
+
+        //문서화
+        resultActions.andDo(getDocumentForGreenroomPlant(2));
+    }
+
+    @Test
+    @Transactional
+    public void 그린룸_식물등록_실패2() throws Exception {
+        //given
+        GreenroomPlantRequestDto greenroomPlantRequestDto = new GreenroomPlantRequestDto(1000L);
+        User user = signupForTest();
+        GreenRoom greenRoom = createGreenRoom(user);
+
+        //when
+        ResultActions resultActions = getResultActionsForGreenroomPlant(greenRoom.getGreenroomId(),greenroomPlantRequestDto);
+
+        //then
+        resultActions.andExpect(status().is(ResponseCodeEnum.PLANT_NOT_FOUND.getStatus().value())).andExpect(jsonPath("code").value(ResponseCodeEnum.PLANT_NOT_FOUND.getCode()));
+
+        //문서화
+        resultActions.andDo(getDocumentForGreenroomPlant(3));
+    }
+
+
+
 }

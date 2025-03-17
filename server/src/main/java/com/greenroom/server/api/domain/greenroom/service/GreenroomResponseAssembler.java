@@ -4,6 +4,7 @@ import com.greenroom.server.api.domain.greenroom.dto.out.GreenroomDetailResponse
 import com.greenroom.server.api.domain.greenroom.dto.out.GreenroomInfoResponseDto;
 import com.greenroom.server.api.domain.greenroom.dto.out.ItemSimpleDto;
 import com.greenroom.server.api.domain.greenroom.entity.GreenRoom;
+import com.greenroom.server.api.domain.greenroom.entity.Plant;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
@@ -32,9 +33,11 @@ public class GreenroomResponseAssembler {
 
         List<GreenroomDetailResponseDto.GreenroomManagementInfoDto> managementInfo = todoService.getGreenroomManagementInfo(greenRoom);
 
-        GreenroomDetailResponseDto.PlantInfoDto plantInfo = GreenroomDetailResponseDto.PlantInfoDto.from(greenRoom.getPlant());
+        Plant plant = greenRoom.getPlant();
 
-        GreenroomDetailResponseDto.PlantManagementInfoDto plantManagementInfo = GreenroomDetailResponseDto.PlantManagementInfoDto.from(greenRoom.getPlant());
+        GreenroomDetailResponseDto.PlantInfoDto plantInfo = plant==null? null: GreenroomDetailResponseDto.PlantInfoDto.from(plant);
+
+        GreenroomDetailResponseDto.PlantManagementInfoDto plantManagementInfo =  plant==null? null: GreenroomDetailResponseDto.PlantManagementInfoDto.from(plant);
 
         return GreenroomDetailResponseDto.of(greenroomBasicInfoDto,decoration,managementInfo,plantInfo,plantManagementInfo);
     }

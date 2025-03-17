@@ -880,3 +880,32 @@ include::{snippets}/api/greenroom/memo/2/http-response.adoc[]
 
 실패 2.
 include::{snippets}/api/greenroom/memo/3/http-response.adoc[]
+
+=== **8. 그린룸 식물 정보 등록**
+
+그린룸 식물 정보를 등록함.
+
+==== Request
+include::{snippets}/api/greenroom/plant/1/http-request.adoc[]
+
+==== Request Headers
+include::{snippets}/api/greenroom/plant/1/request-headers.adoc[]
+
+==== Request Path Parameter Fields
+include::{snippets}/api/greenroom/plant/1/path-parameters.adoc[]
+
+==== Request Body Fields
+include::{snippets}/api/greenroom/plant/1/request-fields.adoc[]
+
+==== 성공 Response
+include::{snippets}/api/greenroom/plant/1/http-response.adoc[]
+
+==== Response Body Fields
+include::{snippets}/api/greenroom/plant/1/response-fields.adoc[]
+
+==== 실패 Response
+실패 1.
+include::{snippets}/api/greenroom/plant/2/http-response.adoc[]
+
+실패 2.
+include::{snippets}/api/greenroom/plant/3/http-response.adoc[]

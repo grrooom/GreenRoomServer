@@ -1,11 +1,8 @@
 package com.greenroom.server.api.domain.greenroom.service;
 
 import com.amazonaws.util.StringUtils;
-import com.greenroom.server.api.domain.greenroom.dto.in.CompleteTodoRequestDto;
-import com.greenroom.server.api.domain.greenroom.dto.in.GreenroomDecorationRequestDto;
-import com.greenroom.server.api.domain.greenroom.dto.in.MemoRequestDto;
+import com.greenroom.server.api.domain.greenroom.dto.in.*;
 import com.greenroom.server.api.domain.greenroom.dto.out.*;
-import com.greenroom.server.api.domain.greenroom.dto.in.GreenroomRegistrationRequestDto;
 import com.greenroom.server.api.domain.greenroom.entity.GreenRoom;
 import com.greenroom.server.api.domain.greenroom.entity.Plant;
 import com.greenroom.server.api.domain.greenroom.enums.GreenRoomStatus;
@@ -177,6 +174,20 @@ public class GreenroomService {
 
     public boolean isOver30Characters(String str) {
         return str.length() > 30;
+    }
+
+    @Transactional
+    public GreenroomDetailResponseDto registerGreenroomPlant(Long greenroomId, GreenroomPlantRequestDto greenroomPlantRequestDto){
+
+        GreenRoom greenRoom =  findEnabledGreenroomById(greenroomId); //없으면 not found
+
+        Plant plant ;
+        if(greenroomPlantRequestDto.plantId()==null){plant=null;}
+        else{plant= plantService.findPlantById(greenroomPlantRequestDto.plantId());}
+
+        greenRoom.updatePlant(plant);
+
+        return getGreenroomDetails(greenroomId);
     }
 
 }
