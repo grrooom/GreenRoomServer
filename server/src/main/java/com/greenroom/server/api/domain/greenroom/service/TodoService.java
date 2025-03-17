@@ -1,5 +1,6 @@
 package com.greenroom.server.api.domain.greenroom.service;
 
+import com.greenroom.server.api.domain.greenroom.dto.out.GreenroomDetailResponseDto;
 import com.greenroom.server.api.domain.greenroom.dto.out.GreenroomInfoResponseDto;
 import com.greenroom.server.api.domain.greenroom.dto.out.PointAndLevelUpResponseDto;
 import com.greenroom.server.api.domain.greenroom.entity.GreenRoom;
@@ -37,7 +38,7 @@ public class TodoService {
 
         List<GreenroomInfoResponseDto.TodoSimpleDto> todoSimpleDtoList =  greemroomTodoList.stream().filter(isTodo).map(todo->GreenroomInfoResponseDto.TodoSimpleDto.from(todo.getActivity())).toList();
 
-        return new GreenroomInfoResponseDto.GreenroomTodoInfoDto(todoSimpleDtoList, todoSimpleDtoList.size());
+        return GreenroomInfoResponseDto.GreenroomTodoInfoDto.of(todoSimpleDtoList, todoSimpleDtoList.size());
 
     }
 
@@ -79,4 +80,11 @@ public class TodoService {
         user.addTotalSeed(totalPoints);
         return PointAndLevelUpResponseDto.of(greenRoom.getUser(),totalPoints,gradeService.updateUserGrade(user));
     }
+
+    public List<GreenroomDetailResponseDto.GreenroomManagementInfoDto> getGreenroomManagementInfo(GreenRoom greenRoom){
+
+        return todoRepository.findAllByGreenRoomAndUseYn(greenRoom,true).stream().map(GreenroomDetailResponseDto.GreenroomManagementInfoDto::from).toList();
+
+    }
+
 }

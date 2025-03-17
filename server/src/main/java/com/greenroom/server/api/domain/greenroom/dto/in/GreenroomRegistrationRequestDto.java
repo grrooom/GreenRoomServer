@@ -17,7 +17,6 @@ public class GreenroomRegistrationRequestDto {
     @NotBlank
     private String nickname;
 
-    @NotBlank
     private String wateringBaseDate;
 
     @NotNull(message = "물주는 주기 등록 필수")

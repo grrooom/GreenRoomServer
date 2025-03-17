@@ -1,8 +1,7 @@
 package com.greenroom.server.api.domain.greenroom.controller;
 
-import com.amazonaws.Response;
 import com.greenroom.server.api.domain.greenroom.dto.in.CompleteTodoRequestDto;
-import com.greenroom.server.api.domain.greenroom.dto.in.GreenroomDecorationDTO;
+import com.greenroom.server.api.domain.greenroom.dto.in.GreenroomDecorationRequestDto;
 import com.greenroom.server.api.domain.greenroom.dto.in.GreenroomRegistrationRequestDto;
 import com.greenroom.server.api.domain.greenroom.dto.out.PointAndLevelUpResponseDto;
 import com.greenroom.server.api.domain.greenroom.service.GreenroomService;
@@ -53,8 +52,13 @@ public class GreenroomController {
     }
 
     @PostMapping("/{greenroom_id}/items")
-    public ResponseEntity<ApiResponse> decoratePlant(@Valid@RequestBody GreenroomDecorationDTO greenroomDecorationDTO, @PathVariable(value = "greenroom_id") Long greenroomID){
-        return ResponseEntity.ok(ApiResponse.success(ResponseCodeEnum.SUCCESS,greenroomService.updateGreenroomAdornment(greenroomID,greenroomDecorationDTO)));
+    public ResponseEntity<ApiResponse> decoratePlant(@Valid@RequestBody GreenroomDecorationRequestDto greenroomDecorationRequestDto, @PathVariable(value = "greenroom_id") Long greenroomId){
+        return ResponseEntity.ok(ApiResponse.success(ResponseCodeEnum.SUCCESS,greenroomService.updateGreenroomAdornment(greenroomId, greenroomDecorationRequestDto)));
+    }
+
+    @GetMapping("/{greenroom_id}/details")
+    public ResponseEntity<ApiResponse> getGreenroomDetails(@PathVariable(value = "greenroom_id") Long greenroomId){
+        return ResponseEntity.ok(ApiResponse.success(ResponseCodeEnum.SUCCESS,greenroomService.getGreenroomDetails(greenroomId)));
     }
 
 }

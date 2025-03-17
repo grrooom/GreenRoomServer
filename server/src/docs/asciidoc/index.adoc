@@ -121,6 +121,7 @@ include::{snippets}/jwt/error2/http-response.adoc[]
 
 === Data 상세 정보
 
+[[activity]]
 ==== Todo
 
 **할 일 목록**
@@ -136,6 +137,7 @@ include::{snippets}/jwt/error2/http-response.adoc[]
 | 6 | misting | 분무하기
 |===
 
+[[item]]
 ==== Item
 
 **item category 목록**
@@ -659,6 +661,8 @@ include::{snippets}/api/greenroom/nickname/duplication/1/response-fields.adoc[]
 
 그린룸을 새롭게 등록함
 
+<<item, **item id** 참고>>
+
 ==== Request
 include::{snippets}/api/greenroom/post/1/curl-request.adoc[]
 
@@ -702,6 +706,10 @@ include::{snippets}/api/greenroom/post/6/http-response.adoc[]
 
 유저가 등록한 그린룸 정보를 조회함.
 
+<<activity, **activity id** 참고>>
+
+<<item, **item id** 참고>>
+
 ==== Request
 include::{snippets}/api/greenroom/info/1/http-request.adoc[]
 
@@ -722,6 +730,8 @@ include::{snippets}/api/greenroom/info/1/response-fields.adoc[]
 === **2. 할 일 완료 처리**
 
 등록된 식물에 대한 할 일(todo task)완료 처리를 진행함.
+
+<<activity, **activity id** 참고>>
 
 ==== Request
 include::{snippets}/api/greenroom/todo/completion/1/http-request.adoc[]
@@ -751,6 +761,8 @@ include::{snippets}/api/greenroom/todo/completion/2/http-response.adoc[]
 
 item 목록을 조회함.
 
+<<item, **item id** 참고>>
+
 ==== Request
 include::{snippets}/api/items/1/http-request.adoc[]
 
@@ -770,6 +782,8 @@ include::{snippets}/api/items/1/response-fields.adoc[]
 
 === **4. 그린룸 꾸미기**
 
+<<item, **item id** 참고>>
+
 ==== Request
 include::{snippets}/api/greenroom/items/1/http-request.adoc[]
 
@@ -783,6 +797,7 @@ include::{snippets}/api/greenroom/items/1/request-fields.adoc[]
 
 include::{snippets}/api/greenroom/items/1/http-response.adoc[]
 
+
 ==== Response Body Fields
 include::{snippets}/api/greenroom/items/1/response-fields.adoc[]
 
@@ -793,3 +808,32 @@ include::{snippets}/api/greenroom/items/2/http-response.adoc[]
 
 실패 2.
 include::{snippets}/api/greenroom/items/3/http-response.adoc[]
+
+
+=== **5. 그린룸 상세 정보 조회**
+
+그린룸 상세 정보를 조회함.
+
+<<activity, **activity id** 참고>>
+
+<<item, **item id** 참고>>
+
+==== Request
+include::{snippets}/api/greenroom/details/1/http-request.adoc[]
+
+==== Request Headers
+include::{snippets}/api/greenroom/details/1/request-headers.adoc[]
+
+==== Request Path Parameter Fields
+include::{snippets}/api/greenroom/details/1/path-parameters.adoc[]
+
+==== 성공 Response
+include::{snippets}/api/greenroom/details/1/http-response.adoc[]
+
+==== Response Body Fields
+include::{snippets}/api/greenroom/details/1/response-fields.adoc[]
+
+
+==== 실패 Response
+실패 1.
+include::{snippets}/api/greenroom/details/2/http-response.adoc[]

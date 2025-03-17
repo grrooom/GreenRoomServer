@@ -61,6 +61,7 @@ dependencies {
 	runtimeOnly group: 'io.jsonwebtoken', name: 'jjwt-jackson', version: '0.11.5'
 
 	implementation 'org.springframework.boot:spring-boot-starter-webflux' //webclient
+
 	implementation "org.json:json:20210307" //json
 
 	//restdocs
@@ -74,7 +75,7 @@ dependencies {
 	testImplementation 'org.springframework.restdocs:spring-restdocs-restassured'
 	swaggerUI 'org.webjars:swagger-ui:4.11.1'
 
-//	//local용 db
+	//local용 db
 	runtimeOnly 'org.mariadb.jdbc:mariadb-java-client'
 
 	//redis

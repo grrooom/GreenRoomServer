@@ -4,14 +4,16 @@ import com.greenroom.server.api.domain.common.entity.BaseTime;
 import com.greenroom.server.api.domain.greenroom.enums.GreenRoomStatus;
 import com.greenroom.server.api.domain.user.entity.User;
 import jakarta.persistence.*;
-import lombok.AccessLevel;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
+
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @Table(name = "greenroom")
 @Entity
 @Getter
+@Builder(access = AccessLevel.PROTECTED)
+@AllArgsConstructor(access = AccessLevel.PRIVATE)
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class GreenRoom extends BaseTime {
 
@@ -36,15 +38,18 @@ public class GreenRoom extends BaseTime {
     @JoinColumn(name = "plant_id")
     private Plant plant;
 
-    @Builder
-    public GreenRoom(String name, String pictureUrl,User user, Plant plant) {
-        this.name = name;
-        this.pictureUrl = pictureUrl;
-        this.greenroomStatus = GreenRoomStatus.ENABLED;
-        this.user = user;
-        this.plant = plant;
+    public static GreenRoom of(String name, String pictureUrl,User user, Plant plant){
+        return GreenRoom.builder()
+                .name(name)
+                .pictureUrl(pictureUrl)
+                .user(user)
+                .memo(null)
+                .greenroomStatus(GreenRoomStatus.ENABLED)
+                .plant(plant)
+                .build();
     }
 
+    public void updateCreationDate(LocalDateTime date){this.createDate = date;}
 
     public void updateMemo(String memo){
         this.memo = memo;

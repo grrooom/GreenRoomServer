@@ -95,7 +95,7 @@ public class PlantService {
                     .stream()
                     .sorted(Comparator.comparingInt(r -> r.getCommonName().indexOf(stn))) // DTO 매핑 전에 정렬
                     .limit(size != -1 ? size : Long.MAX_VALUE) // 필요할 때만 limit 제한 적용
-                    .map(plantDocument -> PlantResponseDto.from(plantDocument, cdnPath)) // 정렬 후 필요한 만큼만 매핑
+                    .map(plantDocument -> PlantResponseDto.of(plantDocument, cdnPath)) // 정렬 후 필요한 만큼만 매핑
                     .toList();
         }
         catch (ElasticsearchException e){
@@ -109,7 +109,7 @@ public class PlantService {
                 .stream()
                 .sorted((p1,p2)->p2.getPlantCount()-p1.getPlantCount())
                 .limit(size != -1 ? size : Long.MAX_VALUE) // 필요할 때만 limit 제한 적용
-                .map(plant -> PlantResponseDto.from(plant, cdnPath)) // 정렬 후 필요한 만큼만 매핑
+                .map(plant -> PlantResponseDto.of(plant, cdnPath)) // 정렬 후 필요한 만큼만 매핑
                 .toList();
     }
 
@@ -120,7 +120,7 @@ public class PlantService {
 
     public PlantWateringInfoResponseDto getWateringInfo(Long plantId){
         Plant plant =  findPlantById(plantId);
-        return new PlantWateringInfoResponseDto(plantId,plant.getCommonName(),plant.getWaterCycle());
+        return PlantWateringInfoResponseDto.of(plantId,plant.getCommonName(),plant.getWaterCycle());
     }
 
 

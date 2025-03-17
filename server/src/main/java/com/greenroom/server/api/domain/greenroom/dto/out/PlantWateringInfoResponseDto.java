@@ -1,12 +1,11 @@
 package com.greenroom.server.api.domain.greenroom.dto.out;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
+public record PlantWateringInfoResponseDto (
+    Long plantId,
+    String plantName,
+    String wateringInfo){
 
-@Data
-@AllArgsConstructor
-public class PlantWateringInfoResponseDto {
-    private Long plantId;
-    private String plantName;
-    private String wateringInfo;
+    public static PlantWateringInfoResponseDto of(Long plantId,String plantName, String wateringInfo){
+        return new PlantWateringInfoResponseDto(plantId,plantName,wateringInfo);
+    }
 }
