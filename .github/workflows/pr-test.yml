@@ -43,13 +43,18 @@ jobs:
           java-version: '17'
           distribution: 'temurin'
 
-      - name: Make application-secret.yml
+      - name: Create Secret Files
         run: |
-            cd ./server/src/main/resources # resources 폴더로 이동
-            touch ./application-secret.yml # application.yml 생성
-            echo "${{ secrets.SECRETS}}" | base64 --decode > ./application-secret.yml
-        shell: bash
-
+          RESOURCE_DIR=./server/src/main/resources
+          STATIC_DIR=$RESOURCE_DIR/static/.well-known
+      
+          # application-secret.yml 생성
+          mkdir -p $RESOURCE_DIR
+          echo "${{ secrets.SECRETS }}" | base64 --decode > $RESOURCE_DIR/application-secret.yml
+      
+          # fcm-admin.json 생성
+          echo "${{ secrets.FCM_SECRET }}" | base64 --decode > $RESOURCE_DIR/fcm-admin.json
+        
       - name: Setup Gradle
         uses: gradle/actions/setup-gradle@af1da67850ed9a4cedd57bfd976089dd991e2582 # v4.0.0
 
