@@ -1,7 +1,9 @@
 package com.greenroom.server.api.domain.greenroom.service;
 
+import com.amazonaws.util.StringUtils;
 import com.greenroom.server.api.domain.greenroom.dto.in.CompleteTodoRequestDto;
 import com.greenroom.server.api.domain.greenroom.dto.in.GreenroomDecorationRequestDto;
+import com.greenroom.server.api.domain.greenroom.dto.in.MemoRequestDto;
 import com.greenroom.server.api.domain.greenroom.dto.out.*;
 import com.greenroom.server.api.domain.greenroom.dto.in.GreenroomRegistrationRequestDto;
 import com.greenroom.server.api.domain.greenroom.entity.GreenRoom;
@@ -23,6 +25,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeParseException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -37,10 +40,12 @@ public class GreenroomService {
     //service
     private final CustomUserDetailService customUserDetailService;
     private final TodoService todoService;
+    private final TodoLogService todoLogService;
     private final AdornmentService adornmentService;
     private final S3ImageUploader s3ImageUploader;
     private final PlantService plantService;
     private final GradeService gradeService;
+    private final DiaryService diaryService;
 
     //util
     private final GreenroomResponseAssembler greenroomResponseAssembler;
@@ -128,6 +133,50 @@ public class GreenroomService {
         GreenRoom greenRoom = findEnabledGreenroomById(greenroomId); // 없으면 not found exception 발생
 
         return greenroomResponseAssembler.toDetailResponse(greenRoom);
+    }
+
+    @Transactional
+    public List<String> deleteGreenroom(List<Long> greenroomIdList){
+
+        List<String> imageDeleteList = new ArrayList<>();
+
+        greenRoomRepository.findAllById(greenroomIdList).forEach(greenRoom -> {
+            if(greenRoom.getPictureUrl()!=null){imageDeleteList.add(greenRoom.getPictureUrl());}}
+        );
+
+        //greenroom 연관 adornment 객체 삭제
+        adornmentService.deleteAllByGreenRoom(greenroomIdList);
+
+        //greenroom 연관 diary 객체 삭제  + diary 객체 image 파일 삭제 대상에 포함.
+        imageDeleteList.addAll(diaryService.deleteAllByGreenRoom(greenroomIdList));
+
+        // greenroom 연관된 todo_log, todo 삭제
+        todoLogService.deleteAllByGreenroom(greenroomIdList);
+        todoService.deleteAllByGreenRoom(greenroomIdList);
+
+        // greenroom 삭제
+        greenRoomRepository.deleteAllByIdInBatch(greenroomIdList);
+
+        return imageDeleteList;
+    }
+
+    @Transactional
+    public void deleteAllGreenroomAndDeleteAllImages(List<Long> greenroomIdList){
+
+        s3ImageUploader.deleteImageInBatch(deleteGreenroom(greenroomIdList));
+    }
+
+    @Transactional
+    public void postMemo(Long greenroomId,MemoRequestDto memoRequestDto){
+
+        if(isOver30Characters(memoRequestDto.memo())){throw new CustomException(ResponseCodeEnum.TOO_LONG_STRING);}
+
+        GreenRoom greenRoom = findEnabledGreenroomById(greenroomId);
+        greenRoom.updateMemo(memoRequestDto.memo());
+    }
+
+    public boolean isOver30Characters(String str) {
+        return str.length() > 30;
     }
 
 }

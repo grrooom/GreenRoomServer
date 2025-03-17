@@ -19,4 +19,10 @@ public class TodoLogService {
         }
     }
 
+    public void deleteAllByGreenroom(List<Long> greenroomIdList){
+        todoLogRepository.deleteAllByGreenRoom(greenroomIdList);
+    }
+
+
+
 }

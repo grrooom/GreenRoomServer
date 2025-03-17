@@ -744,7 +744,6 @@ include::{snippets}/api/greenroom/todo/completion/1/request-headers.adoc[]
 include::{snippets}/api/greenroom/todo/completion/1/path-parameters.adoc[]
 
 ==== Request Body Fields
-
 include::{snippets}/api/greenroom/todo/completion/1/request-fields.adoc[]
 
 ==== 성공 Response
@@ -837,3 +836,47 @@ include::{snippets}/api/greenroom/details/1/response-fields.adoc[]
 ==== 실패 Response
 실패 1.
 include::{snippets}/api/greenroom/details/2/http-response.adoc[]
+
+
+=== **6. 그린룸 삭제**
+
+특정 그린룸을 삭제함
+
+==== Request
+include::{snippets}/api/greenroom/delete/1/http-request.adoc[]
+
+==== Request Headers
+include::{snippets}/api/greenroom/delete/1/request-headers.adoc[]
+
+==== Request Path Parameter Fields
+include::{snippets}/api/greenroom/delete/1/path-parameters.adoc[]
+
+==== 성공 Response
+include::{snippets}/api/greenroom/delete/1/http-response.adoc[]
+
+
+=== **7. 그린룸 메모 등록**
+
+그린룸 메모를 등록/갱신함
+
+==== Request
+include::{snippets}/api/greenroom/memo/1/http-request.adoc[]
+
+==== Request Headers
+include::{snippets}/api/greenroom/memo/1/request-headers.adoc[]
+
+==== Request Path Parameter Fields
+include::{snippets}/api/greenroom/memo/1/path-parameters.adoc[]
+
+==== Request Body Fields
+include::{snippets}/api/greenroom/memo/1/request-fields.adoc[]
+
+==== 성공 Response
+include::{snippets}/api/greenroom/memo/1/http-response.adoc[]
+
+==== 실패 Response
+실패 1.
+include::{snippets}/api/greenroom/memo/2/http-response.adoc[]
+
+실패 2.
+include::{snippets}/api/greenroom/memo/3/http-response.adoc[]

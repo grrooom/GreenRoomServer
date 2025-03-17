@@ -73,7 +73,7 @@ public class AdornmentService {
             GreenRoom greenRoom, GreenroomDecorationRequestDto greenroomDecorationRequestDto) {
 
         // 기존 장식 삭제
-        adornmentRepository.deleteAllByGreenRoom(greenRoom);
+        adornmentRepository.deleteAllByGreenRoomGreenroomId(greenRoom.getGreenroomId());
 
         // 아이템 ID 리스트 추출
         List<Long> itemIdList = extractItemIds(greenroomDecorationRequestDto);
@@ -140,5 +140,9 @@ public class AdornmentService {
                         dto.getShelf())
                 .filter(Objects::nonNull)  // null 값 제거
                 .toList();
+    }
+
+    public void deleteAllByGreenRoom(List<Long> greenroomIdList){
+        adornmentRepository.deleteAllByGreenRoomIn(greenroomIdList);
     }
 }
