@@ -31,7 +31,7 @@ public record GreenroomDetailResponseDto(
     public record GreenroomBasicInfoDto (Long greenroomId, String nickName, String plantName, Integer duration, String memo, String imageUrl){
         public static GreenroomBasicInfoDto from(GreenRoom greenRoom,String cdnPath){
             String completeImageUrl = greenRoom.getPictureUrl()==null? null: cdnPath+"/"+greenRoom.getPictureUrl();
-            return new GreenroomBasicInfoDto(greenRoom.getGreenroomId(),greenRoom.getName(),greenRoom.getPlant().getCommonName(),LocalDate.now().getDayOfYear()- greenRoom.getCreateDate().getDayOfYear()+1,greenRoom.getMemo(), completeImageUrl);
+            return new GreenroomBasicInfoDto(greenRoom.getGreenroomId(),greenRoom.getName(), greenRoom.getPlant()==null?null:greenRoom.getPlant().getCommonName(),LocalDate.now().getDayOfYear()- greenRoom.getCreateDate().getDayOfYear()+1,greenRoom.getMemo(), completeImageUrl);
         }
     }
 

@@ -1,10 +1,7 @@
 package com.greenroom.server.api.domain.greenroom.controller;
 
 import com.google.protobuf.Api;
-import com.greenroom.server.api.domain.greenroom.dto.in.CompleteTodoRequestDto;
-import com.greenroom.server.api.domain.greenroom.dto.in.GreenroomDecorationRequestDto;
-import com.greenroom.server.api.domain.greenroom.dto.in.GreenroomRegistrationRequestDto;
-import com.greenroom.server.api.domain.greenroom.dto.in.MemoRequestDto;
+import com.greenroom.server.api.domain.greenroom.dto.in.*;
 import com.greenroom.server.api.domain.greenroom.dto.out.PointAndLevelUpResponseDto;
 import com.greenroom.server.api.domain.greenroom.service.GreenroomService;
 import com.greenroom.server.api.global.response.enums.ResponseCodeEnum;
@@ -50,13 +47,12 @@ public class GreenroomController {
 
     }
 
-
     @PostMapping("/{greenroom_id}/todo/completion")
     public ResponseEntity<ApiResponse> completeTodo(@PathVariable(value = "greenroom_id")Long greenroomId, @RequestBody @Valid CompleteTodoRequestDto completeTodoRequestDto){
         return ResponseEntity.ok(ApiResponse.success(ResponseCodeEnum.SUCCESS,greenroomService.completeTodo(greenroomId,completeTodoRequestDto)));
     }
 
-    @PostMapping("/{greenroom_id}/items")
+    @PatchMapping("/{greenroom_id}/items")
     public ResponseEntity<ApiResponse> decoratePlant(@Valid@RequestBody GreenroomDecorationRequestDto greenroomDecorationRequestDto, @PathVariable(value = "greenroom_id") Long greenroomId){
         return ResponseEntity.ok(ApiResponse.success(ResponseCodeEnum.SUCCESS,greenroomService.updateGreenroomAdornment(greenroomId, greenroomDecorationRequestDto)));
     }
@@ -72,10 +68,15 @@ public class GreenroomController {
         return ResponseEntity.status(HttpStatus.NO_CONTENT).body(null);
     }
 
-    @PostMapping("{greenroom_id}/memo")
+    @PatchMapping("{greenroom_id}/memo")
     public ResponseEntity<ApiResponse> postMemo(@PathVariable(value = "greenroom_id") Long greenroomId, @RequestBody MemoRequestDto memoRequestDto){
         greenroomService.postMemo(greenroomId,memoRequestDto);
         return ResponseEntity.status(HttpStatus.NO_CONTENT).body(null);
+    }
+
+    @PatchMapping("/{greenroom_id}/plant")
+    public ResponseEntity<ApiResponse> postGreenroomPlant(@PathVariable(value = "greenroom_id") Long greenroomId, @RequestBody GreenroomPlantRequestDto greenroomPlantRequestDto){
+        return ResponseEntity.ok(ApiResponse.success(ResponseCodeEnum.SUCCESS,greenroomService.registerGreenroomPlant(greenroomId,greenroomPlantRequestDto)));
     }
 
 }
