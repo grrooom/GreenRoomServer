@@ -69,11 +69,30 @@ public class S3ImageUploader {
         metadata.setContentLength(multipartFile.getSize());
         metadata.setContentType(multipartFile.getContentType());
 
-        try{
-            amazonS3.putObject(bucket, serverFileName, multipartFile.getInputStream(), metadata);
-        }
-        catch (IOException e){throw new CustomException(ResponseCodeEnum.FAIL_TO_UPLOAD_IMAGE);}
+        int maxRetries = 3; // 최대 재시도 횟수
+        int attempt = 0;
 
+        while (true) {
+            try (InputStream inputStream = multipartFile.getInputStream()) {
+                amazonS3.putObject(bucket, serverFileName, inputStream, metadata);
+                break;
+            }
+            catch (IOException | SdkClientException e){
+                attempt++;
+                log.warn("[warn] Failed to upload image attempt {}/{}. Error: {}", attempt, maxRetries, e.getMessage());
+
+                if (attempt >= maxRetries) {
+                    // 재시도 끝까지 실패하면 예외 던지기
+                    throw new CustomException(ResponseCodeEnum.FAIL_TO_UPLOAD_IMAGE);
+                }
+                try {
+                    Thread.sleep(1000L * attempt); // 1초, 2초, 3초... 점진적 딜레이
+                } catch (InterruptedException ie) {
+                    Thread.currentThread().interrupt(); // 인터럽트 발생 시 즉시 종료
+                    throw new CustomException(ResponseCodeEnum.FAIL_TO_UPLOAD_IMAGE);
+                }
+            }
+        }
         return serverFileName;
     }
 
@@ -84,6 +103,7 @@ public class S3ImageUploader {
         }
         catch (SdkClientException e){
             //삭제 연산 실패 시 log 남김.
+            // 고아 객체 - 낙관적 처리
             //추후 삭제 연산 실패 시 db 저장 -> 삭제 실패한 파일 삭제 재시도 (스케줄러) 도입 가능
             log.error("[error] Fail to delete image files after 3 times retry : {}",imageFileUrl);
         }

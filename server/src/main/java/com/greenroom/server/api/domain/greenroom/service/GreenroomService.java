@@ -18,6 +18,8 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.support.TransactionSynchronization;
+import org.springframework.transaction.support.TransactionSynchronizationManager;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.time.LocalDate;
@@ -188,6 +190,60 @@ public class GreenroomService {
         greenRoom.updatePlant(plant);
 
         return getGreenroomDetails(greenroomId);
+    }
+
+    @Transactional
+    public GreenroomDetailResponseDto updateGreenroomInfo(Long greenroomId, GreenroomInfoUpdateRequestDto greenroomInfoUpdateRequestDto, MultipartFile imageFile){
+
+        GreenRoom  greenRoom = findEnabledGreenroomById(greenroomId); //없으면 not found
+        GreenRoomStatus greenRoomStatus = greenroomInfoUpdateRequestDto.isAlive()?GreenRoomStatus.ENABLED:GreenRoomStatus.DISABLED;
+
+        greenRoom.updateName(greenroomInfoUpdateRequestDto.nickname()); //이름 변경
+        greenRoom.updateStatus(greenRoomStatus); // 상태 변경
+
+        if(greenroomInfoUpdateRequestDto.imageAction()== GreenroomInfoUpdateRequestDto.ImageAction.DELETE){
+            deleteGreenroomImage(greenRoom);
+        }
+        else if(greenroomInfoUpdateRequestDto.imageAction()== GreenroomInfoUpdateRequestDto.ImageAction.UPLOAD){
+            updateGreenroomImage(greenRoom,imageFile);
+        }
+        return getGreenroomDetails(greenroomId);
+    }
+
+    private void deleteGreenroomImage(GreenRoom greenRoom){
+
+        String oldImageUrl = greenRoom.getPictureUrl();
+        greenRoom.updatePictureUrl(null);
+
+        if (TransactionSynchronizationManager.isSynchronizationActive()) {
+            TransactionSynchronizationManager.registerSynchronization(new TransactionSynchronization() {
+                @Override
+                public void afterCommit() {
+                    if(oldImageUrl!=null){s3ImageUploader.deleteImage(oldImageUrl);}
+                }
+            });
+        }
+    }
+
+    private void updateGreenroomImage(GreenRoom greenRoom, MultipartFile imageFile){
+
+        deleteGreenroomImage(greenRoom);
+
+        if(imageFile==null || imageFile.isEmpty()){return;}
+
+        String imageUrl = s3ImageUploader.uploadGreenroomImage(imageFile);
+        greenRoom.updatePictureUrl(imageUrl);
+
+        if (TransactionSynchronizationManager.isSynchronizationActive()) {
+            TransactionSynchronizationManager.registerSynchronization(new TransactionSynchronization() {
+                @Override
+                public void afterCompletion(int status) {
+                    if (status == TransactionSynchronization.STATUS_ROLLED_BACK && imageUrl!=null) {
+                        s3ImageUploader.deleteImage(imageUrl);
+                    }
+                }
+            });
+        }
     }
 
 }
