@@ -34,5 +34,6 @@ public interface GreenRoomRepository extends JpaRepository<GreenRoom,Long> {
     @EntityGraph(attributePaths = {"plant"})
     List<GreenRoom> findGreenRoomByUserAndGreenroomStatus(User user, GreenRoomStatus greenRoomStatus);
 
+    @EntityGraph(attributePaths = {"plant"})
     Optional<GreenRoom> findByGreenroomIdAndGreenroomStatus(Long greenroomId, GreenRoomStatus greenRoomStatus);
 }

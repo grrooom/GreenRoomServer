@@ -289,6 +289,23 @@ public class GreenroomIntegrationTest {
             fieldWithPath("itemId").type(JsonFieldType.NUMBER).description("식물 형태 id")
     );
 
+
+    List<RequestPartDescriptor> requestPartDescriptorsForGreenroomInfoUpdate = List.of(
+            partWithName("imageFile").description("이미지 파일. \n+ 이미지를 등록/갱신하는 경우에만 첨부").attributes(new Attributes.Attribute("content-type","image/*")),
+            partWithName("data").description("그린룸 변경 정보").attributes(new Attributes.Attribute("content-type","application/json"))
+    );
+
+    List<FieldDescriptor> requestPartFieldDescriptorsForGreenroomInfoUpdate = List.of(
+            fieldWithPath("nickname").type(JsonFieldType.STRING).description("그린룸 별명"),
+            fieldWithPath("imageAction").type(JsonFieldType.STRING).description("이미지 처리 방법").attributes(new Attributes.Attribute("constraint","""
+                            이미지 처리 방법 +
+                            1. NONE : 변경하지 않음 +
+                            2. UPLOAD : 이미지 등록/변경 +
+                            3. DELETE : 이미지를 삭제함
+                            """)),
+            fieldWithPath("isAlive").type(JsonFieldType.BOOLEAN).description("식물 상태. 여전히 키우고 있으면 true, 죽었으면 false")
+    );
+
     List<FieldDescriptor> requestBodyDescriptorsForCompleteTodo = List.of(
             fieldWithPath("completedTodo").type(JsonFieldType.ARRAY).description("완료 처리할 작업의 id 목록")
     );
@@ -1006,7 +1023,6 @@ public class GreenroomIntegrationTest {
     }
 
     private ResultActions getResultActionsForGreenroomPlant(Long greenroomId, GreenroomPlantRequestDto greenroomPlantRequestDto) throws Exception {
-
         String token = getTokenForTest((long) (10*1000));
         return mockMvc.perform( // api 실행
                 RestDocumentationRequestBuilders
@@ -1084,6 +1100,126 @@ public class GreenroomIntegrationTest {
         //문서화
         resultActions.andDo(getDocumentForGreenroomPlant(3));
     }
+
+
+    private ResultActions getResultActionsForGreenroomInfoUpdate(Long greenroomId, MockMultipartFile image,MockMultipartFile data) throws Exception {
+
+        String token = getTokenForTest((long) (10*1000));
+        return mockMvc.perform( // api 실행
+                RestDocumentationRequestBuilders
+                        .multipart("/api/greenroom/{greenroom_id}/info",greenroomId)
+                        .file(image)
+                        .file(data)
+                        .contentType(MediaType.MULTIPART_FORM_DATA)
+                        .header(HttpHeaders.AUTHORIZATION, "Bearer "+token)
+                        .with(request -> {
+                            request.setMethod("PATCH"); // PATCH로 변경!
+                            return request;}));
+    }
+
+    private RestDocumentationResultHandler getDocumentForGreenroomInfoUpdate(Integer identifier){
+        return document("api/greenroom/info/update/"+identifier,
+                preprocessRequest(prettyPrint(),modifyUris().scheme("https").host("greenroom-server.site").removePort()),
+                preprocessResponse(prettyPrint(), getModifiedHeader()),
+                pathParameters(pathParameterForGreenroomId),
+                requestParts(requestPartDescriptorsForGreenroomInfoUpdate),
+                requestPartFields("data",requestPartFieldDescriptorsForGreenroomInfoUpdate),
+                responseFields(resultDescriptorsForGreenroomDetails), // responseBody 설명
+                requestHeaders(headerWithName("Authorization").description("Bearer : 사용자 access Token")),
+                resource(ResourceSnippetParameters.builder()
+                                .tag("그린룸") // 문서에서 api들이 태그로 분류됨
+                                .summary("그린룸 식물 정보 편집 api") // api 이름
+                                .description("그린룸 정보를 편집함.") // api 설명
+                                .build()));
+    }
+
+    @Test
+    @Transactional
+    public void 그린룸_식물정보_편집_성공() throws Exception {
+        //given
+        User user = signupForTest();
+        GreenRoom greenRoom = createGreenRoom(user);
+        greenRoom.updateCreationDate(LocalDateTime.now().minusDays(2));
+
+        GreenroomInfoUpdateRequestDto greenroomInfoUpdateRequestDto = new GreenroomInfoUpdateRequestDto("해롱해롱이",true, GreenroomInfoUpdateRequestDto.ImageAction.UPLOAD);
+        MockMultipartFile image = getTestMultiPartFile();
+        MockMultipartFile data = new MockMultipartFile("data", "", "application/json", mapper.writeValueAsString(greenroomInfoUpdateRequestDto).getBytes());
+
+        //when
+        ResultActions resultActions = getResultActionsForGreenroomInfoUpdate(greenRoom.getGreenroomId(),image,data);
+
+        //then
+        resultActions.andExpect(status().isOk());
+
+        //문서화
+        resultActions.andDo(getDocumentForGreenroomInfoUpdate(1));
+    }
+
+    @Test
+    @Transactional
+    public void 그린룸_식물정보_편집_실패1() throws Exception {
+        //given
+        GreenroomInfoUpdateRequestDto greenroomInfoUpdateRequestDto = new GreenroomInfoUpdateRequestDto("해롱해롱이",true, GreenroomInfoUpdateRequestDto.ImageAction.UPLOAD);
+        MockMultipartFile image = getTestMultiPartFile();
+        MockMultipartFile data = new MockMultipartFile("data", "", "application/json", mapper.writeValueAsString(greenroomInfoUpdateRequestDto).getBytes());
+
+        //when
+        ResultActions resultActions = getResultActionsForGreenroomInfoUpdate(100L,image,data);
+
+        //then
+        resultActions.andExpect(status().is(ResponseCodeEnum.GREENROOM_NOT_FOUND.getStatus().value())).andExpect(jsonPath("code").value(ResponseCodeEnum.GREENROOM_NOT_FOUND.getCode()));
+
+        //문서화
+        resultActions.andDo(getDocumentForGreenroomInfoUpdate(2));
+    }
+
+    @Test
+    @Transactional
+    public void 그린룸_식물정보_편집_실패2() throws Exception {
+        //given
+        User user = signupForTest();
+        GreenRoom greenRoom = createGreenRoom(user);
+        greenRoom.updateCreationDate(LocalDateTime.now().minusDays(2));
+
+        GreenroomInfoUpdateRequestDto greenroomInfoUpdateRequestDto = new GreenroomInfoUpdateRequestDto("해롱해롱이",true, GreenroomInfoUpdateRequestDto.ImageAction.UPLOAD);
+        MockMultipartFile image = getInvalidTestMultiPartFile();
+        MockMultipartFile data = new MockMultipartFile("data", "", "application/json", mapper.writeValueAsString(greenroomInfoUpdateRequestDto).getBytes());
+
+
+        //when
+        ResultActions resultActions = getResultActionsForGreenroomInfoUpdate(greenRoom.getGreenroomId(),image,data);
+
+        //then
+        resultActions.andExpect(status().is(ResponseCodeEnum.INVALID_IMAGE_FORMAT.getStatus().value())).andExpect(jsonPath("code").value(ResponseCodeEnum.INVALID_IMAGE_FORMAT.getCode()));
+
+        //문서화
+        resultActions.andDo(getDocumentForGreenroomInfoUpdate(3));
+    }
+
+    @Test
+    @Transactional
+    public void 그린룸_식물정보_편집_실패3() throws Exception {
+        //given
+        User user = signupForTest();
+        GreenRoom greenRoom = createGreenRoom(user);
+        greenRoom.updateCreationDate(LocalDateTime.now().minusDays(2));
+
+        GreenroomInfoUpdateRequestDto greenroomInfoUpdateRequestDto = new GreenroomInfoUpdateRequestDto("해롱해롱이",true, GreenroomInfoUpdateRequestDto.ImageAction.UPLOAD);
+        MockMultipartFile image = getInvalidTestMultiPartFile();
+        MockMultipartFile data = new MockMultipartFile("data", "", "application/json", mapper.writeValueAsString(greenroomInfoUpdateRequestDto).getBytes());
+
+        //when
+        doThrow(new CustomException(ResponseCodeEnum.FAIL_TO_UPLOAD_IMAGE)).when(mockitoGreenroomService).updateGreenroomInfo(greenRoom.getGreenroomId(),greenroomInfoUpdateRequestDto,image);
+        ResultActions resultActions = getResultActionsForGreenroomInfoUpdate(greenRoom.getGreenroomId(),image,data);
+
+        //then
+        resultActions.andExpect(status().is(ResponseCodeEnum.FAIL_TO_UPLOAD_IMAGE.getStatus().value())).andExpect(jsonPath("code").value(ResponseCodeEnum.FAIL_TO_UPLOAD_IMAGE.getCode()));
+
+        //문서화
+        resultActions.andDo(getDocumentForGreenroomInfoUpdate(4));
+    }
+
+
 
 
 

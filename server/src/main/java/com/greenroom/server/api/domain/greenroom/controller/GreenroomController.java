@@ -79,4 +79,8 @@ public class GreenroomController {
         return ResponseEntity.ok(ApiResponse.success(ResponseCodeEnum.SUCCESS,greenroomService.registerGreenroomPlant(greenroomId,greenroomPlantRequestDto)));
     }
 
+    @PatchMapping(value ="/{greenroom_id}/info" ,consumes = "multipart/form-data")
+    public ResponseEntity<ApiResponse> updateGreenroom(@PathVariable(value = "greenroom_id") Long greenroomId, @Valid @RequestPart(value = "data") GreenroomInfoUpdateRequestDto greenroomInfoUpdateRequestDto,@RequestPart(value = "imageFile",required = false) MultipartFile imageFile){
+        return ResponseEntity.ok(ApiResponse.success(ResponseCodeEnum.SUCCESS,greenroomService.updateGreenroomInfo(greenroomId,greenroomInfoUpdateRequestDto,imageFile)));
+    }
 }
