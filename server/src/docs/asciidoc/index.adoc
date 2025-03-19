@@ -1034,3 +1034,26 @@ include::{snippets}/api/greenroom/activity/patch/1/response-fields.adoc[]
 실패 1.
 include::{snippets}/api/greenroom/activity/patch/2/http-response.adoc[]
 
+
+=== **13. 식물 상세 정보를 조회**
+
+특정 식물의 상세 정보를 조회함.
+
+==== Request
+include::{snippets}/api/plants/info/1/http-request.adoc[]
+
+==== Request Headers
+include::{snippets}/api/plants/info/1/request-headers.adoc[]
+
+==== Request Path Parameter Fields
+include::{snippets}/api/plants/info/1/path-parameters.adoc[]
+
+==== 성공 Response
+include::{snippets}/api/plants/info/1/http-response.adoc[]
+
+==== Response Body Fields
+include::{snippets}/api/plants/info/1/response-fields.adoc[]
+
+==== 실패 Response
+실패 1.
+include::{snippets}/api/plants/info/2/http-response.adoc[]

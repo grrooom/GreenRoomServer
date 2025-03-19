@@ -415,6 +415,7 @@ public class GreenroomIntegrationTest {
             fieldWithPath("data.plantInfo.name").type(JsonFieldType.STRING).description("식물 이름").optional(),
             fieldWithPath("data.plantInfo.scientificName").type(JsonFieldType.STRING).description("식물 학명").optional(),
             fieldWithPath("data.plantInfo.description").type(JsonFieldType.STRING).description("식물에 대한 설명").optional(),
+            fieldWithPath("data.plantInfo.imageUrl").type(JsonFieldType.STRING).description("식물 사진").optional(),
             fieldWithPath("data.plantManagementInfo").type(JsonFieldType.OBJECT).description("식물 키우는 법").optional().attributes(new Attributes.Attribute("constraint","등록된 식물이 없으면 null")),
             fieldWithPath("data.plantManagementInfo.managementLevel").type(JsonFieldType.STRING).description("관리 레벨 정보").optional(),
             fieldWithPath("data.plantManagementInfo.temperature").type(JsonFieldType.STRING).description("온도 정보").optional(),
@@ -1427,6 +1428,7 @@ public class GreenroomIntegrationTest {
         //문서화
         resultActions.andDo(getDocumentForUpdateActivityInfo(2));
     }
+
 
 
 }

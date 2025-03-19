@@ -8,6 +8,9 @@ import static org.springframework.restdocs.operation.preprocess.Preprocessors.*;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.greenroom.server.api.config.TestExecutionListener;
 import com.greenroom.server.api.domain.greenroom.document.PlantDocument;
+import com.greenroom.server.api.domain.greenroom.dto.in.ActivityInfoUpdateRequestDto;
+import com.greenroom.server.api.domain.greenroom.dto.in.GreenroomPlantRequestDto;
+import com.greenroom.server.api.domain.greenroom.entity.GreenRoom;
 import com.greenroom.server.api.domain.greenroom.repository.*;
 import com.greenroom.server.api.domain.greenroom.service.PlantService;
 import com.greenroom.server.api.domain.user.entity.User;
@@ -29,9 +32,11 @@ import org.springframework.boot.test.autoconfigure.restdocs.AutoConfigureRestDoc
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
 import org.springframework.restdocs.RestDocumentationContextProvider;
 import org.springframework.restdocs.RestDocumentationExtension;
 import org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders;
+import org.springframework.restdocs.mockmvc.RestDocumentationResultHandler;
 import org.springframework.restdocs.operation.preprocess.HeadersModifyingOperationPreprocessor;
 import org.springframework.restdocs.payload.FieldDescriptor;
 import org.springframework.restdocs.payload.JsonFieldType;
@@ -48,6 +53,7 @@ import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -187,6 +193,25 @@ public class PlantIntegrationTest {
             fieldWithPath("data.plantId").type(JsonFieldType.NUMBER).description("식물 id"),
             fieldWithPath("data.plantName").type(JsonFieldType.STRING).description("식물 이름"),
             fieldWithPath("data.wateringInfo").type(JsonFieldType.STRING).description("식물 물주기 정보")
+    );
+
+    List<FieldDescriptor> resultDescriptorsForPlantDetails= List.of(
+            fieldWithPath("status").type(JsonFieldType.STRING).description("응답 상태"),
+            fieldWithPath("code").type(JsonFieldType.STRING).description("상태 코드"),
+            fieldWithPath("data").type(JsonFieldType.OBJECT).optional().description("data").optional(),
+            fieldWithPath("data.plantInfo").type(JsonFieldType.OBJECT).description("식물 기본 정보"),
+            fieldWithPath("data.plantInfo.plantId").type(JsonFieldType.NUMBER).description("식물 id").optional(),
+            fieldWithPath("data.plantInfo.name").type(JsonFieldType.STRING).description("식물 이름").optional(),
+            fieldWithPath("data.plantInfo.scientificName").type(JsonFieldType.STRING).description("식물 학명").optional(),
+            fieldWithPath("data.plantInfo.description").type(JsonFieldType.STRING).description("식물에 대한 설명").optional(),
+            fieldWithPath("data.plantInfo.imageUrl").type(JsonFieldType.STRING).description("식물 사진").optional(),
+            fieldWithPath("data.plantManagementInfo").type(JsonFieldType.OBJECT).description("식물 키우는 법"),
+            fieldWithPath("data.plantManagementInfo.managementLevel").type(JsonFieldType.STRING).description("관리 레벨 정보").optional(),
+            fieldWithPath("data.plantManagementInfo.temperature").type(JsonFieldType.STRING).description("온도 정보").optional(),
+            fieldWithPath("data.plantManagementInfo.sunlight").type(JsonFieldType.STRING).description("햇빛 정보").optional(),
+            fieldWithPath("data.plantManagementInfo.watering").type(JsonFieldType.STRING).description("물주기 정보").optional(),
+            fieldWithPath("data.plantManagementInfo.humidity").type(JsonFieldType.STRING).description("습도 정보").optional(),
+            fieldWithPath("data.plantManagementInfo.fertilizer").type(JsonFieldType.STRING).description("비료 정보").optional()
     );
 
 
@@ -356,4 +381,57 @@ public class PlantIntegrationTest {
                                     .build()))
             );
         }
+
+    private ResultActions getResultActionsForPlantInfo(Long plantId) throws Exception {
+
+        String token = getTokenForTest((long) (10*1000));
+        return mockMvc.perform( // api 실행
+                RestDocumentationRequestBuilders
+                        .get("/api/plants/{plantId}",plantId)
+                        .header(HttpHeaders.AUTHORIZATION, "Bearer "+token));
+    }
+
+    private RestDocumentationResultHandler getDocumentForPlantInfo(Integer identifier){
+        return document("api/plants/info/"+identifier,
+                preprocessRequest(prettyPrint(),modifyUris().scheme("https").host("greenroom-server.site").removePort()),
+                preprocessResponse(prettyPrint(), getModifiedHeader()),
+                pathParameters(pathParametersForPlantId),
+                responseFields(resultDescriptorsForPlantDetails), // responseBody 설명
+                requestHeaders(headerWithName("Authorization").description("Bearer : 사용자 access Token")),
+                resource(ResourceSnippetParameters.builder()
+                        .tag("그린룸") // 문서에서 api들이 태그로 분류됨
+                        .summary("식물 상세 정보 조회 api") // api 이름
+                        .description("식물 사전에서 식물 상세 정보를 조회함.") // api 설명
+                        .build()));
+    }
+
+    @Test
+    @Transactional
+    public void 식물정보_조회_성공() throws Exception {
+        //given
+
+        //when
+        ResultActions resultActions = getResultActionsForPlantInfo(10L);
+
+        //then
+        resultActions.andExpect(status().isOk());
+
+        //문서화
+        resultActions.andDo(getDocumentForPlantInfo(1));
+    }
+
+    @Test
+    @Transactional
+    public void 식물정보_조회_실패() throws Exception {
+        //given
+
+        //when
+        ResultActions resultActions = getResultActionsForPlantInfo(10000L);
+
+        //then
+        resultActions.andExpect(status().is(ResponseCodeEnum.PLANT_NOT_FOUND.getStatus().value())).andExpect(jsonPath("code").value(ResponseCodeEnum.PLANT_NOT_FOUND.getCode()));
+
+        //문서화
+        resultActions.andDo(getDocumentForPlantInfo(2));
+    }
 }

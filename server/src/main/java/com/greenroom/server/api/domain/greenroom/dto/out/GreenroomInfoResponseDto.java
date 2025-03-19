@@ -3,6 +3,7 @@ package com.greenroom.server.api.domain.greenroom.dto.out;
 import com.greenroom.server.api.domain.greenroom.entity.Activity;
 import com.greenroom.server.api.domain.greenroom.entity.GreenRoom;
 import com.greenroom.server.api.domain.greenroom.entity.Item;
+import com.greenroom.server.api.global.config.PropertiesHolder;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
@@ -21,8 +22,8 @@ public record GreenroomInfoResponseDto (
         return new GreenroomInfoResponseDto(basicInfo,todo,customItems);
     }
     public record GreenroomBasicInfoDto(Long greenroomId,String plantNickname,String plantName, String imageUrl,String memo){
-        public static GreenroomBasicInfoDto from(GreenRoom greenRoom,String cdnPath){
-            return new GreenroomBasicInfoDto(greenRoom.getGreenroomId(), greenRoom.getName(), greenRoom.getPlant()==null?null:greenRoom.getPlant().getCommonName() , greenRoom.getPictureUrl()==null?null:cdnPath+"/"+greenRoom.getPictureUrl() ,greenRoom.getMemo());
+        public static GreenroomBasicInfoDto from(GreenRoom greenRoom){
+            return new GreenroomBasicInfoDto(greenRoom.getGreenroomId(), greenRoom.getName(), greenRoom.getPlant()==null?null:greenRoom.getPlant().getCommonName() , greenRoom.getPictureUrl()==null?null: PropertiesHolder.CDN_PATH+"/"+greenRoom.getPictureUrl() ,greenRoom.getMemo());
         }
     }
     public record GreenroomTodoInfoDto(List<TodoSimpleDto> todoList, Integer numberOfTodo){
