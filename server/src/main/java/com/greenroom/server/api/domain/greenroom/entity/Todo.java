@@ -46,12 +46,29 @@ public class Todo extends BaseTime {
         this.nextTodoDate = nextTodoDate;
     }
 
+    public static Todo createBasicTodo(Activity activity, GreenRoom greenRoom){
+        return Todo.builder()
+                .baseDate(null)
+                .term(null)
+                .greenRoom(greenRoom)
+                .activity(activity)
+                .nextTodoDate(null)
+                .build();
+    }
+
     public void updateNextTodoDate(LocalDate date){
         this.nextTodoDate = date;
     }
 
-    public void updateBaseDate(){
-        this.baseDate = LocalDate.now();
+    public void updateBaseDate(LocalDate date){
+        this.baseDate = date;
     }
 
+    public void updateUseYn(Boolean use){
+        this.useYn = use;
+    }
+
+    public void updateTerm(Integer term){
+        this.term = term;
+    }
 }

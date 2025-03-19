@@ -3,6 +3,7 @@ package com.greenroom.server.api.domain.greenroom.service;
 import com.greenroom.server.api.domain.greenroom.dto.out.GreenroomDetailResponseDto;
 import com.greenroom.server.api.domain.greenroom.dto.out.GreenroomInfoResponseDto;
 import com.greenroom.server.api.domain.greenroom.dto.out.PointAndLevelUpResponseDto;
+import com.greenroom.server.api.domain.greenroom.entity.Activity;
 import com.greenroom.server.api.domain.greenroom.entity.GreenRoom;
 import com.greenroom.server.api.domain.greenroom.entity.Todo;
 import com.greenroom.server.api.domain.greenroom.entity.TodoLog;
@@ -54,6 +55,13 @@ public class TodoService {
         todoRepository.save(todo);
     }
 
+    public void createTodo(GreenRoom greenRoom, List<Long> activityIdList){
+
+        List<Todo> newTodoList = activityService.findAllByIds(activityIdList).stream().map(a-> Todo.createBasicTodo(a,greenRoom)).toList();
+
+        todoRepository.saveAll(newTodoList);
+    }
+
     @Transactional
     public PointAndLevelUpResponseDto completeTodo(GreenRoom greenRoom, List<Long> activityIdList){
 
@@ -69,7 +77,7 @@ public class TodoService {
         for(Todo todo : todoList){
             if(!todo.getNextTodoDate().isAfter(LocalDate.now())&&todo.getUseYn()){
                 todo.updateNextTodoDate(LocalDate.now().plusDays(todo.getTerm()));
-                todo.updateBaseDate();
+                todo.updateBaseDate(LocalDate.now());
                 totalPoints++;
                 todoLogList.add(TodoLog.builder().greenRoom(greenRoom).activity(todo.getActivity()).build());
             }
@@ -91,8 +99,13 @@ public class TodoService {
         todoRepository.deleteAllByGreenRoom(greenroomIdList);
     }
 
-    public List<Todo> findAllByGreenroom(GreenRoom greenRoom){
+    public List<Todo> findAllEnabledTodoByGreenroom(GreenRoom greenRoom){
         return todoRepository.findAllByGreenRoomAndUseYn(greenRoom,true);
     }
+
+    public List<Todo> findAllByGreenroom(GreenRoom greenRoom){
+        return todoRepository.findAllByGreenRoom(greenRoom);
+    }
+
 
 }

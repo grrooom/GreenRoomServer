@@ -88,4 +88,19 @@ public class GreenroomController {
     public ResponseEntity<ApiResponse> getActivityInfo(@PathVariable(value = "greenroom_id") Long greenroomId){
         return ResponseEntity.ok(ApiResponse.success(ResponseCodeEnum.SUCCESS,greenroomService.getGreenroomTodoInfo(greenroomId)));
     }
+
+    @PatchMapping("/{greenroom_id}/activity/status")
+    public ResponseEntity<ApiResponse> updateActivityStatus(@PathVariable(value = "greenroom_id") Long greenroomId, @RequestBody ActivityStatusUpdateRequestDto activityStatusUpdateRequestDto){
+        return ResponseEntity.ok(ApiResponse.success(ResponseCodeEnum.SUCCESS,greenroomService.updateActivityStatus(activityStatusUpdateRequestDto,greenroomId)));
+    }
+
+
+    @PatchMapping("/{greenroom_id}/activity")
+    public ResponseEntity<ApiResponse> updateActivity(@PathVariable(value = "greenroom_id") Long greenroomId, @Valid @RequestBody ActivityInfoUpdateRequestDto activityInfoUpdateRequestDto){
+        return ResponseEntity.ok(ApiResponse.success(ResponseCodeEnum.SUCCESS,greenroomService.updateActivity(activityInfoUpdateRequestDto,greenroomId)));
+    }
+
+
+
+
 }
