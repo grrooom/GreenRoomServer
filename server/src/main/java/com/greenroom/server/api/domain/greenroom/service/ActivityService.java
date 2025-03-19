@@ -5,6 +5,8 @@ import com.greenroom.server.api.domain.greenroom.repository.ActivityRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 @RequiredArgsConstructor
 public class ActivityService {
@@ -12,5 +14,9 @@ public class ActivityService {
 
     public Activity getWateringActivity(){
         return activityRepository.findActivityByActivityName("watering").orElse(null);
+    }
+
+    public List<Activity> findAllActivity(){
+        return activityRepository.findAll();
     }
 }

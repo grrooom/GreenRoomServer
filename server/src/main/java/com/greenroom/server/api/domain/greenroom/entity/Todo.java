@@ -50,4 +50,8 @@ public class Todo extends BaseTime {
         this.nextTodoDate = date;
     }
 
+    public void updateBaseDate(){
+        this.baseDate = LocalDate.now();
+    }
+
 }

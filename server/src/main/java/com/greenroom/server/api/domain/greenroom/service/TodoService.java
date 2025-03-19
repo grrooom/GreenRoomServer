@@ -69,6 +69,7 @@ public class TodoService {
         for(Todo todo : todoList){
             if(!todo.getNextTodoDate().isAfter(LocalDate.now())&&todo.getUseYn()){
                 todo.updateNextTodoDate(LocalDate.now().plusDays(todo.getTerm()));
+                todo.updateBaseDate();
                 totalPoints++;
                 todoLogList.add(TodoLog.builder().greenRoom(greenRoom).activity(todo.getActivity()).build());
             }
@@ -88,6 +89,10 @@ public class TodoService {
 
     public void deleteAllByGreenRoom(List<Long> greenroomIdList){
         todoRepository.deleteAllByGreenRoom(greenroomIdList);
+    }
+
+    public List<Todo> findAllByGreenroom(GreenRoom greenRoom){
+        return todoRepository.findAllByGreenRoomAndUseYn(greenRoom,true);
     }
 
 }

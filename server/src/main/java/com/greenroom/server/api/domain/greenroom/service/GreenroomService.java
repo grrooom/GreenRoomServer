@@ -3,8 +3,10 @@ package com.greenroom.server.api.domain.greenroom.service;
 import com.amazonaws.util.StringUtils;
 import com.greenroom.server.api.domain.greenroom.dto.in.*;
 import com.greenroom.server.api.domain.greenroom.dto.out.*;
+import com.greenroom.server.api.domain.greenroom.entity.Activity;
 import com.greenroom.server.api.domain.greenroom.entity.GreenRoom;
 import com.greenroom.server.api.domain.greenroom.entity.Plant;
+import com.greenroom.server.api.domain.greenroom.entity.Todo;
 import com.greenroom.server.api.domain.greenroom.enums.GreenRoomStatus;
 import com.greenroom.server.api.domain.greenroom.repository.GreenRoomRepository;
 import com.greenroom.server.api.domain.user.entity.User;
@@ -25,6 +27,7 @@ import org.springframework.web.multipart.MultipartFile;
 import java.time.LocalDate;
 import java.time.format.DateTimeParseException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -45,6 +48,7 @@ public class GreenroomService {
     private final PlantService plantService;
     private final GradeService gradeService;
     private final DiaryService diaryService;
+    private final ActivityService activityService;
 
     //util
     private final GreenroomResponseAssembler greenroomResponseAssembler;
@@ -244,6 +248,25 @@ public class GreenroomService {
                 }
             });
         }
+    }
+
+    public GreenroomTodoCycleResponseDto getGreenroomTodoInfo(Long greenroomId){
+
+        GreenRoom greenRoom = findEnabledGreenroomById(greenroomId); // 없는 경우 not found exception 반환.
+
+        Map<Long,String> activityMap = new HashMap<>();
+        activityService.findAllActivity().forEach(activity ->  activityMap.put(activity.getActivityId(),activity.getActivityName()));
+
+        List<Todo> todoList = todoService.findAllByGreenroom(greenRoom);
+        todoList.forEach(todo-> activityMap.remove(todo.getActivity().getActivityId()));
+
+        List<GreenroomTodoCycleResponseDto.TodoSimpleInfo> notUsedActivity =
+                activityMap.keySet().stream().map(a-> GreenroomTodoCycleResponseDto.TodoSimpleInfo.of(a,  activityMap.get(a))).toList();
+
+        List<GreenroomTodoCycleResponseDto.TodoCycleInfo> usedActivity =
+                todoList.stream().map(GreenroomTodoCycleResponseDto.TodoCycleInfo::from).toList();
+
+        return GreenroomTodoCycleResponseDto.of(usedActivity,notUsedActivity);
     }
 
 }

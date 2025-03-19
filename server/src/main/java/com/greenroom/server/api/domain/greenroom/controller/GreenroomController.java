@@ -83,4 +83,9 @@ public class GreenroomController {
     public ResponseEntity<ApiResponse> updateGreenroom(@PathVariable(value = "greenroom_id") Long greenroomId, @Valid @RequestPart(value = "data") GreenroomInfoUpdateRequestDto greenroomInfoUpdateRequestDto,@RequestPart(value = "imageFile",required = false) MultipartFile imageFile){
         return ResponseEntity.ok(ApiResponse.success(ResponseCodeEnum.SUCCESS,greenroomService.updateGreenroomInfo(greenroomId,greenroomInfoUpdateRequestDto,imageFile)));
     }
+
+    @GetMapping("/{greenroom_id}/activity")
+    public ResponseEntity<ApiResponse> getActivityInfo(@PathVariable(value = "greenroom_id") Long greenroomId){
+        return ResponseEntity.ok(ApiResponse.success(ResponseCodeEnum.SUCCESS,greenroomService.getGreenroomTodoInfo(greenroomId)));
+    }
 }
