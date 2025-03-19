@@ -915,7 +915,6 @@ include::{snippets}/api/greenroom/plant/3/http-response.adoc[]
 
 그린룸 정보를 편집함.
 
-
 ==== Request
 include::{snippets}/api/greenroom/info/update/1/curl-request.adoc[]
 
@@ -950,7 +949,10 @@ include::{snippets}/api/greenroom/info/update/4/http-response.adoc[]
 
 === **10. 그린룸 주기 활성화/비활성화 정보 조회**
 
-그린룸 주기 활성화/비활성화 정보를 조회함. 활성화된 주기의 경우 주기 상세 정보를 반환.
+그린룸 주기 활성화/비활성화 정보를 조회함. +
+활성화된 주기의 경우 주기 상세 정보를 반환. +
+
+<<activity, **activity id** 참고>>
 
 ==== Request
 include::{snippets}/api/greenroom/activity/get/1/http-request.adoc[]
@@ -970,3 +972,65 @@ include::{snippets}/api/greenroom/activity/get/1/response-fields.adoc[]
 ==== 실패 Response
 실패 1.
 include::{snippets}/api/greenroom/activity/get/2/http-response.adoc[]
+
+
+=== **11. 할 일 주기 비활성화/활성화**
+
+할 일 주기를 비활성화/ 활성화함. +
+활성화, 비활성화할 주기의 activity id를 전달. +
+전달되지 않은 주기는 이전 상태를 그대로 유지함. +
+
+<<activity, **activity id** 참고>>
+
+==== Request
+include::{snippets}/api/greenroom/activity/status/1/http-request.adoc[]
+
+==== Request Headers
+include::{snippets}/api/greenroom/activity/status/1/request-headers.adoc[]
+
+==== Request Path Parameter Fields
+include::{snippets}/api/greenroom/activity/status/1/path-parameters.adoc[]
+
+==== Request Body Fields
+include::{snippets}/api/greenroom/activity/status/1/request-fields.adoc[]
+
+==== 성공 Response
+include::{snippets}/api/greenroom/activity/status/1/http-response.adoc[]
+
+==== Response Body Fields
+include::{snippets}/api/greenroom/activity/status/1/response-fields.adoc[]
+
+==== 실패 Response
+실패 1.
+include::{snippets}/api/greenroom/activity/status/2/http-response.adoc[]
+
+
+=== **12. 할 일 주기 정보를 수정함**
+
+할 일 주기 정보를 수정함. +
+기준 날짜와 간격을 수정할 수 있음. +
+
+<<activity, **activity id** 참고>>
+
+==== Request
+include::{snippets}/api/greenroom/activity/patch/1/http-request.adoc[]
+
+==== Request Headers
+include::{snippets}/api/greenroom/activity/patch/1/request-headers.adoc[]
+
+==== Request Path Parameter Fields
+include::{snippets}/api/greenroom/activity/patch/1/path-parameters.adoc[]
+
+==== Request Body Fields
+include::{snippets}/api/greenroom/activity/patch/1/request-fields.adoc[]
+
+==== 성공 Response
+include::{snippets}/api/greenroom/activity/patch/1/http-response.adoc[]
+
+==== Response Body Fields
+include::{snippets}/api/greenroom/activity/patch/1/response-fields.adoc[]
+
+==== 실패 Response
+실패 1.
+include::{snippets}/api/greenroom/activity/patch/2/http-response.adoc[]
+

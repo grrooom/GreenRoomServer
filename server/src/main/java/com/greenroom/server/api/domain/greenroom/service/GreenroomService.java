@@ -26,10 +26,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeParseException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @Service
 @RequiredArgsConstructor
@@ -257,7 +254,7 @@ public class GreenroomService {
         Map<Long,String> activityMap = new HashMap<>();
         activityService.findAllActivity().forEach(activity ->  activityMap.put(activity.getActivityId(),activity.getActivityName()));
 
-        List<Todo> todoList = todoService.findAllByGreenroom(greenRoom);
+        List<Todo> todoList = todoService.findAllEnabledTodoByGreenroom(greenRoom);
         todoList.forEach(todo-> activityMap.remove(todo.getActivity().getActivityId()));
 
         List<GreenroomTodoCycleResponseDto.TodoSimpleInfo> notUsedActivity =
@@ -269,5 +266,77 @@ public class GreenroomService {
         return GreenroomTodoCycleResponseDto.of(usedActivity,notUsedActivity);
     }
 
+    @Transactional
+    public GreenroomTodoCycleResponseDto updateActivityStatus(ActivityStatusUpdateRequestDto activityStatusUpdateRequestDto,Long greenroomId){
+
+        GreenRoom greenRoom = findEnabledGreenroomById(greenroomId);
+
+        Set<Long> active = new HashSet<>(activityStatusUpdateRequestDto.activeList());
+        Set<Long> inactive = new HashSet<>(activityStatusUpdateRequestDto.inactiveList());
+
+        if(active.stream().anyMatch(inactive::contains)){throw new CustomException(ResponseCodeEnum.INVALID_REQUEST_ARGUMENT);}
+
+        List<Todo> todoList = todoService.findAllByGreenroom(greenRoom);
+
+        // 기존에 존재하던 todo는 update
+        updateExistingTodos(todoList,active,inactive);
+
+        // 한번도 활성화된 적 없는 주기는 새로 생성
+        todoService.createTodo(greenRoom,new ArrayList<>(active));
+
+        return getGreenroomTodoInfo(greenroomId);
+
+    }
+
+    private void updateExistingTodos(List<Todo> todoList, Set<Long> activeIds, Set<Long> inactiveIds) {
+
+        for (Todo todo : todoList) {
+            Long activityId = todo.getActivity().getActivityId();
+
+            if (inactiveIds.contains(activityId)) {
+                todo.updateUseYn(false);
+            }
+
+            if (activeIds.contains(activityId)) {
+                activeIds.remove(activityId);
+                todo.updateUseYn(true);
+            }
+        }
+    }
+
+    @Transactional
+    public GreenroomTodoCycleResponseDto updateActivity(ActivityInfoUpdateRequestDto activityInfoUpdateRequestDto, Long greenroomId){
+
+        GreenRoom greenRoom = findEnabledGreenroomById(greenroomId);
+
+        Map<Long, ActivityInfoUpdateRequestDto.ActivityInfoUpdateDto> updateMap = new HashMap<>();
+        activityInfoUpdateRequestDto.updateList().forEach(a-> updateMap.put(a.activityId(),a));
+        Set<Long> updateActivityList= updateMap.keySet();
+
+        todoService.findAllEnabledTodoByGreenroom(greenRoom).forEach(todo->{
+            if(updateActivityList.contains(todo.getActivity().getActivityId())){
+                updateTodo(todo,updateMap.get(todo.getActivity().getActivityId()));
+            }
+        });
+
+        return getGreenroomTodoInfo(greenroomId);
+    }
+
+    public void updateTodo(Todo todo, ActivityInfoUpdateRequestDto.ActivityInfoUpdateDto updateDto){
+        LocalDate baseDate ;
+
+        try{
+            baseDate = LocalDate.parse(updateDto.date());
+            if(baseDate.isAfter(LocalDate.now())){throw new CustomException(ResponseCodeEnum.INVALID_REQUEST_ARGUMENT); }
+        }
+        catch (DateTimeParseException e){throw new CustomException(ResponseCodeEnum.INVALID_REQUEST_ARGUMENT);}
+
+        Integer term = updateDto.term();
+
+        todo.updateBaseDate(baseDate);
+        todo.updateTerm(term);
+        todo.updateNextTodoDate(baseDate.plusDays(term));
+
+    }
 }
 
