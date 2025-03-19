@@ -5,6 +5,7 @@ import com.greenroom.server.api.domain.greenroom.repository.TodoLogRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.util.List;
 
 @Service
@@ -22,7 +23,6 @@ public class TodoLogService {
     public void deleteAllByGreenroom(List<Long> greenroomIdList){
         todoLogRepository.deleteAllByGreenRoom(greenroomIdList);
     }
-
 
 
 }

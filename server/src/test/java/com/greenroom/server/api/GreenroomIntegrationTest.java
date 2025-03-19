@@ -68,7 +68,6 @@ import static org.mockito.Mockito.doThrow;
 import static org.springframework.restdocs.headers.HeaderDocumentation.headerWithName;
 import static org.springframework.restdocs.headers.HeaderDocumentation.requestHeaders;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.documentationConfiguration;
-import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.post;
 import static org.springframework.restdocs.operation.preprocess.Preprocessors.*;
 import static org.springframework.restdocs.payload.PayloadDocumentation.*;
 import static org.springframework.restdocs.request.RequestDocumentation.*;
@@ -178,7 +177,7 @@ public class GreenroomIntegrationTest {
 
         greenRoomRepository.save(greenRoom);
 
-        Todo todo = Todo.builder().greenRoom(greenRoom).activity(activityRepository.findAll().get(0)).nextTodoDate(LocalDate.now().plusDays(1)).term(10).build();
+        Todo todo = Todo.builder().greenRoom(greenRoom).activity(activityRepository.findAll().get(0)).nextTodoDate(LocalDate.now().plusDays(8)).term(10).baseDate(LocalDate.now().minusDays(2)).build();
         todoRepository.save(todo);
 
         adornmentRepository.save(Adornment.createAdornment(itemRepository.findAll().get(0),greenRoom));
@@ -411,6 +410,20 @@ public class GreenroomIntegrationTest {
             fieldWithPath("data.plantManagementInfo.humidity").type(JsonFieldType.STRING).description("습도 정보").optional(),
             fieldWithPath("data.plantManagementInfo.fertilizer").type(JsonFieldType.STRING).description("비료 정보").optional()
             );
+
+    List<FieldDescriptor> resultDescriptorsForGetActivityInfo= List.of(
+            fieldWithPath("status").type(JsonFieldType.STRING).description("응답 상태"),
+            fieldWithPath("code").type(JsonFieldType.STRING).description("상태 코드"),
+            fieldWithPath("data").type(JsonFieldType.OBJECT).optional().description("data").optional(),
+            fieldWithPath("data.activeCycle").type(JsonFieldType.ARRAY).description("활성화된 주기 정보").attributes(new Attributes.Attribute("constraint","활성화된 주기가 없을 경우 빈 배열 반환")),
+            fieldWithPath("data.activeCycle[].activityId").type(JsonFieldType.NUMBER).description("activity id : activity id 문서 부분 참조"),
+            fieldWithPath("data.activeCycle[].activityName").type(JsonFieldType.STRING).description("activity 이름"),
+            fieldWithPath("data.activeCycle[].lastDate").type(JsonFieldType.STRING).description("마지막으로 수행한 기준 날짜"),
+            fieldWithPath("data.activeCycle[].term").type(JsonFieldType.NUMBER).description("행동 주기"),
+            fieldWithPath("data.inactiveCycle").type(JsonFieldType.ARRAY).description("비활성화된 주기 정보").attributes(new Attributes.Attribute("constraint","비활성화된 주기가 없을 경우 빈 배열 반환")),
+            fieldWithPath("data.inactiveCycle[].activityId").type(JsonFieldType.NUMBER).description("activity id : activity id 문서 부분 참조"),
+            fieldWithPath("data.inactiveCycle[].activityName").type(JsonFieldType.STRING).description("activity 이름"));
+
     @Transactional
     @Test
     public void 그린룸_정보_조회_성공1() throws Exception {
@@ -1219,8 +1232,62 @@ public class GreenroomIntegrationTest {
         resultActions.andDo(getDocumentForGreenroomInfoUpdate(4));
     }
 
+    private ResultActions getResultActionsForGetActivityInfo(Long greenroomId) throws Exception {
+
+        String token = getTokenForTest((long) (10*1000));
+        return mockMvc.perform( // api 실행
+                RestDocumentationRequestBuilders
+                        .get("/api/greenroom/{greenroom_id}/activity",greenroomId)
+                        .header(HttpHeaders.AUTHORIZATION, "Bearer "+token));
+    }
+
+    private RestDocumentationResultHandler getDocumentForGetActivityInfo(Integer identifier){
+        return document("api/greenroom/activity/get/"+identifier,
+                preprocessRequest(prettyPrint(),modifyUris().scheme("https").host("greenroom-server.site").removePort()),
+                preprocessResponse(prettyPrint(), getModifiedHeader()),
+                pathParameters(pathParameterForGreenroomId),
+                responseFields(resultDescriptorsForGetActivityInfo), // responseBody 설명
+                requestHeaders(headerWithName("Authorization").description("Bearer : 사용자 access Token")),
+                resource(ResourceSnippetParameters.builder()
+                        .tag("그린룸") // 문서에서 api들이 태그로 분류됨
+                        .summary("그린룸 주기 활성화/비활성화 정보 조회 api") // api 이름
+                        .description("그린룸 주기 활성화/비활성화 정보를 조회함. 활성화된 주기의 경우 상세 정보를 반환함.") // api 설명
+                        .build()));
+    }
 
 
+    @Test
+    @Transactional
+    public void 그린룸_주기정보_조회_성공() throws Exception {
+        //given
+        User user = signupForTest();
+        GreenRoom greenRoom = createGreenRoom(user);
+        greenRoom.updateCreationDate(LocalDateTime.now().minusDays(2));
+
+        //when
+        ResultActions resultActions = getResultActionsForGetActivityInfo(greenRoom.getGreenroomId());
+
+        //then
+        resultActions.andExpect(status().isOk());
+
+        //문서화
+        resultActions.andDo(getDocumentForGetActivityInfo(1));
+    }
+
+    @Test
+    @Transactional
+    public void 그린룸_주기정보_조회_실패() throws Exception {
+        //given
+
+        //when
+        ResultActions resultActions = getResultActionsForGetActivityInfo(100L);
+
+        //then
+        resultActions.andExpect(status().is(ResponseCodeEnum.GREENROOM_NOT_FOUND.getStatus().value())).andExpect(jsonPath("code").value(ResponseCodeEnum.GREENROOM_NOT_FOUND.getCode()));
+
+        //문서화
+        resultActions.andDo(getDocumentForGetActivityInfo(2));
+    }
 
 
 }

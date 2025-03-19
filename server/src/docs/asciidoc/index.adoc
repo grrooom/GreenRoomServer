@@ -946,3 +946,27 @@ include::{snippets}/api/greenroom/info/update/3/http-response.adoc[]
 
 실패 2.
 include::{snippets}/api/greenroom/info/update/4/http-response.adoc[]
+
+
+=== **10. 그린룸 주기 활성화/비활성화 정보 조회**
+
+그린룸 주기 활성화/비활성화 정보를 조회함. 활성화된 주기의 경우 주기 상세 정보를 반환.
+
+==== Request
+include::{snippets}/api/greenroom/activity/get/1/http-request.adoc[]
+
+==== Request Headers
+include::{snippets}/api/greenroom/activity/get/1/request-headers.adoc[]
+
+==== Request Path Parameter Fields
+include::{snippets}/api/greenroom/activity/get/1/path-parameters.adoc[]
+
+==== 성공 Response
+include::{snippets}/api/greenroom/activity/get/1/http-response.adoc[]
+
+==== Response Body Fields
+include::{snippets}/api/greenroom/activity/get/1/response-fields.adoc[]
+
+==== 실패 Response
+실패 1.
+include::{snippets}/api/greenroom/activity/get/2/http-response.adoc[]
