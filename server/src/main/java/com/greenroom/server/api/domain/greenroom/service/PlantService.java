@@ -4,6 +4,7 @@ import co.elastic.clients.elasticsearch._types.ElasticsearchException;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.greenroom.server.api.domain.greenroom.document.PlantDocument;
+import com.greenroom.server.api.domain.greenroom.dto.out.PlantDetailInfoResponseDto;
 import com.greenroom.server.api.domain.greenroom.dto.out.PlantResponseDto;
 import com.greenroom.server.api.domain.greenroom.dto.out.PlantWateringInfoResponseDto;
 import com.greenroom.server.api.domain.greenroom.entity.Plant;
@@ -122,6 +123,12 @@ public class PlantService {
         Plant plant =  findPlantById(plantId);
         return PlantWateringInfoResponseDto.of(plantId,plant.getCommonName(),plant.getWaterCycle());
     }
+
+    public PlantDetailInfoResponseDto getPlantDetailInfo(Long plantId){
+        Plant plant = findPlantById(plantId); // 없으면 not found
+        return PlantDetailInfoResponseDto.from(plant);
+    }
+
 
 
 }

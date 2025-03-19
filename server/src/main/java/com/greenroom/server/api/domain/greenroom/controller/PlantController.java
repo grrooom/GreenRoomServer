@@ -35,4 +35,8 @@ public class PlantController {
         return ResponseEntity.ok(ApiResponse.success(plantService.getWateringInfo(plantId)));
     }
 
+    @GetMapping("{plant_id}")
+    public ResponseEntity<ApiResponse> getPlantDetailInfo(@PathVariable(value = "plant_id")Long plantId){
+        return ResponseEntity.ok(ApiResponse.success(plantService.getPlantDetailInfo(plantId)));
+    }
 }

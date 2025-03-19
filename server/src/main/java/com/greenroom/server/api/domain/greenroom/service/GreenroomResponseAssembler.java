@@ -1,8 +1,6 @@
 package com.greenroom.server.api.domain.greenroom.service;
 
-import com.greenroom.server.api.domain.greenroom.dto.out.GreenroomDetailResponseDto;
-import com.greenroom.server.api.domain.greenroom.dto.out.GreenroomInfoResponseDto;
-import com.greenroom.server.api.domain.greenroom.dto.out.ItemSimpleDto;
+import com.greenroom.server.api.domain.greenroom.dto.out.*;
 import com.greenroom.server.api.domain.greenroom.entity.GreenRoom;
 import com.greenroom.server.api.domain.greenroom.entity.Plant;
 import org.springframework.beans.factory.annotation.Value;
@@ -13,10 +11,6 @@ import java.util.Map;
 
 @Component
 public class GreenroomResponseAssembler {
-
-    @Value("${cloud.cdn.path.root}")
-    private  String cdnPath;
-
     private final AdornmentService adornmentService;
     private final TodoService todoService;
 
@@ -27,7 +21,7 @@ public class GreenroomResponseAssembler {
 
     public GreenroomDetailResponseDto toDetailResponse(GreenRoom greenRoom) {
 
-        GreenroomDetailResponseDto.GreenroomBasicInfoDto greenroomBasicInfoDto = GreenroomDetailResponseDto.GreenroomBasicInfoDto.from(greenRoom,cdnPath);
+        GreenroomDetailResponseDto.GreenroomBasicInfoDto greenroomBasicInfoDto = GreenroomDetailResponseDto.GreenroomBasicInfoDto.from(greenRoom);
 
         Map<String, ItemSimpleDto> decoration = adornmentService.getGreenroomSimpleAdornmentInfo(greenRoom);
 
@@ -35,9 +29,9 @@ public class GreenroomResponseAssembler {
 
         Plant plant = greenRoom.getPlant();
 
-        GreenroomDetailResponseDto.PlantInfoDto plantInfo = plant==null? null: GreenroomDetailResponseDto.PlantInfoDto.from(plant);
+        PlantInfoDto plantInfo = plant==null? null: PlantInfoDto.from(plant);
 
-        GreenroomDetailResponseDto.PlantManagementInfoDto plantManagementInfo =  plant==null? null: GreenroomDetailResponseDto.PlantManagementInfoDto.from(plant);
+        PlantManagementInfoDto plantManagementInfo =  plant==null? null: PlantManagementInfoDto.from(plant);
 
         return GreenroomDetailResponseDto.of(greenroomBasicInfoDto,decoration,managementInfo,plantInfo,plantManagementInfo);
     }
@@ -45,7 +39,7 @@ public class GreenroomResponseAssembler {
     public GreenroomInfoResponseDto toGreenroomInfo(GreenRoom greenRoom){
 
         //user의 greenroom 기본 정보 조회
-        GreenroomInfoResponseDto.GreenroomBasicInfoDto  greenroomBasicInfo=  GreenroomInfoResponseDto.GreenroomBasicInfoDto.from(greenRoom,cdnPath);
+        GreenroomInfoResponseDto.GreenroomBasicInfoDto  greenroomBasicInfo=  GreenroomInfoResponseDto.GreenroomBasicInfoDto.from(greenRoom);
 
         //user의 greenroom todo 조회
         GreenroomInfoResponseDto.GreenroomTodoInfoDto greenroomTodoInfo =  todoService.getGreenroomTodoInfo(greenRoom);

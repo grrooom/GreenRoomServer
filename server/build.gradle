@@ -125,6 +125,7 @@ tasks.register('copyDocument', Copy){
 openapi3 {
 	servers = [
 			{ url = "http://localhost:8080" },
+			{ url = "http://127.0.0.1:8080" },
 			{ url = "https://greenroom-server.site" }
 	]
 	title = '그린룸 API DOCUMENT'

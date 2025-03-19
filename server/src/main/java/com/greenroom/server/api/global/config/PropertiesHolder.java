@@ -1,0 +1,20 @@
+package com.greenroom.server.api.global.config;
+
+import jakarta.annotation.PostConstruct;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Component;
+
+@Component
+public class PropertiesHolder {
+
+    @Value("${cloud.cdn.path.root}")
+    private String cdnPathValue;
+
+    public static String CDN_PATH;
+
+    @PostConstruct
+    public void init() {
+        CDN_PATH = cdnPathValue;
+    }
+
+}
