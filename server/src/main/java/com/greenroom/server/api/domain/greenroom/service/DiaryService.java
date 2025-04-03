@@ -1,12 +1,15 @@
 package com.greenroom.server.api.domain.greenroom.service;
 
 import com.amazonaws.util.StringUtils;
+import com.greenroom.server.api.domain.greenroom.entity.Diary;
 import com.greenroom.server.api.domain.greenroom.entity.GreenRoom;
 import com.greenroom.server.api.domain.greenroom.repository.DiaryRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -28,5 +31,9 @@ public class DiaryService {
         });
         diaryRepository.deleteAllByIdInBatch(deletedDiaryIdList);
         return  imageDeleteList;
+    }
+
+    public List<Diary> getAllDiariesByGreenroomAndDate(List<GreenRoom>greenRoomList, LocalDate date){
+        return diaryRepository.findByCreateDateAndGreenRoomIn(date,greenRoomList.stream().map(GreenRoom::getGreenroomId).toList());
     }
 }

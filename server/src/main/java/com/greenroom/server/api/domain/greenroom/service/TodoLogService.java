@@ -1,11 +1,13 @@
 package com.greenroom.server.api.domain.greenroom.service;
 
+import com.greenroom.server.api.domain.greenroom.entity.GreenRoom;
 import com.greenroom.server.api.domain.greenroom.entity.TodoLog;
 import com.greenroom.server.api.domain.greenroom.repository.TodoLogRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.List;
 
 @Service
@@ -24,5 +26,7 @@ public class TodoLogService {
         todoLogRepository.deleteAllByGreenRoom(greenroomIdList);
     }
 
-
+    public List<TodoLog> getAllTodoLogByGreenroomAndDate(List<GreenRoom> greenRooms, LocalDate date){
+        return todoLogRepository.findByCreateDateAndGreenRoomIn(date, greenRooms.stream().map(GreenRoom::getGreenroomId).toList());
+    }
 }

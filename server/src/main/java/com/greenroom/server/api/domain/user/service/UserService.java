@@ -8,6 +8,7 @@ import com.greenroom.server.api.domain.greenroom.repository.*;
 import com.greenroom.server.api.domain.user.dto.*;
 import com.greenroom.server.api.domain.user.entity.User;
 import com.greenroom.server.api.domain.user.enums.UserStatus;
+import com.greenroom.server.api.domain.user.repository.CheckInRepository;
 import com.greenroom.server.api.domain.user.repository.GradeRepository;
 import com.greenroom.server.api.domain.user.repository.UserRepository;
 import com.greenroom.server.api.security.repository.EmailVerificationLogsRepository;
@@ -40,6 +41,7 @@ public class UserService {
     private final GreenRoomRepository greenRoomRepository;
     private final NotificationRepository notificationRepository;
     private final GradeRepository gradeRepository;
+    private final CheckInRepository checkInRepository;
 
 
     private final CustomUserDetailService customUserDetailService;
@@ -95,8 +97,15 @@ public class UserService {
     public List<String> deleteUserData(User user){
         //alarm 삭제
         notificationRepository.deleteByUser(user);
+
+        //check in 삭제
+        checkInRepository.deleteByUser(user);
+
+        //refresh token 삭제
+        refreshTokenRepository.deleteByUser(user);
+
         //user 객체 삭제
-        userRepository.delete(user);
+        userRepository.deleteByUserId(user.getUserId());
 
         if(StringUtils.hasValue(user.getProfileUrl()))  return List.of(user.getProfileUrl());
         else return List.of();
@@ -135,7 +144,7 @@ public class UserService {
         User user = customUserDetailService.findUserByEmail(email); //없으면 not found error반환
 
         LocalDateTime userJoinedDate = user.getCreateDate();
-        Long userDurationWithGreenroom = ChronoUnit.DAYS.between(userJoinedDate.toLocalDate(), LocalDate.now());
+        Long userDurationWithGreenroom = ChronoUnit.DAYS.between(userJoinedDate.toLocalDate(), LocalDate.now())+1;
 
         int nextGradeRequiredSeed = gradeRepository.findById(user.getGrade().getGradeId()+1).get().getRequiredSeed();
         int seedsToNextGrade = nextGradeRequiredSeed -  user.getGrade().getRequiredSeed() ;

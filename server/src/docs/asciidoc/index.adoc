@@ -1057,3 +1057,23 @@ include::{snippets}/api/plants/info/1/response-fields.adoc[]
 ==== 실패 Response
 실패 1.
 include::{snippets}/api/plants/info/2/http-response.adoc[]
+
+
+=== **14. 달력에서 그린룸 활동 정보 조회**
+
+특정 날짜의 모든 그린룸 활동 내역들을 조회함.
+
+==== Request
+include::{snippets}/api/greenroom/calendar/1/http-request.adoc[]
+
+==== Request Headers
+include::{snippets}/api/greenroom/calendar/1/request-headers.adoc[]
+
+==== Request Query Parameter Fields
+include::{snippets}/api/greenroom/calendar/1/query-parameters.adoc[]
+
+==== 성공 Response
+include::{snippets}/api/greenroom/calendar/1/http-response.adoc[]
+
+==== Response Body Fields
+include::{snippets}/api/greenroom/calendar/1/response-fields.adoc[]
