@@ -6,9 +6,7 @@ import lombok.Getter;
 public enum GreenRoomStatus {
 
     ENABLED("활성화됨"),
-    DISABLED("비활성화됨"),
-    DELETED("삭제됨"),
-    OTHER("기타");
+    DISABLED("비활성화됨");
 
     private final String description;
 

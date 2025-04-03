@@ -17,6 +17,7 @@ import org.springframework.security.core.userdetails.User;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.time.LocalDate;
 import java.util.List;
 
 @RestController
@@ -100,6 +101,10 @@ public class GreenroomController {
         return ResponseEntity.ok(ApiResponse.success(ResponseCodeEnum.SUCCESS,greenroomService.updateActivity(activityInfoUpdateRequestDto,greenroomId)));
     }
 
+    @GetMapping("/calendar")
+    public ResponseEntity<ApiResponse> getCalender(@AuthenticationPrincipal User user, @RequestParam(value = "date") LocalDate date, @RequestParam (value = "type",required = false) Long activityId){
+        return ResponseEntity.ok(ApiResponse.success(ResponseCodeEnum.SUCCESS,greenroomService.getGreenroomInfoFromCalendar(user.getUsername(),date,activityId)));
+    }
 
 
 

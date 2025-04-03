@@ -5,10 +5,8 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.greenroom.server.api.config.TestExecutionListener;
 import com.greenroom.server.api.domain.greenroom.dto.in.*;
-import com.greenroom.server.api.domain.greenroom.entity.Adornment;
-import com.greenroom.server.api.domain.greenroom.entity.GreenRoom;
-import com.greenroom.server.api.domain.greenroom.entity.Plant;
-import com.greenroom.server.api.domain.greenroom.entity.Todo;
+import com.greenroom.server.api.domain.greenroom.entity.*;
+import com.greenroom.server.api.domain.greenroom.enums.GreenRoomStatus;
 import com.greenroom.server.api.domain.greenroom.repository.*;
 import com.greenroom.server.api.domain.greenroom.service.GreenroomService;
 import com.greenroom.server.api.domain.user.entity.User;
@@ -120,6 +118,12 @@ public class GreenroomIntegrationTest {
     @Autowired
     private ActivityRepository activityRepository;
 
+    @Autowired
+    private TodoLogRepository todoLogRepository;
+
+    @Autowired
+    private DiaryRepository diaryRepository;
+
     @MockitoSpyBean
     private GreenroomService mockitoGreenroomService;
 
@@ -171,7 +175,7 @@ public class GreenroomIntegrationTest {
     public GreenRoom createGreenRoom(User user){
 
         Plant plant = plantRepository.findById(20L).get();
-        //plantRepository.save(plant);
+
 
         GreenRoom greenRoom = GreenRoom.of("test 그린룸",null,user,plant);
 
@@ -179,6 +183,40 @@ public class GreenroomIntegrationTest {
 
         Todo todo = Todo.builder().greenRoom(greenRoom).activity(activityRepository.findAll().get(0)).nextTodoDate(LocalDate.now().plusDays(8)).term(10).baseDate(LocalDate.now().minusDays(2)).build();
         todoRepository.save(todo);
+
+        adornmentRepository.save(Adornment.createAdornment(itemRepository.findAll().get(0),greenRoom));
+
+
+        return greenRoom;
+    }
+
+    public GreenRoom createGreenRoomForCalender(User user){
+
+        Plant plant = plantRepository.findById(20L).get();
+
+        GreenRoom greenRoom = GreenRoom.of("초롱이",null,user,plant);
+        greenRoomRepository.save(greenRoom);
+
+        Todo todo1 = Todo.builder().greenRoom(greenRoom).activity(activityRepository.findAll().get(0)).nextTodoDate(LocalDate.now().minusDays(2)).term(5).baseDate(LocalDate.now().minusDays(7)).build();
+        Todo todo2 = Todo.builder().greenRoom(greenRoom).activity(activityRepository.findAll().get(2)).nextTodoDate(LocalDate.now().plusDays(2)).term(5).baseDate(LocalDate.now().minusDays(3)).build();
+        TodoLog todoLog = TodoLog.builder().greenRoom(greenRoom).activity(activityRepository.findAll().get(0)).build();
+        todoLogRepository.save(todoLog);
+
+        todoRepository.save(todo1);todoRepository.save(todo2);
+
+        Diary diary = Diary.builder().greenRoom(greenRoom).title("제목입니다~").content("본문입니다 ~ ").diaryPictureUrl(null).build();
+        diaryRepository.save(diary);
+
+        GreenRoom greenRoom2 = GreenRoom.of("아롱이",null,user,plant);
+        greenRoom2.updateStatus(GreenRoomStatus.DISABLED);
+        greenRoomRepository.save(greenRoom2);
+
+        Todo todo3 = Todo.builder().greenRoom(greenRoom2).activity(activityRepository.findAll().get(0)).nextTodoDate(LocalDate.now().minusDays(2)).term(5).baseDate(LocalDate.now().minusDays(7)).build();
+        Todo todo4 = Todo.builder().greenRoom(greenRoom2).activity(activityRepository.findAll().get(2)).nextTodoDate(LocalDate.now().plusDays(2)).term(5).baseDate(LocalDate.now().minusDays(3)).build();
+        TodoLog todoLog2 = TodoLog.builder().greenRoom(greenRoom2).activity(activityRepository.findAll().get(0)).build();
+        todoLogRepository.save(todoLog2);
+
+        todoRepository.save(todo3);todoRepository.save(todo4);
 
         adornmentRepository.save(Adornment.createAdornment(itemRepository.findAll().get(0),greenRoom));
 
@@ -437,6 +475,45 @@ public class GreenroomIntegrationTest {
             fieldWithPath("data.inactiveCycle").type(JsonFieldType.ARRAY).description("비활성화된 주기 정보").attributes(new Attributes.Attribute("constraint","비활성화된 주기가 없을 경우 빈 배열 반환")),
             fieldWithPath("data.inactiveCycle[].activityId").type(JsonFieldType.NUMBER).description("activity id : activity id 문서 부분 참조"),
             fieldWithPath("data.inactiveCycle[].activityName").type(JsonFieldType.STRING).description("activity 이름"));
+
+    List<FieldDescriptor> resultDescriptorsForCalenderInfo= List.of(
+            fieldWithPath("status").type(JsonFieldType.STRING).description("응답 상태"),
+            fieldWithPath("code").type(JsonFieldType.STRING).description("상태 코드"),
+            fieldWithPath("data").type(JsonFieldType.OBJECT).optional().description("data").optional(),
+            fieldWithPath("data.dateInfo").type(JsonFieldType.OBJECT).description("조회 날짜 정보"),
+            fieldWithPath("data.dateInfo.year").type(JsonFieldType.NUMBER).description("조회 날짜 연도"),
+            fieldWithPath("data.dateInfo.month").type(JsonFieldType.NUMBER).description("조회 날짜 월"),
+            fieldWithPath("data.dateInfo.date").type(JsonFieldType.NUMBER).description("조회 날짜 일자"),
+            fieldWithPath("data.dateInfo.day").type(JsonFieldType.STRING).description("조회 날짜 요일"),
+            fieldWithPath("data.mainInfo").type(JsonFieldType.ARRAY).description("활동 정보 및 일기 내역").optional().attributes(new Attributes.Attribute("constraint","정보를 조회할 그린룸이 없거나 활동 내역이 없는 경우 빈 배열")),
+            fieldWithPath("data.mainInfo[].greenroomInfo").type(JsonFieldType.OBJECT).description("그린룸 정보"),
+            fieldWithPath("data.mainInfo[].greenroomInfo.greenroomId").type(JsonFieldType.NUMBER).description("그린룸 id"),
+            fieldWithPath("data.mainInfo[].greenroomInfo.greenroomName").type(JsonFieldType.STRING).description("그린룸 닉네임"),
+
+            fieldWithPath("data.mainInfo[].activity").type(JsonFieldType.ARRAY).description("활동 정보 내역").optional().attributes(new Attributes.Attribute("constraint","활동 내역 정보가 없는 경우 빈 배열")),
+            fieldWithPath("data.mainInfo[].activity[].activityId").type(JsonFieldType.NUMBER).description("activity id"),
+            fieldWithPath("data.mainInfo[].activity[].activityName").type(JsonFieldType.STRING).description("activity 이름"),
+            fieldWithPath("data.mainInfo[].activity[].isCompleted").type(JsonFieldType.BOOLEAN).description("""
+                           활동 완료 여부:  +
+                            1. 과거 날짜 조회시(이미 완료함) : true +
+                            2. 현재 날짜 조회시 : 오늘 해야할 일을 완료 했을 경우 true, 미완료시 false +
+                            3. 미래 날짜 조회시(아직 미완료) : false """),
+            fieldWithPath("data.mainInfo[].activity[].remainingDays").type(JsonFieldType.NUMBER).optional().description(
+                    """
+                            현재 날짜를 기준으로 활동 수행 날짜까지 남은 일수 +
+                            1. 이미 완료한 경우 : null +
+                            2. 수행해야 하는 날짜가 현재 날짜보다 과거인 경우 : -값 +
+                            3. 수행해야 하는 날짜가 오늘인 경우 : 0 +
+                            4. 수행해야 하는 날짜가 현재 날짜보다 미래인 경우 : +값
+                            
+                            """
+            ).attributes(new Attributes.Attribute("constraint","과거 날짜 조회시 이미 완료된 활동 내역이므로 null")),
+            fieldWithPath("data.mainInfo[].diary").type(JsonFieldType.ARRAY).description("활동 정보 및 일기 내역").optional().attributes(new Attributes.Attribute("constraint","일기 내역이 없는 경우 빈 배열")),
+            fieldWithPath("data.mainInfo[].diary[].diaryId").type(JsonFieldType.NUMBER).description("일기 id"),
+            fieldWithPath("data.mainInfo[].diary[].title").type(JsonFieldType.STRING).description("일기 제목"),
+            fieldWithPath("data.mainInfo[].diary[].body").type(JsonFieldType.STRING).description("일기 본문"),
+            fieldWithPath("data.mainInfo[].diary[].imageUrl").type(JsonFieldType.STRING).description("일기에 등록한 이미지 url").optional().attributes(new Attributes.Attribute("constraint","등록한 이미지가 없을 경우 null")));
+
 
     @Transactional
     @Test
@@ -1429,6 +1506,50 @@ public class GreenroomIntegrationTest {
         resultActions.andDo(getDocumentForUpdateActivityInfo(2));
     }
 
+
+    private ResultActions getResultActionsForCalenderInfo(String date) throws Exception {
+        String token = getTokenForTest((long) (10*1000));
+        return mockMvc.perform( // api 실행
+                RestDocumentationRequestBuilders
+                        .get("/api/greenroom/calendar")
+                        .param("date",date)
+                        .header(HttpHeaders.AUTHORIZATION, "Bearer "+token));
+    }
+
+    private RestDocumentationResultHandler getDocumentForCalenderInfo(Integer identifier){
+        return document("api/greenroom/calendar/"+identifier,
+                preprocessRequest(prettyPrint(),modifyUris().scheme("https").host("greenroom-server.site").removePort()),
+                preprocessResponse(prettyPrint(), getModifiedHeader()),
+                queryParameters(parameterDescriptorsForCalenderInfo),
+                responseFields(resultDescriptorsForCalenderInfo), // responseBody 설명
+                requestHeaders(headerWithName("Authorization").description("Bearer : 사용자 access Token")),
+                resource(ResourceSnippetParameters.builder()
+                        .tag("그린룸") // 문서에서 api들이 태그로 분류됨
+                        .summary("그린룸 날짜별 정보 api") // api 이름
+                        .description("그린룸 달력 정보 api 조회") // api 설명
+                        .build()));
+    }
+    private final List<ParameterDescriptor> parameterDescriptorsForCalenderInfo = List.of(
+            parameterWithName("date").description("조회 날짜").attributes(new Attributes.Attribute("constraint","yyyy-mm-dd")),
+            parameterWithName("type").description("특정 type의 주기를 조회하는 경우 activity id 전달").optional().attributes(new Attributes.Attribute("constraint","상단 표에 작성된 activity id"),new Attributes.Attribute("default","모든 activity의 활동 내역을 조회"))
+    );
+
+    @Test
+    @Transactional
+    public void 그린룸_달력정보_조회_성공() throws Exception {
+        //given
+        User user = signupForTest();
+        createGreenRoomForCalender(user);
+
+        //when
+        ResultActions resultActions = getResultActionsForCalenderInfo(LocalDate.now().toString());
+
+        //then
+        resultActions.andExpect(status().isOk());
+
+        //문서화
+        resultActions.andDo(getDocumentForCalenderInfo(1));
+    }
 
 
 }

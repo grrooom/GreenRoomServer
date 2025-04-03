@@ -107,5 +107,11 @@ public class TodoService {
         return todoRepository.findAllByGreenRoom(greenRoom);
     }
 
+    public List<Todo> getAllTodoByGreenroomAndDate(List<GreenRoom> greenRoomList, LocalDate date){
+        if(date.isAfter(LocalDate.now())){
+            return todoRepository.findByNextTodoDateAndGreenRoomInFuture(date, greenRoomList.stream().map(GreenRoom::getGreenroomId).toList());
+        }
+        return todoRepository.findByNextTodoDateAndGreenRoomIn(date, greenRoomList.stream().map(GreenRoom::getGreenroomId).toList());
+    }
 
 }

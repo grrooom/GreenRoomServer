@@ -26,6 +26,7 @@ public class BaseTime {
     @Column(updatable = false,insertable = false)
     protected LocalDateTime createDate;
 
+
     @JsonSerialize(using = LocalDateTimeSerializer.class)
     @JsonDeserialize(using = LocalDateTimeDeserializer.class)
     @Column(insertable = false,updatable = false)

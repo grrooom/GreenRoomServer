@@ -1,12 +1,8 @@
 package com.greenroom.server.api.domain.greenroom.service;
 
-import com.amazonaws.util.StringUtils;
 import com.greenroom.server.api.domain.greenroom.dto.in.*;
 import com.greenroom.server.api.domain.greenroom.dto.out.*;
-import com.greenroom.server.api.domain.greenroom.entity.Activity;
-import com.greenroom.server.api.domain.greenroom.entity.GreenRoom;
-import com.greenroom.server.api.domain.greenroom.entity.Plant;
-import com.greenroom.server.api.domain.greenroom.entity.Todo;
+import com.greenroom.server.api.domain.greenroom.entity.*;
 import com.greenroom.server.api.domain.greenroom.enums.GreenRoomStatus;
 import com.greenroom.server.api.domain.greenroom.repository.GreenRoomRepository;
 import com.greenroom.server.api.domain.user.entity.User;
@@ -18,7 +14,6 @@ import com.greenroom.server.api.utils.S3ImageUploader;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.support.TransactionSynchronization;
 import org.springframework.transaction.support.TransactionSynchronizationManager;
@@ -27,6 +22,7 @@ import org.springframework.web.multipart.MultipartFile;
 import java.time.LocalDate;
 import java.time.format.DateTimeParseException;
 import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -337,6 +333,105 @@ public class GreenroomService {
         todo.updateTerm(term);
         todo.updateNextTodoDate(baseDate.plusDays(term));
 
+    }
+
+    public GreenroomCalendarResponseDto getGreenroomInfoFromCalendar(String email, LocalDate date, Long activityId){
+
+        User user = customUserDetailService.findUserByEmail(email);
+
+        if(date.isBefore(LocalDate.now())){
+            return GreenroomCalendarResponseDto.from(date,getGreenroomInfoPast(user,date,activityId));
+        }
+        else if(date.isEqual(LocalDate.now())){
+            return GreenroomCalendarResponseDto.from(date,getGreenroomInfoPresent(user,date,activityId));
+        }
+        else{
+            return GreenroomCalendarResponseDto.from(date,getGreenroomInfoFuture(user,date,activityId));
+        }
+    }
+
+    private List<GreenRoom> getEnabledGreenRooms(User user) {
+        return greenRoomRepository.findGreenRoomByUserAndGreenroomStatus(user, GreenRoomStatus.ENABLED);
+    }
+
+    private List<GreenRoom> getAllGreenRooms(User user) {
+        return greenRoomRepository.findGreenRoomByUser(user);
+    }
+
+    private Map<GreenRoom, List<TodoLog>> getTodoLogs(List<GreenRoom> rooms, LocalDate date, Long activityId) {
+        return todoLogService.getAllTodoLogByGreenroomAndDate(rooms, date).stream()
+                .filter(log -> activityId == null || Objects.equals(log.getActivity().getActivityId(), activityId))
+                .collect(Collectors.groupingBy(TodoLog::getGreenRoom));
+    }
+
+    private Map<GreenRoom, List<Todo>> getTodos(List<GreenRoom> rooms, LocalDate date, Long activityId) {
+        return todoService.getAllTodoByGreenroomAndDate(rooms, date).stream()
+                .filter(todo -> activityId == null || Objects.equals(todo.getActivity().getActivityId(), activityId))
+                .collect(Collectors.groupingBy(Todo::getGreenRoom));
+    }
+
+    private Map<GreenRoom, List<Diary>> getDiaries(List<GreenRoom> rooms, LocalDate date) {
+        return diaryService.getAllDiariesByGreenroomAndDate(rooms, date).stream()
+                .collect(Collectors.groupingBy(Diary::getGreenRoom));
+    }
+
+    private GreenroomCalendarResponseDto.CalendarInfo buildCalendarInfo(GreenRoom greenRoom, List<TodoLog> todoLogs, List<Todo> todos, List<Diary> diaries) {
+
+        List<GreenroomCalendarResponseDto.TodoInfo> todoInfos = new ArrayList<>();
+        if (todoLogs != null) todoInfos.addAll(todoLogs.stream().map(GreenroomCalendarResponseDto.TodoInfo::from).toList());
+        if (todos != null) todoInfos.addAll(todos.stream().map(GreenroomCalendarResponseDto.TodoInfo::from).toList());
+
+        List<GreenroomCalendarResponseDto.DiaryInfo> diaryInfos = diaries != null ? diaries.stream().map(GreenroomCalendarResponseDto.DiaryInfo::from).toList() : new ArrayList<>();
+
+        GreenroomCalendarResponseDto.GreenroomInfo greenroomInfo = GreenroomCalendarResponseDto.GreenroomInfo.from(greenRoom);
+        return GreenroomCalendarResponseDto.CalendarInfo.of(greenroomInfo, todoInfos, diaryInfos);
+    }
+
+    public List<GreenroomCalendarResponseDto.CalendarInfo> getGreenroomInfoPast(User user, LocalDate date, Long activityId){
+        List<GreenRoom> greenRoomListForTodoLogAndDiary = getAllGreenRooms(user);
+        if(greenRoomListForTodoLogAndDiary.isEmpty()){return List.of();}
+
+        Map<GreenRoom,List<TodoLog>>  todoLogList = getTodoLogs(greenRoomListForTodoLogAndDiary,date,activityId);
+        Map<GreenRoom,List<Diary>> diaryList = getDiaries(greenRoomListForTodoLogAndDiary,date);
+
+        Set<GreenRoom> resultGreenroomList = new HashSet<>();
+        resultGreenroomList.addAll(todoLogList.keySet());resultGreenroomList.addAll(diaryList.keySet());
+
+
+        return resultGreenroomList.isEmpty()?List.of():resultGreenroomList.stream()
+                .map(greenroom -> buildCalendarInfo(greenroom, todoLogList.getOrDefault(greenroom, null), null, diaryList.getOrDefault(greenroom, null)))
+                .toList();
+
+    }
+    public List<GreenroomCalendarResponseDto.CalendarInfo> getGreenroomInfoPresent(User user, LocalDate date, Long activityId){
+        List<GreenRoom> greenRoomListForTodoLogAndDiary = getAllGreenRooms(user);
+        List<GreenRoom> greenRoomListForTodo = getEnabledGreenRooms(user);
+
+        if(greenRoomListForTodoLogAndDiary.isEmpty()||greenRoomListForTodo.isEmpty()){return List.of();}
+
+        Map<GreenRoom,List<TodoLog>>  todoLogList = getTodoLogs(greenRoomListForTodoLogAndDiary,date,activityId);
+        Map<GreenRoom,List<Todo>> todoList = getTodos(greenRoomListForTodo,date,activityId);
+        Map<GreenRoom,List<Diary>> diaryList = getDiaries(greenRoomListForTodoLogAndDiary,date);
+
+        Set<GreenRoom> resultGreenroomList = new HashSet<>();
+        resultGreenroomList.addAll(todoList.keySet()); resultGreenroomList.addAll(todoLogList.keySet());resultGreenroomList.addAll(diaryList.keySet());
+
+
+        return resultGreenroomList.isEmpty()?List.of():resultGreenroomList.stream()
+                .map(greenroom -> buildCalendarInfo(greenroom, todoLogList.getOrDefault(greenroom, null), todoList.getOrDefault(greenroom, null) ,diaryList.getOrDefault(greenroom, null)))
+                .toList();
+    }
+
+    public List<GreenroomCalendarResponseDto.CalendarInfo> getGreenroomInfoFuture(User user, LocalDate date, Long activityId){
+        List<GreenRoom> greenRoomListForTodo = getEnabledGreenRooms(user);
+        if(greenRoomListForTodo.isEmpty()){return List.of();}
+
+        Map<GreenRoom,List<Todo>> todoList = getTodos(greenRoomListForTodo,date,activityId);
+
+
+        return todoList.isEmpty()?List.of():todoList.keySet().stream()
+                .map(greenroom -> buildCalendarInfo(greenroom, null, todoList.getOrDefault(greenroom, null), null))
+                .toList();
     }
 }
 
