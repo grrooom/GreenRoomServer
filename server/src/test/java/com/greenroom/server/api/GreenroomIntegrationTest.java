@@ -343,6 +343,18 @@ public class GreenroomIntegrationTest {
             fieldWithPath("isAlive").type(JsonFieldType.BOOLEAN).description("식물 상태. 여전히 키우고 있으면 true, 죽었으면 false")
     );
 
+    List<RequestPartDescriptor> requestPartDescriptorsForDiaryCreation = List.of(
+            partWithName("imageFile").description("일기 이미지 파일").attributes(new Attributes.Attribute("content-type","image/*")).optional(),
+            partWithName("data").description("일기 작성 정보").attributes(new Attributes.Attribute("content-type","application/json"))
+    );
+
+    List<FieldDescriptor> requestPartFieldDescriptorsForDiaryCreation = List.of(
+            fieldWithPath("title").type(JsonFieldType.STRING).description("일기 제목").attributes(new Attributes.Attribute("constraint","1자 이상 65자 이하")),
+            fieldWithPath("content").type(JsonFieldType.STRING).description("일기 본문").attributes(new Attributes.Attribute("constraint","1자 이상 500자 이하")),
+            fieldWithPath("date").type(JsonFieldType.STRING).description("물주기 기준 날짜").attributes(new Attributes.Attribute("constraint","YYYY-MM-DD"))
+    );
+
+
     List<FieldDescriptor> requestBodyDescriptorsForCompleteTodo = List.of(
             fieldWithPath("completedTodo").type(JsonFieldType.ARRAY).description("완료 처리할 작업의 id 목록")
     );
@@ -513,6 +525,20 @@ public class GreenroomIntegrationTest {
             fieldWithPath("data.mainInfo[].diary[].title").type(JsonFieldType.STRING).description("일기 제목"),
             fieldWithPath("data.mainInfo[].diary[].body").type(JsonFieldType.STRING).description("일기 본문"),
             fieldWithPath("data.mainInfo[].diary[].imageUrl").type(JsonFieldType.STRING).description("일기에 등록한 이미지 url").optional().attributes(new Attributes.Attribute("constraint","등록한 이미지가 없을 경우 null")));
+
+
+    List<FieldDescriptor> resultDescriptorsForDiaryCreation = List.of(
+            fieldWithPath("status").type(JsonFieldType.STRING).description("응답 상태"),
+            fieldWithPath("code").type(JsonFieldType.STRING).description("상태 코드"),
+            fieldWithPath("data").type(JsonFieldType.OBJECT).optional().description("data"),
+            fieldWithPath("data.diaryId").type(JsonFieldType.NUMBER).description("새롭게 생성된 다이어리 고유 id"),
+            fieldWithPath("data.greenroomId").type(JsonFieldType.NUMBER).description("그린룸 id"),
+            fieldWithPath("data.greenroomName").type(JsonFieldType.STRING).description("그린룸 별명").optional(),
+            fieldWithPath("data.title").type(JsonFieldType.STRING).description("일기 제목"),
+            fieldWithPath("data.content").type(JsonFieldType.STRING).description("일기 본문"),
+            fieldWithPath("data.imageUrl").type(JsonFieldType.STRING).description("일기 이미지").optional().attributes(new Attributes.Attribute("constraint","등록된 이미지가 없으면 null")),
+            fieldWithPath("data.date").type(JsonFieldType.STRING).description("일기 작성 날짜")
+    );
 
 
     @Transactional
@@ -1549,6 +1575,127 @@ public class GreenroomIntegrationTest {
 
         //문서화
         resultActions.andDo(getDocumentForCalenderInfo(1));
+    }
+
+    private ResultActions getResultActionsForDiaryCreation(MockMultipartFile image,MockMultipartFile data) throws Exception {
+
+        String token = getTokenForTest((long) (10*1000));
+
+        return mockMvc.perform( // api 실행
+                RestDocumentationRequestBuilders
+                        .multipart("/api/greenroom/diary")
+                        .file(image)
+                        .file(data)
+                        .contentType(MediaType.MULTIPART_FORM_DATA)
+                        .header(HttpHeaders.AUTHORIZATION, "Bearer "+token));
+    }
+
+    private RestDocumentationResultHandler getDocumentForDiaryCreation(Integer identifier){
+        return document("api/greenroom/diary/post/"+identifier,
+                preprocessRequest(prettyPrint(),modifyUris().scheme("https").host("greenroom-server.site").removePort()),   // (2)
+                preprocessResponse(prettyPrint(), getModifiedHeader()),  // (3)
+                requestParts(requestPartDescriptorsForDiaryCreation),
+                requestPartFields("data",requestPartFieldDescriptorsForDiaryCreation),
+                responseFields(resultDescriptorsForDiaryCreation), // responseBody 설명
+                requestHeaders(headerWithName("Authorization").description("Bearer : 사용자 access Token")),
+                resource(
+                        ResourceSnippetParameters.builder()
+                                .tag("그린룸") // 문서에서 api들이 태그로 분류됨
+                                .summary("일기 작성 api") // api 이름
+                                .description("그린룸 일기 작성") // api 설명
+                                .build()));
+    }
+
+    @Test
+    @Transactional
+    public void 일기_작성_성공() throws Exception {
+        //given
+
+        //test용 data 생성
+
+        User user =signupForTest();
+        createGreenRoom(user);
+
+        DiaryCreationRequestDto request = new DiaryCreationRequestDto("일기 제목입니다!!","일기 본문입니다!!","2025-04-05");
+        MockMultipartFile image = getTestMultiPartFile();
+        MockMultipartFile data = new MockMultipartFile("data", "", "application/json", mapper.writeValueAsString(request).getBytes());
+
+        //when
+        ResultActions resultActions = getResultActionsForDiaryCreation(image,data);
+
+        //then
+        resultActions.andExpect(status().isCreated());
+
+        //문서화
+        resultActions.andDo(getDocumentForDiaryCreation(1));
+
+    }
+
+    @Test
+    @Transactional
+    public void 일기_작성_실패1() throws Exception {
+        //given
+
+        //test용 data 생성
+        User user =signupForTest();
+
+        DiaryCreationRequestDto request = new DiaryCreationRequestDto("일기 제목입니다!!","일기 본문입니다!!","2025-04-05");
+        MockMultipartFile image = getTestMultiPartFile();
+        MockMultipartFile data = new MockMultipartFile("data", "", "application/json", mapper.writeValueAsString(request).getBytes());
+
+        //when
+        ResultActions resultActions = getResultActionsForDiaryCreation(image,data);
+
+        //then
+        resultActions.andExpect(status().is(ResponseCodeEnum.GREENROOM_NOT_FOUND.getStatus().value())).andExpect(jsonPath("code").value(ResponseCodeEnum.GREENROOM_NOT_FOUND.getCode()));
+
+        //문서화
+        resultActions.andDo(getDocumentForDiaryCreation(2));
+    }
+
+    @Test
+    @Transactional
+    public void 일기_작성_실패2() throws Exception {
+        //given
+
+        //test 용 data
+        User user = signupForTest();
+        createGreenRoom(user);
+
+        DiaryCreationRequestDto request = new DiaryCreationRequestDto("일기 제목입니다!!","일기 본문입니다!!","2025-04-05");
+        MockMultipartFile image = getInvalidTestMultiPartFile();
+        MockMultipartFile data = new MockMultipartFile("data", "", "application/json", mapper.writeValueAsString(request).getBytes());
+
+        //when
+        ResultActions resultActions = getResultActionsForDiaryCreation(image,data);
+
+        //then
+        resultActions.andExpect(status().is(ResponseCodeEnum.INVALID_IMAGE_FORMAT.getStatus().value())).andExpect(jsonPath("code").value(ResponseCodeEnum.INVALID_IMAGE_FORMAT.getCode()));
+
+        //문서화
+        resultActions.andDo(getDocumentForDiaryCreation(3));
+    }
+
+    @Test
+    @Transactional
+    public void 일기_작성_실패3() throws Exception {
+        //given
+        //test 용 data
+        User user =signupForTest();
+
+        DiaryCreationRequestDto request = new DiaryCreationRequestDto("일기 제목임~!!","일기 본문입니다!!","2025-04-05");
+        MockMultipartFile image = getTestMultiPartFile();
+        MockMultipartFile data = new MockMultipartFile("data", "", "application/json", mapper.writeValueAsString(request).getBytes());
+
+        //when
+        doThrow(new CustomException(ResponseCodeEnum.FAIL_TO_UPLOAD_IMAGE)).when(mockitoGreenroomService).createDiary(EMAIL,request,image);
+        ResultActions resultActions = getResultActionsForDiaryCreation(image,data);
+
+        //then
+        resultActions.andExpect(status().is(ResponseCodeEnum.FAIL_TO_UPLOAD_IMAGE.getStatus().value())).andExpect(jsonPath("code").value(ResponseCodeEnum.FAIL_TO_UPLOAD_IMAGE.getCode()));
+
+        //문서화
+        resultActions.andDo(getDocumentForDiaryCreation(4));
     }
 
 

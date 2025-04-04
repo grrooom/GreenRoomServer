@@ -318,6 +318,7 @@ public class GreenroomService {
         return getGreenroomTodoInfo(greenroomId);
     }
 
+
     public void updateTodo(Todo todo, ActivityInfoUpdateRequestDto.ActivityInfoUpdateDto updateDto){
         LocalDate baseDate ;
 
@@ -432,6 +433,21 @@ public class GreenroomService {
         return todoList.isEmpty()?List.of():todoList.keySet().stream()
                 .map(greenroom -> buildCalendarInfo(greenroom, null, todoList.getOrDefault(greenroom, null), null))
                 .toList();
+    }
+
+    @Transactional
+    public DiaryResponseDto createDiary(String email, DiaryCreationRequestDto request, MultipartFile imageFile){
+        User user = customUserDetailService.findUserByEmail(email);
+        List<GreenRoom> greenRoomList =  greenRoomRepository.findGreenRoomByUserAndGreenroomStatus(user,GreenRoomStatus.ENABLED);
+        if(greenRoomList.isEmpty()){throw new CustomException(ResponseCodeEnum.GREENROOM_NOT_FOUND);} //일기 작성이 가능한 그린룸이 없는 경우
+
+        String imageUrl = null;
+        if(imageFile!=null) imageUrl = s3ImageUploader.uploadGreenroomImage(imageFile);
+
+        Diary createdDiary =  diaryService.createDiary(greenRoomList.get(0),request,imageUrl);
+
+        return DiaryResponseDto.from(createdDiary);
+
     }
 }
 

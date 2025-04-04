@@ -1,6 +1,5 @@
 package com.greenroom.server.api.domain.greenroom.controller;
 
-import com.google.protobuf.Api;
 import com.greenroom.server.api.domain.greenroom.dto.in.*;
 import com.greenroom.server.api.domain.greenroom.dto.out.PointAndLevelUpResponseDto;
 import com.greenroom.server.api.domain.greenroom.service.GreenroomService;
@@ -9,7 +8,6 @@ import com.greenroom.server.api.global.response.ApiResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 
-import org.checkerframework.checker.units.qual.A;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -106,6 +104,8 @@ public class GreenroomController {
         return ResponseEntity.ok(ApiResponse.success(ResponseCodeEnum.SUCCESS,greenroomService.getGreenroomInfoFromCalendar(user.getUsername(),date,activityId)));
     }
 
-
-
+    @PostMapping("/diary")
+    public ResponseEntity<ApiResponse> createDiary(@AuthenticationPrincipal User user, @Valid @RequestPart(value = "data") DiaryCreationRequestDto request, @RequestPart(value = "imageFile",required = false) MultipartFile imageFile){
+        return ResponseEntity.status(HttpStatus.CREATED).body(ApiResponse.success(ResponseCodeEnum.CREATED,greenroomService.createDiary(user.getUsername(),request,imageFile)));
+    }
 }

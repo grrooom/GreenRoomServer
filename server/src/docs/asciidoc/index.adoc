@@ -1077,3 +1077,40 @@ include::{snippets}/api/greenroom/calendar/1/http-response.adoc[]
 
 ==== Response Body Fields
 include::{snippets}/api/greenroom/calendar/1/response-fields.adoc[]
+
+
+=== **15. 일기 등록**
+
+사용자가 현재 가지고 있는 활성화된 그린룸에 대해서 일기를 작성함
+
+==== Request
+include::{snippets}/api/greenroom/diary/post/1/curl-request.adoc[]
+
+==== Request Headers
+include::{snippets}/api/greenroom/diary/post/1/request-headers.adoc[]
+
+==== Request Parts
+이미지 파일은 선택 요소입니다.(필수x)
+include::{snippets}/api/greenroom/diary/post/1/request-parts.adoc[]
+
+==== Request Parts : **data** - Detail Fields
+include::{snippets}/api/greenroom/diary/post/1/request-part-data-fields.adoc[]
+
+==== 성공 Response
+include::{snippets}/api/greenroom/diary/post/1/http-response.adoc[]
+
+==== Response Body Fields
+include::{snippets}/api/greenroom/diary/post/1/response-fields.adoc[]
+
+
+==== 실패 Response
+실패 1.
+include::{snippets}/api/greenroom/diary/post/2/http-response.adoc[]
+
+실패 2.
+include::{snippets}/api/greenroom/diary/post/3/http-response.adoc[]
+
+실패 3.
+include::{snippets}/api/greenroom/diary/post/4/http-response.adoc[]
+
+
