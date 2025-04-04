@@ -35,6 +35,9 @@ public class S3ImageUploader {
     @Value("${cloud.image.path.greenroom}")
     private String greenroomImageDir;
 
+    @Value("${cloud.image.path.greenroom}")
+    private String diaryImageDir;
+
     @Value("${cloud.image.path.plant}")
     private String plantImageDir;
 
@@ -50,6 +53,10 @@ public class S3ImageUploader {
 
     public String uploadGreenroomImage(MultipartFile multipartFile){
         return uploadImage(multipartFile,greenroomImageDir);
+    }
+
+    public String uploadDiaryImage(MultipartFile multipartFile){
+        return uploadImage(multipartFile,diaryImageDir);
     }
 
     public String uploadImage(MultipartFile multipartFile, String dir) {

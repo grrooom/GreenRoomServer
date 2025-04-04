@@ -128,6 +128,7 @@ CREATE TABLE `diary` (
                          `diary_picture_url` varchar(255),
                          `title` varchar(255),
                          `content` varchar(1000),
+                         `date` date,
                          `create_date` timestamp DEFAULT CURRENT_TIMESTAMP,
                          `update_date` timestamp ON UPDATE CURRENT_TIMESTAMP
 );

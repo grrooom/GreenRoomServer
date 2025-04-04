@@ -62,6 +62,7 @@ cloud:
       user: local/user
       plant : plant
       greenroom: local/greenroom
+      diary : local/diary
 temp:
   filePath: src/main/resources/
 logging.level:
