@@ -172,6 +172,12 @@ public class GreenroomIntegrationTest {
 
     }
 
+    public User signupForTest2(){
+        User user = User.createUser(new SignupRequestDto("test@gmail.com",PW,NAME), gradeRepository.findById(1L).orElse(null));
+        userRepository.save(user);
+        return user;
+    }
+
     public GreenRoom createGreenRoom(User user){
 
         Plant plant = plantRepository.findById(20L).get();
@@ -186,6 +192,22 @@ public class GreenroomIntegrationTest {
 
         adornmentRepository.save(Adornment.createAdornment(itemRepository.findAll().get(0),greenRoom));
 
+
+        return greenRoom;
+    }
+
+    public GreenRoom createGreenRoom2(User user){
+
+        Plant plant = plantRepository.findById(21L).get();
+
+        GreenRoom greenRoom = GreenRoom.of("test그린룸22",null,user,plant);
+
+        greenRoomRepository.save(greenRoom);
+
+        Todo todo = Todo.builder().greenRoom(greenRoom).activity(activityRepository.findAll().get(0)).nextTodoDate(LocalDate.now().plusDays(8)).term(10).baseDate(LocalDate.now().minusDays(2)).build();
+        todoRepository.save(todo);
+
+        adornmentRepository.save(Adornment.createAdornment(itemRepository.findAll().get(0),greenRoom));
 
         return greenRoom;
     }
@@ -305,8 +327,16 @@ public class GreenroomIntegrationTest {
             parameterWithName("nickname").description("중복을 확인할 nickname")
     );
 
+    private final List<ParameterDescriptor> queryParametersForDiaryList = List.of(
+            parameterWithName("date").description("일기를 조회할 날짜(연도-월) : YYYY-MM")
+    );
+
     private final List<ParameterDescriptor> pathParameterForGreenroomId = List.of(
         parameterWithName("greenroom_id").description("그린룸 id")
+    );
+
+    private final List<ParameterDescriptor> pathParameterForDiary = List.of(
+            parameterWithName("diary_id").description("일기 고유 id")
     );
 
     List<RequestPartDescriptor> requestPartDescriptorsForGreenroomRegistration = List.of(
@@ -522,9 +552,12 @@ public class GreenroomIntegrationTest {
             ).attributes(new Attributes.Attribute("constraint","과거 날짜 조회시 이미 완료된 활동 내역이므로 null")),
             fieldWithPath("data.mainInfo[].diary").type(JsonFieldType.ARRAY).description("활동 정보 및 일기 내역").optional().attributes(new Attributes.Attribute("constraint","일기 내역이 없는 경우 빈 배열")),
             fieldWithPath("data.mainInfo[].diary[].diaryId").type(JsonFieldType.NUMBER).description("일기 id"),
+            fieldWithPath("data.mainInfo[].diary[].greenroomId").type(JsonFieldType.NUMBER).description("그린룸 id"),
+            fieldWithPath("data.mainInfo[].diary[].greenroomName").type(JsonFieldType.STRING).description("그린룸 별명"),
             fieldWithPath("data.mainInfo[].diary[].title").type(JsonFieldType.STRING).description("일기 제목"),
             fieldWithPath("data.mainInfo[].diary[].body").type(JsonFieldType.STRING).description("일기 본문"),
-            fieldWithPath("data.mainInfo[].diary[].imageUrl").type(JsonFieldType.STRING).description("일기에 등록한 이미지 url").optional().attributes(new Attributes.Attribute("constraint","등록한 이미지가 없을 경우 null")));
+            fieldWithPath("data.mainInfo[].diary[].imageUrl").type(JsonFieldType.STRING).description("일기에 등록한 이미지 url").optional().attributes(new Attributes.Attribute("constraint","등록한 이미지가 없을 경우 null")),
+            fieldWithPath("data.mainInfo[].diary[].dateTime").type(JsonFieldType.STRING).description("일기 작성 날짜 및 시간 : YYYY-MM-DDTHH:MM:SS"));
 
 
     List<FieldDescriptor> resultDescriptorsForDiaryCreation = List.of(
@@ -533,11 +566,44 @@ public class GreenroomIntegrationTest {
             fieldWithPath("data").type(JsonFieldType.OBJECT).optional().description("data"),
             fieldWithPath("data.diaryId").type(JsonFieldType.NUMBER).description("새롭게 생성된 다이어리 고유 id"),
             fieldWithPath("data.greenroomId").type(JsonFieldType.NUMBER).description("그린룸 id"),
-            fieldWithPath("data.greenroomName").type(JsonFieldType.STRING).description("그린룸 별명").optional(),
+            fieldWithPath("data.greenroomName").type(JsonFieldType.STRING).description("그린룸 별명"),
             fieldWithPath("data.title").type(JsonFieldType.STRING).description("일기 제목"),
             fieldWithPath("data.content").type(JsonFieldType.STRING).description("일기 본문"),
             fieldWithPath("data.imageUrl").type(JsonFieldType.STRING).description("일기 이미지").optional().attributes(new Attributes.Attribute("constraint","등록된 이미지가 없으면 null")),
-            fieldWithPath("data.date").type(JsonFieldType.STRING).description("일기 작성 날짜")
+            fieldWithPath("data.dateTime").type(JsonFieldType.STRING).description("일기 작성 날짜 및 시간 : YYYY-MM-DDTHH:MM:SS")
+    );
+
+    List<FieldDescriptor> resultDescriptorsForDiaryList = List.of(
+            fieldWithPath("status").type(JsonFieldType.STRING).description("응답 상태"),
+            fieldWithPath("code").type(JsonFieldType.STRING).description("상태 코드"),
+            fieldWithPath("data").type(JsonFieldType.OBJECT).optional().description("data"),
+            fieldWithPath("data.diaryList").type(JsonFieldType.ARRAY).optional().description("날짜 별 일기 목록").attributes(new Attributes.Attribute("constraint","해당 날짜(연도+월)에 등록된 일기가 없으면 빈 배열 반환")),
+            fieldWithPath("data.diaryList[].dateInfo").type(JsonFieldType.OBJECT).description("일기 작성된 날짜"),
+            fieldWithPath("data.diaryList[].dateInfo.year").type(JsonFieldType.NUMBER).description("일기 작성 연도"),
+            fieldWithPath("data.diaryList[].dateInfo.month").type(JsonFieldType.NUMBER).description("일기 작성 월"),
+            fieldWithPath("data.diaryList[].dateInfo.date").type(JsonFieldType.NUMBER).description("일기 작성 일자"),
+            fieldWithPath("data.diaryList[].dateInfo.day").type(JsonFieldType.STRING).description("일기 작성 요일"),
+            fieldWithPath("data.diaryList[].diaryInfo").type(JsonFieldType.ARRAY).description("날짜 별 작성된 일기 목록"),
+            fieldWithPath("data.diaryList[].diaryInfo[].diaryId").type(JsonFieldType.NUMBER).description("일기 id"),
+            fieldWithPath("data.diaryList[].diaryInfo[].greenroomId").type(JsonFieldType.NUMBER).description("그린룸 id"),
+            fieldWithPath("data.diaryList[].diaryInfo[].greenroomName").type(JsonFieldType.STRING).description("그린룸 이름"),
+            fieldWithPath("data.diaryList[].diaryInfo[].title").type(JsonFieldType.STRING).description("일기 제목"),
+            fieldWithPath("data.diaryList[].diaryInfo[].content").type(JsonFieldType.STRING).description("일기 본문"),
+            fieldWithPath("data.diaryList[].diaryInfo[].imageUrl").type(JsonFieldType.STRING).description("일기 이미지 url").optional().attributes(new Attributes.Attribute("constraint","등록된 이미지가 없으면 null")),
+            fieldWithPath("data.diaryList[].diaryInfo[].dateTime").type(JsonFieldType.STRING).description("일기 작성 날짜 및 시간 : YYYY-MM-DDTHH:MM:SS")
+    );
+
+    List<FieldDescriptor> resultDescriptorsForDiary = List.of(
+            fieldWithPath("status").type(JsonFieldType.STRING).description("응답 상태"),
+            fieldWithPath("code").type(JsonFieldType.STRING).description("상태 코드"),
+            fieldWithPath("data").type(JsonFieldType.OBJECT).optional().description("data"),
+            fieldWithPath("data.diaryId").type(JsonFieldType.NUMBER).description("새롭게 생성된 다이어리 고유 id"),
+            fieldWithPath("data.greenroomId").type(JsonFieldType.NUMBER).description("그린룸 id"),
+            fieldWithPath("data.greenroomName").type(JsonFieldType.STRING).description("그린룸 별명"),
+            fieldWithPath("data.title").type(JsonFieldType.STRING).description("일기 제목"),
+            fieldWithPath("data.content").type(JsonFieldType.STRING).description("일기 본문"),
+            fieldWithPath("data.imageUrl").type(JsonFieldType.STRING).description("일기 이미지").optional().attributes(new Attributes.Attribute("constraint","등록된 이미지가 없으면 null")),
+            fieldWithPath("data.dateTime").type(JsonFieldType.STRING).description("일기 작성 날짜 및 시간 : YYYY-MM-DDTHH:MM:SS")
     );
 
 
@@ -1698,5 +1764,151 @@ public class GreenroomIntegrationTest {
         resultActions.andDo(getDocumentForDiaryCreation(4));
     }
 
+
+    private ResultActions getResultActionsForDiaryList(String date) throws Exception {
+
+        String token = getTokenForTest((long) (10*1000));
+
+        return mockMvc.perform( // api 실행
+                RestDocumentationRequestBuilders
+                        .get("/api/greenroom/diaries")
+                        .param("date",date)
+                        .header(HttpHeaders.AUTHORIZATION, "Bearer "+token));
+    }
+
+    private RestDocumentationResultHandler getDocumentForDiaryList(Integer identifier){
+        return document("api/greenroom/diaries/"+identifier,
+                preprocessRequest(prettyPrint(),modifyUris().scheme("https").host("greenroom-server.site").removePort()),   // (2)
+                preprocessResponse(prettyPrint(), getModifiedHeader()),  // (3)
+                queryParameters(queryParametersForDiaryList),
+                responseFields(resultDescriptorsForDiaryList), // responseBody 설명
+                requestHeaders(headerWithName("Authorization").description("Bearer : 사용자 access Token")),
+                resource(
+                        ResourceSnippetParameters.builder()
+                                .tag("그린룸") // 문서에서 api들이 태그로 분류됨
+                                .summary("연도/월 별 작성된 일기 조회 api") // api 이름
+                                .description("특정 연도-월에 작성된 모든 일기 목록을 조회함.") // api 설명
+                                .build()));
+    }
+
+    @Test
+    @Transactional
+    public void 일기목록_조회_성공() throws Exception {
+        //given
+
+        //test용 data 생성
+
+        User user =signupForTest();
+        GreenRoom greenRoom = createGreenRoom(user);
+        GreenRoom greenRoom1 = createGreenRoom2(user);
+
+
+        Diary diary1 = Diary.createDiary("일기제목111","일기 본문111",greenRoom,null,LocalDate.of(2025,4,5)); diary1.updateCreateDate(LocalDateTime.now());
+        Diary diary2 = Diary.createDiary("일기제목222","일기 본문222",greenRoom,null,LocalDate.of(2025,4,3));diary2.updateCreateDate(LocalDateTime.now());
+        Diary diary3 = Diary.createDiary("일기제목333","일기 본문333",greenRoom1,null,LocalDate.of(2025,4,2));diary3.updateCreateDate(LocalDateTime.now());
+        Diary diary4 = Diary.createDiary("일기제목444","일기 본문444",greenRoom1,null,LocalDate.of(2025,4,3));diary4.updateCreateDate(LocalDateTime.now());
+
+        diaryRepository.save(diary1);diaryRepository.save(diary2);diaryRepository.save(diary3);diaryRepository.save(diary4);
+
+        //when
+        ResultActions resultActions = getResultActionsForDiaryList("2025-04");
+
+        //then
+        resultActions.andExpect(status().isOk());
+
+        //문서화
+        resultActions.andDo(getDocumentForDiaryList(1));
+
+    }
+
+
+    private ResultActions getResultActionsForDiary(Long diaryId) throws Exception {
+
+        String token = getTokenForTest((long) (10*1000));
+        return mockMvc.perform( // api 실행
+                RestDocumentationRequestBuilders
+                        .get("/api/greenroom/diaries/{diary_id}",diaryId)
+                        .header(HttpHeaders.AUTHORIZATION, "Bearer "+token));
+    }
+
+    private RestDocumentationResultHandler getDocumentForDiary(Integer identifier){
+        return document("api/greenroom/diaries/specific/"+identifier,
+                preprocessRequest(prettyPrint(),modifyUris().scheme("https").host("greenroom-server.site").removePort()),
+                preprocessResponse(prettyPrint(), getModifiedHeader()),
+                pathParameters(pathParameterForDiary),
+                responseFields(resultDescriptorsForDiary), // responseBody 설명
+                requestHeaders(headerWithName("Authorization").description("Bearer : 사용자 access Token")),
+                resource(ResourceSnippetParameters.builder()
+                        .tag("그린룸") // 문서에서 api들이 태그로 분류됨
+                        .summary("일기 상세 조회 api") // api 이름
+                        .description("특정 일기를 상세 조회함.") // api 설명
+                        .build()));
+    }
+
+    @Test
+    @Transactional
+    public void 일기_조회_성공() throws Exception {
+        //given
+
+        //test용 data 생성
+        User user =signupForTest();
+        GreenRoom greenRoom = createGreenRoom(user);
+
+        Diary diary = Diary.createDiary("일기제목111","일기 본문111",greenRoom,null,LocalDate.of(2025,4,5));
+        diary.updateCreateDate(LocalDateTime.now());
+        diaryRepository.save(diary);
+        //when
+        ResultActions resultActions = getResultActionsForDiary(diary.getDiaryId());
+
+        //then
+        resultActions.andExpect(status().isOk());
+
+        //문서화
+        resultActions.andDo(getDocumentForDiary(1));
+
+    }
+
+    @Test
+    @Transactional
+    public void 일기_조회_실패1() throws Exception {
+        //given
+
+        //test용 data 생성
+        User user =signupForTest();
+        GreenRoom greenRoom = createGreenRoom(user);
+
+        //when
+        ResultActions resultActions = getResultActionsForDiary(10L);
+
+        //then
+        resultActions.andExpect(status().is(ResponseCodeEnum.DIARY_NOT_FOUND.getStatus().value())).andExpect(jsonPath("code").value(ResponseCodeEnum.DIARY_NOT_FOUND.getCode()));
+
+        //문서화
+        resultActions.andDo(getDocumentForDiary(2));
+
+    }
+
+    @Test
+    @Transactional
+    public void 일기_조회_실패2() throws Exception {
+        //given
+
+        //test용 data 생성
+        User user =signupForTest2();
+        GreenRoom greenRoom = createGreenRoom(user);
+        Diary diary = Diary.createDiary("일기제목111","일기 본문111",greenRoom,null,LocalDate.of(2025,4,5));
+        diary.updateCreateDate(LocalDateTime.now());
+        diaryRepository.save(diary);
+
+        //when
+        ResultActions resultActions = getResultActionsForDiary(diary.getDiaryId());
+
+        //then
+        resultActions.andExpect(status().is(ResponseCodeEnum.NOT_AUTHORIZATION.getStatus().value())).andExpect(jsonPath("code").value(ResponseCodeEnum.NOT_AUTHORIZATION.getCode()));
+
+        //문서화
+        resultActions.andDo(getDocumentForDiary(3));
+
+    }
 
 }

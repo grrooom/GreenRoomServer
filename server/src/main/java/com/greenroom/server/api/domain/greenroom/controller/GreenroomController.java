@@ -2,6 +2,7 @@ package com.greenroom.server.api.domain.greenroom.controller;
 
 import com.greenroom.server.api.domain.greenroom.dto.in.*;
 import com.greenroom.server.api.domain.greenroom.dto.out.PointAndLevelUpResponseDto;
+import com.greenroom.server.api.domain.greenroom.service.DiaryService;
 import com.greenroom.server.api.domain.greenroom.service.GreenroomService;
 import com.greenroom.server.api.global.response.enums.ResponseCodeEnum;
 import com.greenroom.server.api.global.response.ApiResponse;
@@ -16,6 +17,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.time.LocalDate;
+import java.time.YearMonth;
 import java.util.List;
 
 @RestController
@@ -24,6 +26,7 @@ import java.util.List;
 public class GreenroomController {
 
     private final GreenroomService greenroomService;
+    private final DiaryService diaryService;
 
     @GetMapping("/info")
     public ResponseEntity<ApiResponse> getUserGreenroomInfo(@AuthenticationPrincipal User user){
@@ -107,5 +110,15 @@ public class GreenroomController {
     @PostMapping("/diary")
     public ResponseEntity<ApiResponse> createDiary(@AuthenticationPrincipal User user, @Valid @RequestPart(value = "data") DiaryCreationRequestDto request, @RequestPart(value = "imageFile",required = false) MultipartFile imageFile){
         return ResponseEntity.status(HttpStatus.CREATED).body(ApiResponse.success(ResponseCodeEnum.CREATED,greenroomService.createDiary(user.getUsername(),request,imageFile)));
+    }
+
+    @GetMapping("/diaries")
+    public ResponseEntity<ApiResponse> getAllDiaries(@AuthenticationPrincipal User user, @RequestParam(value = "date")YearMonth date){
+        return ResponseEntity.ok(ApiResponse.success(ResponseCodeEnum.SUCCESS,greenroomService.getAllDiaries(user.getUsername(),date)));
+    }
+
+    @GetMapping("/diaries/{diary_id}")
+    public ResponseEntity<ApiResponse> getDiaryById(@AuthenticationPrincipal User user ,@PathVariable(value = "diary_id") Long diaryId){
+        return ResponseEntity.ok(ApiResponse.success(ResponseCodeEnum.SUCCESS,diaryService.getSpecificDiary(diaryId, user.getUsername())));
     }
 }

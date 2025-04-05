@@ -44,6 +44,8 @@ public class Diary extends BaseTime {
         return Diary.builder().title(title).content(content).greenRoom(greenRoom).diaryPictureUrl(diaryPictureUrl).date(date).build();
     }
 
-
+    public void updateCreateDate(LocalDateTime createDate){
+        this.createDate = createDate;
+    }
 
 }

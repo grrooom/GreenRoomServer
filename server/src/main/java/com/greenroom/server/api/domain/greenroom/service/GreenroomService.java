@@ -20,6 +20,7 @@ import org.springframework.transaction.support.TransactionSynchronizationManager
 import org.springframework.web.multipart.MultipartFile;
 
 import java.time.LocalDate;
+import java.time.YearMonth;
 import java.time.format.DateTimeParseException;
 import java.util.*;
 import java.util.stream.Collectors;
@@ -448,6 +449,24 @@ public class GreenroomService {
 
         return DiaryResponseDto.from(createdDiary);
 
+    }
+
+    public DiaryListResponseDto getAllDiaries(String email, YearMonth date){
+        User user = customUserDetailService.findUserByEmail(email);
+
+        Map<LocalDate, List<Diary>> diaryList = diaryService.getAllDiariesByUser(user,date).stream().collect(Collectors.groupingBy(Diary::getDate));
+        List<DiaryListResponseDto.DateAndDiaryList> result = new ArrayList<>();
+
+        List<LocalDate> dateList = diaryList.keySet().stream().sorted((a,b)->b.getDayOfYear()-a.getDayOfYear()).toList();
+
+        for(LocalDate diaryDate : dateList){
+            DiaryListResponseDto.DateInfo dateInfo =  DiaryListResponseDto.DateInfo.from(diaryDate);
+            List<DiaryListResponseDto.DiaryInfo> diaryInfoList =  diaryList.get(diaryDate).stream().map(DiaryListResponseDto.DiaryInfo::from).toList();
+
+            result.add(DiaryListResponseDto.DateAndDiaryList.of(dateInfo,diaryInfoList));
+        }
+
+        return DiaryListResponseDto.of(result);
     }
 }
 
