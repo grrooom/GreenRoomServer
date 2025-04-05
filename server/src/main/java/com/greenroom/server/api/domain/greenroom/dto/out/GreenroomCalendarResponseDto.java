@@ -4,6 +4,8 @@ import com.greenroom.server.api.domain.greenroom.entity.*;
 import com.greenroom.server.api.global.config.PropertiesHolder;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.time.format.TextStyle;
 import java.util.List;
 import java.util.Locale;
@@ -40,10 +42,12 @@ public record GreenroomCalendarResponseDto(DateInfo dateInfo, List<CalendarInfo>
             return new TodoInfo(activity.getActivityId(),activity.getActivityName(),null,true);
         }
     }
-    public record DiaryInfo(Long diaryId, String title, String body, String imageUrl){
+    public record DiaryInfo(Long diaryId, Long greenroomId, String greenroomName, String title, String body, String imageUrl, LocalDateTime dateTime){
         public static DiaryInfo from(Diary diary){
             String imageUrl = diary.getDiaryPictureUrl()==null?null:PropertiesHolder.CDN_PATH+"/"+diary.getDiaryPictureUrl();
-            return new DiaryInfo(diary.getDiaryId(),diary.getTitle(),diary.getContent(),imageUrl);
+            LocalTime time = LocalTime.of(diary.getCreateDate().getHour(),diary.getCreateDate().getMinute());
+            LocalDateTime diaryDateTime = LocalDateTime.of(diary.getDate(),time);
+            return new DiaryInfo(diary.getDiaryId(),diary.getGreenRoom().getGreenroomId(),diary.getGreenRoom().getName(),diary.getTitle(),diary.getContent(),imageUrl,diaryDateTime);
         }
     }
 }

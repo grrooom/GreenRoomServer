@@ -1113,4 +1113,49 @@ include::{snippets}/api/greenroom/diary/post/3/http-response.adoc[]
 실패 3.
 include::{snippets}/api/greenroom/diary/post/4/http-response.adoc[]
 
+=== **16. 연도-월 별 작성된 일기 조회**
 
+특정 연도-월에 작성된 모든 일기 목록을 조회함.
+
+==== Request
+include::{snippets}/api/greenroom/diaries/1/http-request.adoc[]
+
+==== Request Headers
+include::{snippets}/api/greenroom/diaries/1/request-headers.adoc[]
+
+==== Request Query Parameter Fields
+include::{snippets}/api/greenroom/diaries/1/query-parameters.adoc[]
+
+==== 성공 Response
+include::{snippets}/api/greenroom/diaries/1/http-response.adoc[]
+
+==== Response Body Fields
+include::{snippets}/api/greenroom/diaries/1/response-fields.adoc[]
+
+
+=== **17. 일기 상세 조회**
+
+특정 일기에 대한 상세 정보를 조회함.
+
+==== Request
+include::{snippets}/api/greenroom/diaries/specific/1/http-request.adoc[]
+
+==== Request Headers
+include::{snippets}/api/greenroom/diaries/specific/1/request-headers.adoc[]
+
+==== Request Path Parameter Fields
+include::{snippets}/api/greenroom/diaries/specific/1/path-parameters.adoc[]
+
+==== 성공 Response
+include::{snippets}/api/greenroom/diaries/specific/1/http-response.adoc[]
+
+==== Response Body Fields
+include::{snippets}/api/greenroom/diaries/specific/1/response-fields.adoc[]
+
+==== 실패 Response
+
+실패1.
+include::{snippets}/api/greenroom/diaries/specific/2/http-response.adoc[]
+
+실패2.
+include::{snippets}/api/greenroom/diaries/specific/3/http-response.adoc[]

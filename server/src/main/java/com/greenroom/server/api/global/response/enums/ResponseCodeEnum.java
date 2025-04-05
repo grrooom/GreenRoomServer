@@ -44,6 +44,7 @@ public enum ResponseCodeEnum {
     CHECKED_IN_NOT_ALLOWED(HttpStatus.CONFLICT,"C028","출석 체크가 불가능함.",""),
     GREENROOM_NOT_FOUND(HttpStatus.NOT_FOUND,"C029","서버에 등록된 그린룸을 찾을 수 없음.",""),
     TOO_LONG_STRING(HttpStatus.BAD_REQUEST,"C030","제한된 길이를 초과하는 문자열이 전달되었음.",""),
+    DIARY_NOT_FOUND(HttpStatus.NOT_FOUND,"C031","요청된 id에 해당하는 일기를 서버에서 찾을 수 없음.",""),
 
     //500~
     UNKNOWN_SERVER_ERROR(HttpStatus.INTERNAL_SERVER_ERROR,"D000","정의되지 않은 알 수 없는 서버 에러가 발생함.","서버에 문의"),
