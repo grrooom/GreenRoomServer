@@ -103,7 +103,7 @@ public class PlantService {
             throw new CustomException(ResponseCodeEnum.FAIL_TO_SEARCH_WITH_ELASTICSEARCH,e.getMessage());
         }
     }
-    @Cacheable(cacheNames = {"plants"},key = "#size",cacheManager = "basicCacheManager")
+    @Cacheable(cacheNames = {"plants"},key = "#size")
     public List<PlantResponseDto> getPopularPlantList(Integer size){
 
         return plantRepository.findAll()

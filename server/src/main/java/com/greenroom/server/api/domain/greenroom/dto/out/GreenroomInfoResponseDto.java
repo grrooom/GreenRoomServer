@@ -2,12 +2,8 @@ package com.greenroom.server.api.domain.greenroom.dto.out;
 
 import com.greenroom.server.api.domain.greenroom.entity.Activity;
 import com.greenroom.server.api.domain.greenroom.entity.GreenRoom;
-import com.greenroom.server.api.domain.greenroom.entity.Item;
-import com.greenroom.server.api.global.config.PropertiesHolder;
-import lombok.AllArgsConstructor;
-import lombok.Data;
+import com.greenroom.server.api.global.properties.PropertiesHolder;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Value;
 
 import java.util.List;
 import java.util.Map;

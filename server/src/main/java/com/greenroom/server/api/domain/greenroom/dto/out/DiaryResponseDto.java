@@ -1,10 +1,9 @@
 package com.greenroom.server.api.domain.greenroom.dto.out;
 
 import com.greenroom.server.api.domain.greenroom.entity.Diary;
-import com.greenroom.server.api.global.config.PropertiesHolder;
+import com.greenroom.server.api.global.properties.PropertiesHolder;
 import lombok.Data;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 

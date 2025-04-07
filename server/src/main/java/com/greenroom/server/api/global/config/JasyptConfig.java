@@ -1,4 +1,4 @@
-package com.greenroom.server.api.config;
+package com.greenroom.server.api.global.config;
 
 import com.ulisesbocchio.jasyptspringboot.annotation.EnableEncryptableProperties;
 import lombok.extern.slf4j.Slf4j;
