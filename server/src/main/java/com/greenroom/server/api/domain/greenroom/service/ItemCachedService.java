@@ -20,7 +20,7 @@ public class ItemCachedService {
     //repository
     private final ItemRepository itemRepository;
 
-    @Cacheable(cacheNames = {"items"},key = "#category+'_'+#subCategory",cacheManager = "itemCacheManager")
+    @Cacheable(cacheNames = {"items"},key = "#category+'_'+#subCategory")
     public List<Item> getItems(Integer category, Integer subCategory){
         return(itemRepository.findAll()
                 .stream()

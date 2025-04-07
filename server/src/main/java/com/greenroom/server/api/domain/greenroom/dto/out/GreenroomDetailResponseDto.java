@@ -2,7 +2,7 @@ package com.greenroom.server.api.domain.greenroom.dto.out;
 
 import com.greenroom.server.api.domain.greenroom.entity.GreenRoom;
 import com.greenroom.server.api.domain.greenroom.entity.Todo;
-import com.greenroom.server.api.global.config.PropertiesHolder;
+import com.greenroom.server.api.global.properties.PropertiesHolder;
 
 import java.time.LocalDate;
 import java.util.List;

@@ -1,4 +1,4 @@
-package com.greenroom.server.api.global.config;
+package com.greenroom.server.api.global.properties;
 
 import jakarta.annotation.PostConstruct;
 import org.springframework.beans.factory.annotation.Value;

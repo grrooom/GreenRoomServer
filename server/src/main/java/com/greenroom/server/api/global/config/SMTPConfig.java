@@ -1,4 +1,4 @@
-package com.greenroom.server.api.config;
+package com.greenroom.server.api.global.config;
 
 import org.springframework.boot.autoconfigure.mail.MailProperties;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
