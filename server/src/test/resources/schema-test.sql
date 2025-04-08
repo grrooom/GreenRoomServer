@@ -186,8 +186,6 @@ ALTER TABLE `adornment` ADD FOREIGN KEY (`item_id`) REFERENCES `item` (`item_id`
 
 ALTER TABLE `adornment` ADD FOREIGN KEY (`greenroom_id`) REFERENCES `greenroom` (`greenroom_id`);
 
-ALTER TABLE `suggestion` ADD FOREIGN KEY (`user_id`) REFERENCES `users` (`user_id`);
-
 ALTER TABLE `item` ADD FOREIGN KEY (`grade_id`) REFERENCES `grade` (`grade_id`);
 
 ALTER TABLE `notification` ADD FOREIGN KEY (`user_id`) REFERENCES `users` (`user_id`);

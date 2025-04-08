@@ -282,7 +282,6 @@ public class GreenroomService {
         todoService.createTodo(greenRoom,new ArrayList<>(active));
 
         return getGreenroomTodoInfo(greenroomId);
-
     }
 
     private void updateExistingTodos(List<Todo> todoList, Set<Long> activeIds, Set<Long> inactiveIds) {
