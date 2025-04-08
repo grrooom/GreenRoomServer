@@ -32,7 +32,7 @@ public class TodoService {
 
     public GreenroomInfoResponseDto.GreenroomTodoInfoDto getGreenroomTodoInfo(GreenRoom greenRoom){
 
-        List<Todo> greemroomTodoList = todoRepository.findAllByGreenRoomAndUseYn(greenRoom,true);
+        List<Todo> greemroomTodoList = todoRepository.findAllByGreenRoomAndUseYnAndNextTodoDateIsNotNull(greenRoom,true);
 
         //오늘 해야하는 일인지 확인
         Predicate<Todo> isTodo = todo -> !todo.getNextTodoDate().isAfter(LocalDate.now());
