@@ -92,7 +92,7 @@ public class TodoService {
 
     public List<GreenroomDetailResponseDto.GreenroomManagementInfoDto> getGreenroomManagementInfo(GreenRoom greenRoom){
 
-        return todoRepository.findAllByGreenRoomAndUseYn(greenRoom,true).stream().map(GreenroomDetailResponseDto.GreenroomManagementInfoDto::from).toList();
+        return todoRepository.findAllByGreenRoomAndUseYnAndNextTodoDateIsNotNull(greenRoom,true).stream().map(GreenroomDetailResponseDto.GreenroomManagementInfoDto::from).toList();
     }
 
     public void deleteAllByGreenRoom(List<Long> greenroomIdList){
