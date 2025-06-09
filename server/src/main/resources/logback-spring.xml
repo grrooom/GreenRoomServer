@@ -8,6 +8,28 @@
 
     <property name ="LOG_PATTERN_FILE" value = "%d{yyyy-MM-dd HH:mm:ss.SSS} %5level [%thread] %-80.80logger{79} : %msg%n"/>
 
+    <appender name="S3_REQUEST_FAIL_FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <!-- 파일 경로 설정 -->
+        <file>/var/log/greenroom/dev/s3_request_fail_log.log</file>
+
+        <!-- 로그 패턴 설정 -->
+        <encoder class = "ch.qos.logback.classic.encoder.PatternLayoutEncoder">
+            <pattern>${LOG_PATTERN_FILE}</pattern>
+        </encoder>
+
+        <!-- 롤링 정책 -->
+        <rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
+            <fileNamePattern>/var/log/greenroom/dev/s3_request_fail_log_%d{yyyy_MM_dd}_%i.log</fileNamePattern>
+            <maxFileSize>20MB</maxFileSize> <!-- 50mb 넘기면 롤링 파일 생성-->
+            <maxHistory>10</maxHistory>   <!--최대 보관 일수-->
+            <totalSizeCap>3GB</totalSizeCap> <!--파일 당 최대 보관 용량. 초과하면 삭제됨.-->
+        </rollingPolicy>
+    </appender>
+
+    <logger name="S3RequestLogger" level="ERROR" additivity="false">
+        <appender-ref ref="S3_REQUEST_FAIL_FILE"/>
+    </logger>
+
     <!-- 콘솔 Appender 설정 -->
     <appender name ="CONSOLE" class ="ch.qos.logback.core.ConsoleAppender">
         <encoder class ="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
@@ -36,6 +58,7 @@
     <springProfile name = "dev">
         <root level = "INFO">
             <appender-ref ref="FILE"/>
+            <appender-ref ref="S3_REQUEST_FAIL_FILE"/>
         </root>
         <logger name="com.greenroom.server" level="DEBUG" />
         <logger name="org.springframework.security" level = "DEBUG" />
@@ -44,16 +67,6 @@
     </springProfile>
 
     <springProfile name = "local">
-        <root level = "INFO">
-            <appender-ref ref="CONSOLE"/>
-        </root>
-        <logger name="com.greenroom.server" level="DEBUG" />
-        <logger name="org.springframework.security" level = "DEBUG" />
-        <logger name="com.zaxxer.hikari" level = "ERROR" />
-        <logger name="org.apache" level = "ERROR" />
-    </springProfile>
-
-    <springProfile name = "test">
         <root level = "INFO">
             <appender-ref ref="CONSOLE"/>
         </root>

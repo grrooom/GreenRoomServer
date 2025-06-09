@@ -10,6 +10,8 @@ import com.greenroom.server.api.global.exception.CustomException;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
@@ -25,6 +27,8 @@ import static com.amazonaws.util.IOUtils.toByteArray;
 @Slf4j
 @RequiredArgsConstructor
 public class S3ImageUploader {
+
+    Logger logger = LoggerFactory.getLogger("S3RequestLogger");
 
     @Value("${cloud.aws.s3.bucket}")
     private String bucket;
@@ -90,6 +94,7 @@ public class S3ImageUploader {
 
                 if (attempt >= maxRetries) {
                     // 재시도 끝까지 실패하면 예외 던지기
+                    logger.error("[ERROR] Failed to upload image");
                     throw new CustomException(ResponseCodeEnum.FAIL_TO_UPLOAD_IMAGE);
                 }
                 try {
@@ -112,7 +117,7 @@ public class S3ImageUploader {
             //삭제 연산 실패 시 log 남김.
             // 고아 객체 - 낙관적 처리
             //추후 삭제 연산 실패 시 db 저장 -> 삭제 실패한 파일 삭제 재시도 (스케줄러) 도입 가능
-            log.error("[error] Fail to delete image files after 3 times retry : {}",imageFileUrl);
+            logger.error("[error] Fail to delete image files : {}",imageFileUrl);
         }
 
     }
@@ -176,7 +181,7 @@ public class S3ImageUploader {
         }
         //삭제 연산 최종 실패 시 log로 남기고 넘어가기
         //추후 삭제 연산 실패 시 db 저장 -> 삭제 실패한 파일 삭제 재시도 (스케줄러) 도입 가능
-        log.error("[error] Fail to delete image files after 3 times retry : {}",keyList);
+        logger.error("[error] Fail to delete image files after 3 times retry : {}",keyList);
     }
 
     public String uploadPlantImages(InputStream inputStream, String plantName) throws IOException {

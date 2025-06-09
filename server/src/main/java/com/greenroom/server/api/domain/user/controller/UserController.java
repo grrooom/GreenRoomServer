@@ -71,4 +71,5 @@ public class UserController {
         return ResponseEntity.ok(ApiResponse.success(ResponseCodeEnum.SUCCESS,checkInService.doCheckIn(user.getUsername())));
     }
 
+
 }
